@@ -1,0 +1,8 @@
+.panel-footer &copy; #{author}
+    .btn-sc
+        each btn in social 
+            +social-btn(btn)
+
+div 
+    span#_api-link: a(href="#")
+    span._panel-info Panel Version: #[strong #{version}] | App Version: #[strong VERSION] | WhatsApp Version #[strong WA_VERSION]

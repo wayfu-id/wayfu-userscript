@@ -1,0 +1,59 @@
+@import "./variable.scss";
+
+/*--------------------------------------------------------------
+# Dark Mode
+--------------------------------------------------------------*/
+body {
+    &.dark {
+        #wayfuPanel {
+            .row:not(:last-child) {
+                border-color: #555;
+            }
+
+            #panel-menus button {
+                &:hover,
+                .active {
+                    background: $darkbg;
+                }
+            }
+
+            .menu-content {
+                background: $darkbg;
+            }
+
+            #_settings ._slider {
+                &::-webkit-slider-thumb,
+                &::-moz-range-thumb {
+                    background-color: white;
+                }
+            }
+
+            .select {
+                select {
+                    background-color: white;
+                }
+
+                svg {
+                    stroke: white;
+                }
+            }
+        }
+
+        #wayfu-modal {
+            background-color: $grey;
+
+            .wfu-modal-container {
+                background: $lightGrey;
+                border: $darkGrey solid 1px;
+                color: white;
+
+                .wfu-btn-close {
+                    &::after,
+                    &::before {
+                        background-color: white;
+                    }
+                }
+            }
+        }
+    }
+}

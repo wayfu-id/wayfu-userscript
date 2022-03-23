@@ -1,0 +1,13 @@
+mixin createSvg(dPath, viewBox, size, alpha, fill)
+    - 
+        const opt = Object.assign(
+            alpha ? {'opacity': alpha} : {},
+            fill ? {'fill': fill} : {}
+        );
+    svg(xmlns='http://www.w3.org/2000/svg' viewBox=viewBox width=size height=size)
+        path(d=dPath)&attributes(opt)
+
+mixin social-btn(data)
+    a(href=data.href target='_blank' id='sc-'+data.name data-icon=data.name title=data.title class='img icon credit-icon icon-'+data.name)
+        +createSvg(data.path, data.viewBox, '16', '.4', 'currentColor')
+    //- span(id='sc-'+data.name data-icon=data.name title=data.title class='img icon credit-icon icon-'+data.name)
