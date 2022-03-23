@@ -123,7 +123,7 @@ function inserHeader() {
     const { dest, name } = path[environment];
     const pkg = readJSON("package.json");
     return (
-        src(`${dest}/${name}`, {
+        src(`${dest}/*.user.js`, {
             allowEmpty: true,
         })
             // Insert userscript header
