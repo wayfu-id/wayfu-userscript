@@ -1,6 +1,7 @@
 package-lock.json
 
-.husky/_/*
+release
+build/
+.husky/_
+dev/
 node_modules
-build
-dev
