@@ -49,22 +49,16 @@ const webpackBundled = () => {
 };
 
 function convertImage() {
-    const { dest } = path[environment],
-        name = Object.assign({ suffix: "-icon" }, base);
-
-    return src("./src/images/*.*")
+    return src("./src/images/*.png")
         .pipe(webp({ quality: 100, resize: { width: 48, height: 48 } }))
-        .pipe(rename(name))
-        .pipe(_dest(`${dest}/assets`));
+        .pipe(rename({ prefix: "wayfu-" }))
+        .pipe(_dest(`./assets`));
 }
 
 function moveJson() {
-    const { dest } = path[environment],
-        name = Object.assign({ suffix: "-colors" }, base);
+    const name = Object.assign({ suffix: "-colors" }, base);
 
-    return src("./src/jsons/*")
-        .pipe(rename(name))
-        .pipe(_dest(`${dest}/assets`));
+    return src("./src/jsons/*").pipe(rename(name)).pipe(_dest(`./assets`));
 }
 
 function createMetaUpdate(done) {
@@ -90,10 +84,13 @@ function clean() {
 }
 
 function compilePug() {
-    const { dest } = path[environment],
+    const isDev = environment === "development",
         pkg = readJSON("package.json"),
         rgx = /^(?:(?:[A-Za-z\w]+)\s?[A-Za-z\w]+)/g,
-        name = Object.assign({ suffix: "-view", extname: ".html" }, base);
+        name = Object.assign(
+            { suffix: `-view${isDev ? "-dev" : ""}`, extname: ".html" },
+            base
+        );
 
     return src("./src/views/index.pug")
         .pipe(
@@ -105,18 +102,17 @@ function compilePug() {
             })
         )
         .pipe(rename(name))
-        .pipe(_dest(`${dest}/assets`));
+        .pipe(_dest(`./assets`));
 }
 
 function compileScss() {
-    const { dest } = path[environment],
-        isDev = environment === "development",
-        name = Object.assign({ suffix: `-style${isDev ? "" : ".min"}` }, base);
+    const isDev = environment === "development",
+        name = Object.assign({ suffix: `-style${isDev ? "-dev" : ".min"}` }, base);
     return src("./src/styles/style.scss")
         .pipe(sass(isDev ? {} : { outputStyle: "compressed" }).on("error", sass.logError))
         .pipe(autoPrefixer({ cascade: false }))
         .pipe(rename(name))
-        .pipe(_dest(`${dest}/assets`));
+        .pipe(_dest(`./assets`));
 }
 
 function inserHeader() {
@@ -134,13 +130,12 @@ function inserHeader() {
 }
 
 function addStyleHeader() {
-    const { dest } = path[environment];
     const pkg = readJSON("package.json");
-    return src(`${dest}/assets/*.css`, {
+    return src(`./assets/*.css`, {
         allowEmpty: true,
     })
         .pipe(styleHeader(pkg))
-        .pipe(_dest(`${dest}/assets`));
+        .pipe(_dest(`./assets`));
 }
 
 task("createView", parallel(compilePug, convertImage, moveJson));
@@ -151,7 +146,7 @@ task(
     "build",
     series(
         releaseEnv,
-        parallel(clean, cleanBuild),
+        parallel(clean, cleanBuild, (cleanAssets = () => cleanDir("./assets"))),
         parallel("bundleStyle", "bundleScript"),
         "createView",
         createMetaUpdate
@@ -161,5 +156,5 @@ task(
 task("imageAssets", function imageAssets() {
     return src("./src/images/assets/*")
         .pipe(webp({ quality: 100, resize: { width: 238, height: 64 } }))
-        .pipe(_dest(`./assets`));
+        .pipe(_dest(`./docs/assets`));
 });
