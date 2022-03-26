@@ -1,7 +1,7 @@
 <div style="text-align:center">
 
-![logo](/assets/logo_white.webp#gh-dark-mode-only)
-![logo](/assets/logo.webp#gh-light-mode-only)
+![logo](docs/assets/logo_white.webp#gh-dark-mode-only)
+![logo](docs/assets/logo.webp#gh-light-mode-only)
 
 </div>
 
