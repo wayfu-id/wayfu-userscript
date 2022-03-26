@@ -72,11 +72,6 @@
       }
     ]
   },
-  "standard-version": {
-    "scripts": {
-      "postbump": "npm run build:prod && git add release/ && git commit -m \"chore(build): build & bump new version\""
-    }
-  },
   "browserslist":[
     ">= 0.5%",
     "last 5 major versions",
