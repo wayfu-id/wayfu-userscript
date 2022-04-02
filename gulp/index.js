@@ -64,33 +64,28 @@ function moveJson() {
 function createMetaUpdate(done) {
     if (environment !== "production") return done();
 
-    const pkg = readJSON("package.json"),
-        { dest } = path[environment];
+    const pkg = readJSON("package.json");
 
     return createFile("update.meta.js", metaUpdate(pkg))
         .pipe(rename({ basename: "update", extname: ".meta.js" }))
-        .pipe(_dest(dest));
+        .pipe(_dest("./"));
 }
 
-function cleanBuild(done) {
+function cleanAssets(done) {
+    if (environment !== "production") return done();
+    return cleanDir("assets");
+}
+
+function clean(done) {
     if (environment !== "production") return done();
     const { dest } = path.development;
     return cleanDir(dest);
 }
 
-function clean() {
-    const { dest } = path[environment];
-    return cleanDir(dest);
-}
-
 function compilePug() {
-    const isDev = environment === "development",
-        pkg = readJSON("package.json"),
+    const pkg = readJSON("package.json"),
         rgx = /^(?:(?:[A-Za-z\w]+)\s?[A-Za-z\w]+)/g,
-        name = Object.assign(
-            { suffix: `-view${isDev ? "-dev" : ""}`, extname: ".html" },
-            base
-        );
+        name = Object.assign({ suffix: "-view", extname: ".html" }, base);
 
     return src("./src/views/index.pug")
         .pipe(
@@ -116,10 +111,10 @@ function compileScss() {
 }
 
 function inserHeader() {
-    const { dest, name } = path[environment];
+    const { dest } = path[environment];
     const pkg = readJSON("package.json");
     return (
-        src(`${dest}/*.user.js`, {
+        src(`${dest}*.user.js`, {
             allowEmpty: true,
         })
             // Insert userscript header
@@ -146,7 +141,7 @@ task(
     "build",
     series(
         releaseEnv,
-        parallel(clean, cleanBuild, (cleanAssets = () => cleanDir("./assets"))),
+        parallel(clean, cleanAssets),
         parallel("bundleStyle", "bundleScript"),
         "createView",
         createMetaUpdate

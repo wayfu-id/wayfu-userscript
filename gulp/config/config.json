@@ -5,7 +5,7 @@
     },
     "path": {
         "production": {
-            "dest": "release/",
+            "dest": "./",
             "suffix": "-install.user"
         },
         "development": {

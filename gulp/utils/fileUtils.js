@@ -26,7 +26,7 @@ const readJSON = (filename) => {
 };
 
 const removeDir = (dir) => {
-    return src(`${dir}/**`, {
+    return src(`${dir}**`, {
         allowEmpty: true,
         read: false,
     }).pipe(
