@@ -2,8 +2,8 @@
   "name": "wayfu-userscript",
   "version": "3.8.0",
   "viewVersion": "1.4.0",
-  "homepage": "https://wayfu.id/",
-  "bugs": "https://wayfu.id/",
+  "homepage": "http://wayfu.id",
+  "bugs": "http://wayfu.id",
   "description": "WhatsApp Easy Follow Up.",
   "author": "Rizal Nurhidayat (https://github.com/rzlnhd)",
   "license": "CC BY-NC-ND 4.0; https://creativecommons.org/licenses/by-nc-nd/4.0/",
@@ -37,7 +37,7 @@
     ],
     "homepage": "<%= pkg.homepage %>",
     "supportURL": "<%= pkg.bugs %>",
-    "icon": "https://wayfu.id/files/assets/wayfu.png",
+    "icon": "http://wayfu.id/files/assets/wayfu.png",
     "match": "https://web.whatsapp.com/*",
     "grant": [
       "GM_addStyle",
@@ -55,20 +55,20 @@
       "GM_notification"
     ],
     "connect": "wayfu.id",
-    "updateURL": "https://wayfu.id/files/update.meta.js",
-    "downloadURL": "https://wayfu.id/files/wayfu-install.user.js",
+    "updateURL": "http://wayfu.id/files/update.meta.js",
+    "downloadURL": "http://wayfu.id/files/wayfu-install.user.js",
     "resource": [
       {
-        "ico": "https://wayfu.id/files/assets/wayfu-icon.webp"
+        "ico": "http://wayfu.id/files/assets/wayfu-icon.webp"
       },
       {
-        "pnl": "https://wayfu.id/files/assets/wayfu-view.html"
+        "pnl": "http://wayfu.id/files/assets/wayfu-view.html"
       },
       {
-        "clr": "https://wayfu.id/files/assets/wayfu-colors.json"
+        "clr": "http://wayfu.id/files/assets/wayfu-colors.json"
       },
       {
-        "css": "https://wayfu.id/files/assets/wayfu-style.min.css"
+        "css": "http://wayfu.id/files/assets/wayfu-style.min.css"
       }
     ]
   },
@@ -79,6 +79,11 @@
     "Chrome >= 8",
     "Firefox >= 3"
   ],
+  "standard-version": {
+    "scripts": {
+      "postbump": "npm run build:prod && git add ./*.js assets/* && git commit -m \"chore(build): build & bump new version\""
+    }
+  },
   "commitizen": {
     "path": "cz-conventional-changelog"
   },
