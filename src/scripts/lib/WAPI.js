@@ -1,46 +1,11 @@
-const storeObjects = [
-    {
-        id: "Store",
-        conditions: (module) =>
-            module.default && module.default.Chat && module.default.Msg
-                ? module.default
-                : null,
-    },
-    {
-        id: "WebClasses",
-        conditions: (module) =>
-            module.default &&
-            typeof module.default === "object" &&
-            module.default.chat &&
-            module.default.active
-                ? module.default
-                : null,
-    },
-    {
-        id: "MediaCollection",
-        conditions: (module) =>
-            module.default &&
-            module.default.prototype &&
-            module.default.prototype.processAttachments
-                ? module.default
-                : null,
-    },
-    {
-        id: "Features",
-        conditions: (module) =>
-            module.FEATURE_CHANGE_EVENT && module.GK ? module.GK : null,
-    },
-    {
-        id: "Debug",
-        conditions: (module) => (module.Debug ? module.Debug : null),
-    },
-    {
-        id: "Conn",
-        conditions: (module) =>
-            module.PLATFORMS && module.Conn ? module.Conn : null,
-    },
-];
+import { storeObjects } from "./Constant";
 
+/**
+ * Get webpack object/array/function from a window.
+ * Return it's name if any, or null if not found.
+ * @param {Window} window window target
+ * @return {String | null}
+ */
 const getWebpack = (window) => {
     let keys = Object.keys(window),
         val;
@@ -52,6 +17,10 @@ const getWebpack = (window) => {
     return val || null;
 };
 
+/**
+ * Set window.WAPI object from window.Store object
+ * @param {any} store
+ */
 function setWAPI(store) {
     window.WAPI = Object.assign({}, store);
 
@@ -86,6 +55,10 @@ function setWAPI(store) {
     });
 }
 
+/**
+ * Load WAPI needed modules from WhatsApp Web window
+ * @param {window} target window target
+ */
 const loadWapi = (target) => {
     if (!window.Store || !window.Store.Msg) {
         function getStore(modules) {
@@ -93,8 +66,7 @@ const loadWapi = (target) => {
             for (let idx in modules.m) {
                 if (typeof modules(idx) === "object" && modules(idx) !== null) {
                     storeObjects.forEach((needObj) => {
-                        if (!needObj.conditions || needObj.foundedModule)
-                            return;
+                        if (!needObj.conditions || needObj.foundedModule) return;
                         let neededModule = needObj.conditions(modules(idx));
                         if (neededModule !== null) {
                             foundCount++;
@@ -106,12 +78,8 @@ const loadWapi = (target) => {
                     }
                 }
             }
-            let neededStore = storeObjects.find(
-                (needObj) => needObj.id === "Store"
-            );
-            window.Store = neededStore.foundedModule
-                ? neededStore.foundedModule
-                : {};
+            let neededStore = storeObjects.find((needObj) => needObj.id === "Store");
+            window.Store = neededStore.foundedModule ? neededStore.foundedModule : {};
             storeObjects.forEach((needObj) => {
                 if (needObj.id !== "Store" && needObj.foundedModule) {
                     window.Store[needObj.id] = needObj.foundedModule;
@@ -119,8 +87,8 @@ const loadWapi = (target) => {
             });
             return window.Store;
         }
-        const parasite = `parasite${Date.now()}`,
-            webpack = getWebpack(target);
+        const parasite = `parasite${Date.now()}`;
+        const webpack = getWebpack(target);
 
         if (webpack && typeof target[webpack] === "object") {
             target[webpack].push([

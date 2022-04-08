@@ -1,3 +1,6 @@
+/**
+ * Regular Expression (RegExp) list pattern for some purpose
+ */
 const rgx = {
     forVersion: /^\d+((\.|-)\d+[A-Za-z]?)*$/,
     phonePattern: /^(?:[\+\d]?[\- \d]{10,})$/,
@@ -6,6 +9,9 @@ const rgx = {
     formatedDate: /^\d{4}[\/|-|:]\d{1,2}[\/|-|:]\d{1,2}$/,
 };
 
+/**
+ * Event lists details to create eventListener
+ */
 const eventLists = [
     { element: "#panelBody .menus", type: "click", event: "tabMenu" },
     { element: "#_mode", type: "click", event: "autoMode" },
@@ -21,6 +27,9 @@ const eventLists = [
     { element: "#_blast", type: "click", event: "runTasks" },
 ];
 
+/**
+ * Element's query selector list for some kind of element
+ */
 const queryElm = {
     send: "#main span[data-testid^='send']",
     input: "#main div[contenteditable='true']",
@@ -29,10 +38,58 @@ const queryElm = {
     chatMessage: "#main div.message-out",
 };
 
+/**
+ * This is default toLocaleDateString options
+ */
 const dateOptDefault = {
     year: "numeric",
     month: "long",
     day: "numeric",
 };
 
-export { rgx, queryElm, dateOptDefault, eventLists };
+/**
+ * WAPI modules that needed to get
+ */
+const storeObjects = [
+    {
+        id: "Store",
+        conditions: (module) =>
+            module.default && module.default.Chat && module.default.Msg
+                ? module.default
+                : null,
+    },
+    {
+        id: "WebClasses",
+        conditions: (module) =>
+            module.default &&
+            typeof module.default === "object" &&
+            module.default.chat &&
+            module.default.active
+                ? module.default
+                : null,
+    },
+    {
+        id: "MediaCollection",
+        conditions: (module) =>
+            module.default &&
+            module.default.prototype &&
+            module.default.prototype.processAttachments
+                ? module.default
+                : null,
+    },
+    {
+        id: "Features",
+        conditions: (module) =>
+            module.FEATURE_CHANGE_EVENT && module.GK ? module.GK : null,
+    },
+    {
+        id: "Debug",
+        conditions: (module) => (module.Debug ? module.Debug : null),
+    },
+    {
+        id: "Conn",
+        conditions: (module) => (module.PLATFORMS && module.Conn ? module.Conn : null),
+    },
+];
+
+export { rgx, queryElm, dateOptDefault, eventLists, storeObjects };
