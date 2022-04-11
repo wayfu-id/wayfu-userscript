@@ -111,14 +111,18 @@ class AppEvents {
     }
     loadData(e) {
         const elm = e.currentTarget || e.target,
-            reader = new FileReader();
+            reader = new FileReader(),
+            file = elm.files[0];
 
-        reader.onload = (f) => {
-            let lines = f.currentTarget.result.split(/\r\n|\r|\n/);
-            loadRecipient(lines);
-        };
+        reader.onloadend = (function (file) {
+            return function (f) {
+                const target = f.target || f.currentTarget,
+                    lines = target.result.split(/\r\n|\r|\n/);
+                loadRecipient(lines, file);
+            };
+        })(file);
         resetRecipient();
-        reader.readAsText(elm.files[0]);
+        reader.readAsText(file);
     }
     imagePreview(e) {
         const elm = e.currentTarget || e.target,

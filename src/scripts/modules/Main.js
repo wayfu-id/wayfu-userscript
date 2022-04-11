@@ -48,8 +48,9 @@ async function checkStatus() {
     return !isValid;
 }
 
-function loadRecipient(lines) {
-    const onLoaded = loadFile(lines);
+function loadRecipient(lines, file) {
+    const onLoaded = loadFile(lines),
+        fileName = file.name.split(".")[0];
 
     let mIdx =
         options.dateFormat !== "auto"
@@ -62,6 +63,7 @@ function loadRecipient(lines) {
         Object.assign({}, onLoaded.option, {
             monthIndex: mIdx,
             isFormat: isFormat,
+            fileName: fileName,
         })
     );
     queue.setData(onLoaded.data);
@@ -105,8 +107,9 @@ function setStatus(stat) {
             },
         },
     ]);
-
-    modal.progressPanel(stat, options.autoMode, stopProcess);
+    if (!stat || !DOM.getElement(".progress-panel")) {
+        modal.progressPanel(stat, options.autoMode, interupt);
+    }
 
     // console.log(stat ? "Blasting..." : "Stoped.");
     return stat;
@@ -183,6 +186,15 @@ function startProcess() {
     }
 }
 
+async function interupt() {
+    loop.break();
+    if (queue.now && (await modal.confirm("Stop Proses?"))) {
+        stopProcess();
+    } else {
+        startProcess();
+    }
+}
+
 function stopProcess() {
     if (options.autoMode && !user.isPremium) {
         user.updateTrial("update");
@@ -202,14 +214,14 @@ function showReport() {
         const { count, data } = report.createData(type);
         if (data.isEmpty) return count;
 
-        const { fileUrl, fileName } = exportToCsv(type, data);
+        const { fileUrl, fileName } = exportToCsv(options.fileName, type, data);
         const elm = {
             tag: "a",
             href: fileUrl,
-            text: "Download",
-            download: `${fileName}_data`,
+            text: "",
+            download: `${fileName}`,
             classid: "wfu-export-csv",
-            title: `Download ${fileName}_data`,
+            title: `Download "${fileName}.csv"`,
         };
 
         return `${count} ` + DOM.createElement(elm).outerHTML;
