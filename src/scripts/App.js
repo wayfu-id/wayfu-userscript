@@ -31,7 +31,8 @@ export default class App extends GM_Library {
         // console.log(chat);
         const html = this.getResource("pnl"),
             style = this.getResource("css"),
-            details = this.appInfo;
+            icon = this.getResource("ico", "url"),
+            details = Object.assign({}, this.appInfo, { icon: icon });
 
         createView(html, style, details);
         // console.info('Panel Created Successfully.');

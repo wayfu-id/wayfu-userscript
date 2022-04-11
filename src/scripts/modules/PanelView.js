@@ -3,7 +3,7 @@ import { eventLists } from "../lib/Constant";
 import { listeners } from "./Events";
 
 function createView(html, style, details) {
-    const { name, version } = details;
+    const { name, version, icon } = details;
     DOM.createElement({
         tag: "header",
         id: "wayfuPanel",
@@ -17,6 +17,8 @@ function createView(html, style, details) {
     DOM.addStyle(style, {
         id: "wayfuStyle",
     });
+
+    DOM.setElement("img.appIco", { src: icon });
 
     initListener();
 }
