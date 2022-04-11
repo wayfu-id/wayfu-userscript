@@ -1,8 +1,9 @@
 import GM_Library from "./GM_Library";
-import { setName, isNumeric, isDateStr, dateFormat } from "../lib/Util";
+import { setName, isNumeric, isDateStr, dateFormat, JSONParse } from "../lib/Util";
 import { modal } from "./Modals.js";
 import { options } from "./Settings";
 import MyDate from "../models/MyDate";
+import MyArray from "./MyArray";
 
 class Users extends GM_Library {
     constructor() {
@@ -36,12 +37,13 @@ class Users extends GM_Library {
      * @returns
      */
     init() {
-        const savedUser = this.getValue("user");
+        const savedUser = this.getValue("wayfu-user");
 
         for (let person of window.WAPI.Contact.models) {
             if (person.isMe) {
-                this.phone = person.userid || person.id.user || "";
-                this.name = person.displayName || person.pushname || "";
+                const { userid, id, displayName, pushname } = person;
+                this.phone = Number(userid || id.user) || "";
+                this.name = displayName || pushname || "";
                 break;
             }
         }
@@ -51,25 +53,26 @@ class Users extends GM_Library {
 
     /**
      * Request userdata from server based on it's phone number
-     * @returns {Promise<boolean>}
      */
     gettingData() {
-        return new Promise((done) => {
+        return new Promise((resolve) => {
             let opt = Object.assign({}, this.defaultOpt, {
                 data: JSON.stringify({
                     phone: this.phone,
                     version: this.appInfo.version,
                 }),
-                onload: (res) => {
+                onload: async (res) => {
                     const { status, responseText } = res;
+                    let data = null;
                     if (status === 200) {
-                        user.setUser(responseText);
+                        data = await JSONParse(responseText);
                     }
-                    done(status === 200);
+                    user.setUser(data);
+                    resolve(status === 200 && data);
                 },
-                onerror: (err) => done(null),
-                ontimeout: (rto) => done(null),
-                onabort: (abrt) => done(null),
+                onerror: (err) => user.setUser(null),
+                ontimeout: (rto) => user.setUser(null),
+                onabort: (abrt) => user.setUser(null),
             });
 
             this.request(opt);
@@ -112,12 +115,10 @@ class Users extends GM_Library {
      * @param {object} data User data as object
      */
     setUser(data) {
-        this.reset().init();
-        if (data && data !== "") {
-            this.updateData(data).save();
+        if (data && typeof data !== "undefined" && data !== null && data !== "") {
+            this.reset().init().updateData(data).save();
+            options.setOption("userType", this.type);
         }
-        // console.log(options, user);
-        options.setOption("userType", this.type);
 
         if (!this.isPremium && !this.isTrial) {
             setTimeout(() => {
@@ -177,12 +178,14 @@ class Users extends GM_Library {
         return new Promise((resolve, reject) => {
             let opt = Object.assign({}, this.defaultOpt, {
                 data: JSON.stringify(Object.assign({}, data, add)),
-                onload: (res) => {
+                onload: async (res) => {
                     const { status, responseText } = res;
+                    let data = null;
                     if (status === 200) {
-                        user.setUser(responseText);
+                        data = await JSONParse(responseText);
                     }
-                    resolve(status === 200);
+                    user.setUser(data);
+                    resolve(status === 200 && data);
                 },
                 onerror: (err) => resolve(false),
                 ontimeout: (rto) => resolve(false),
@@ -238,14 +241,11 @@ class Users extends GM_Library {
      * @returns resetted user data
      */
     reset() {
-        const include = (key) =>
-            ["attempt", "type", "reg", "mon", "end", "expires"].some(
-                (elm) => key === elm
-            );
+        const keys = new MyArray("attempt", "type", "reg", "mon", "end", "expires");
 
         for (let prop in this) {
-            if (this.hasOwnProperty(prop) && include(prop)) {
-                delete this[e];
+            if (this.hasOwnProperty(prop) && keys.isOnArray(prop)) {
+                delete this[prop];
             }
         }
         return this.init();
@@ -255,18 +255,25 @@ class Users extends GM_Library {
      * Save current user data to UserScript Manager Storage
      */
     save() {
-        const include = (key) =>
-            ["name", "phone", "attempt", "type", "reg", "mon", "end", "expires"].some(
-                (elm) => key === elm
-            );
-        const data = {};
+        const keys = new MyArray(
+                "name",
+                "phone",
+                "attempt",
+                "type",
+                "reg",
+                "mon",
+                "end",
+                "expires"
+            ),
+            data = {};
         for (let prop in this) {
-            if (this.hasOwnProperty(prop) && include(prop)) {
-                data[prop] = this[prop];
+            if (this.hasOwnProperty(prop) && keys.isOnArray(prop)) {
+                let val =
+                    this[prop] instanceof Date ? this[prop].toISOString() : this[prop];
+                data[prop] = val;
             }
         }
-        // console.log(data);
-        this.setValue("user", data);
+        this.setValue("wayfu-user", data);
     }
 }
 
