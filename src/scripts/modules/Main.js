@@ -252,7 +252,7 @@ function updateUI(index = 0.5, phone = null) {
         { elm: "#_data-count", props: { text: num } },
     ]);
     DOM.setElement("span.curPhone", {
-        text: `+${phone ? setPhone(phone) : ""}`,
+        text: `+${phone || ""}`,
     });
     showProgress(queue, index);
 }
