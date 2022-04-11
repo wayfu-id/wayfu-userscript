@@ -1,6 +1,7 @@
 import { DOM } from "../lib/DOM";
 import { isNumeric } from "../lib/Util";
 import GM_Library from "./GM_Library";
+import MyArray from "./MyArray";
 
 class Settings extends GM_Library {
     constructor() {
@@ -11,6 +12,7 @@ class Settings extends GM_Library {
             hasImage: false,
             imageFile: null,
             useImage: false,
+            fileName: "",
             activeTab: 0,
             targetBp: 100,
             maxQueue: 500,
@@ -32,7 +34,7 @@ class Settings extends GM_Library {
      * @returns
      */
     init() {
-        const set = this.getValue("options"),
+        const set = this.getValue("wayfu-options"),
             opt = Object.assign({}, this.default, this.intoObject(set));
 
         return this.setOptions(opt).colorList();
@@ -128,25 +130,25 @@ class Settings extends GM_Library {
      * Native save the options to Tampermonkey Storage
      */
     save() {
-        const exclude = (key) =>
-                [
-                    "useImage",
-                    "hasImage",
-                    "imageFile",
-                    "autoMode",
-                    "alert",
-                    "bpLimit",
-                    "queueLimit",
-                    "default",
-                ].some((elm) => key === elm),
-            opsi = {};
+        const keys = new MyArray(
+                "useImage",
+                "hasImage",
+                "imageFile",
+                "fileName",
+                "autoMode",
+                "alert",
+                "bpLimit",
+                "queueLimit",
+                "default"
+            ),
+            data = {};
         for (let prop in this) {
-            if (this.default.hasOwnProperty(prop) && !exclude(prop)) {
-                opsi[prop] = this[prop];
+            if (this.default.hasOwnProperty(prop) && !keys.isOnArray(prop)) {
+                data[prop] = this[prop];
             }
         }
         // console.log(this);
-        this.setValue("options", opsi);
+        this.setValue("wayfu-options", data);
     }
 }
 
