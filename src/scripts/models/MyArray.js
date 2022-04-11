@@ -41,6 +41,15 @@ export default class MyArray extends Array {
     }
 
     /**
+     * Check one item is on this array or not.
+     * @param {any} item
+     * @returns {boolean}
+     */
+    isOnArray(item) {
+        return this.some((elm) => item === elm);
+    }
+
+    /**
      * Create array by spliting from string
      * @param {string} string string
      * @param {string} delimiter delimiter
