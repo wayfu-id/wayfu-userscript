@@ -82,7 +82,7 @@ class Messages extends BaseModel {
                 const isDate = rgx.datePattern.test(value),
                     isNumber = isNumeric(value);
 
-                if (isNumber) {
+                if (i === 0 && isNumber) {
                     const target = options.targetBp,
                         toGo = (value) => {
                             const val = target - Number(value);
@@ -91,7 +91,7 @@ class Messages extends BaseModel {
                     message = message
                         .replace(/P_BP/g, `${value} BP`)
                         .replace(/K_BP/g, `${toGo(value)} BP`);
-                } else if (isDate) {
+                } else if (i === 1 && isDate) {
                     message = message
                         .replace(/L_DAY/g, this.lastDay(value))
                         .replace(/S_DAY/g, this.lastDay(value, 1));
@@ -100,24 +100,6 @@ class Messages extends BaseModel {
                         .replace(/F_INVS/g, setName(value, true))
                         .replace(/INVS/g, setName(value));
                 }
-
-                // if (i === 2 && !isDate && !isNumber)
-                //     message = message
-                //         .replace(/F_INVS/g, setName(value, true))
-                //         .replace(/INVS/g, setName(value));
-                // if (i === 1 && isDate && !isNumber)
-                //     message = message
-                //         .replace(/L_DAY/g, this.lastDay(value))
-                //         .replace(/S_DAY/g, this.lastDay(value, 1));
-                // if (i === 0 && !isDate && isNumber) {
-                //     const target = options.targetBp;
-
-                //     let kBp = target - Number(value);
-                //     kBp = kBp < 0 ? 0 : kBp;
-                //     message = message
-                //         .replace(/P_BP/g, `${value} BP`)
-                //         .replace(/K_BP/g, `${kBp} BP`);
-                // }
             }
             return column > 2
                 ? message.replace(dataKey(column - 2), `${value}$2`)
@@ -180,9 +162,9 @@ class Messages extends BaseModel {
      * @returns
      */
     async sendImg() {
-        let caption =
-            options.useCaption === "caption" ? this.inputCaption : this.inputMessage;
-        // caption = this.subtitute(caption);
+        const { useCaption } = options,
+            caption = useCaption === "caption" ? this.inputCaption : this.inputMessage;
+
         return await window.WAPI.sendImage(
             this.phone,
             this.imageFile,
