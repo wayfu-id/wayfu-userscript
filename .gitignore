@@ -1,5 +1,7 @@
 package-lock.json
 
+
+assets/*-dev.*
 release
 build/
 .husky/_
