@@ -29,9 +29,9 @@ class Interval {
     start(callback = null) {
         if (!this.isRunning) {
             this.timer = setInterval(this.fn, this.time);
-            if (!!callback && typeof callback === "function") {
-                callback(true);
-            }
+        }
+        if (!!callback && typeof callback === "function") {
+            callback(true);
         }
     }
 
@@ -43,9 +43,9 @@ class Interval {
         if (this.isRunning) {
             clearInterval(this.timer);
             this.timer = false;
-            if (!!callback && typeof callback === "function") {
-                callback(false);
-            }
+        }
+        if (!!callback && typeof callback === "function") {
+            callback(false);
         }
     }
 
