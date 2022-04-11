@@ -6,8 +6,8 @@ import MyArray from "./MyArray";
 class Changelog extends GM_Library {
     constructor() {
         super();
-        const detail = this.getValue("changelog", []);
-        this.details = detail.length != 0 ? new MyArray(...detail) : new MyArray();
+        const detail = this.getValue("wayfu-changelog", new MyArray());
+        this.details = detail.length !== 0 ? new MyArray(...detail) : new MyArray();
     }
 
     /**
@@ -92,7 +92,7 @@ class Changelog extends GM_Library {
      * Save changelog to locals
      */
     save() {
-        this.setValue("changelog", this.details);
+        this.setValue("wayfu-changelog", this.details);
     }
 }
 
