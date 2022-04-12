@@ -1,4 +1,5 @@
 import MyArray from "../models/MyArray";
+import MyDate from "../models/MyDate";
 import { rgx, dateOptDefault } from "./Constant";
 
 /**
@@ -49,6 +50,18 @@ const JSONParse = (str) => {
             done(null);
         }
     });
+};
+
+/**
+ * Parse any value from any type of data
+ * @param {any} val value to be parsed
+ * @returns {any} parsed value
+ */
+const parseValue = (val) => {
+    if (typeof val === "string") {
+        val = isNumeric(val) ? Number(val) : isDateStr(val) ? new MyDate(val) : val;
+    }
+    return val;
 };
 
 /**
@@ -324,4 +337,5 @@ export {
     loadFile,
     exportToCsv,
     JSONParse,
+    parseValue,
 };
