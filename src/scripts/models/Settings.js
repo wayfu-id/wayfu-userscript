@@ -1,5 +1,5 @@
 import { DOM } from "../lib/DOM";
-import { isNumeric } from "../lib/Util";
+import { parseValue } from "../lib/Util";
 import GM_Library from "./GM_Library";
 import MyArray from "./MyArray";
 
@@ -62,7 +62,7 @@ class Settings extends GM_Library {
      * @returns
      */
     setOption(key, val) {
-        val = isNumeric(val) ? Number(val) : val;
+        val = parseValue(val);
         if (this.hasOwnProperty(key) || this.default.hasOwnProperty(key)) {
             this[key] = val;
         }
