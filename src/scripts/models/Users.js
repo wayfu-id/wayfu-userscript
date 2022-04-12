@@ -90,15 +90,7 @@ class Users extends GM_Library {
         if (prop.phone !== this.phone) return this;
 
         for (const name in prop) {
-            let val = prop[name];
-            if (typeof prop[name] === "string") {
-                val = isNumeric(val)
-                    ? Number(val)
-                    : isDateStr(val)
-                    ? new MyDate(val)
-                    : val;
-            }
-            if (name !== "today") this[name] = val;
+            if (name !== "today") this[name] = prop[name];
         }
 
         this.end =
