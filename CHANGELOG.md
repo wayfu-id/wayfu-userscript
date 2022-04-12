@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.0.1](https://github.com/wayfu-id/wayfu-userscript/compare/v4.0.0...v4.0.1) (2022-04-12)
+
+
+### Bug Fixes
+
+* **user:** add parsevalue function in utility ([151d551](https://github.com/wayfu-id/wayfu-userscript/commit/151d551599ca7b17a09b94d46bcaa0b815e392f4))
+* **user:** change object parsing function ([c08a7b0](https://github.com/wayfu-id/wayfu-userscript/commit/c08a7b0ddbf608155c0810859ffcac3871b93fca))
+* **user:** failed init user when no local data found ([7cdaefa](https://github.com/wayfu-id/wayfu-userscript/commit/7cdaefa4969e3c28630bcf64c592f1096c107fdd))
+
 ## 4.0.0 (2022-04-11)
 
 
