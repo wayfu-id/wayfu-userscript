@@ -1,3 +1,4 @@
+import { parseValue } from "../lib/Util";
 export default class BaseModel {
     /**
      * Set message propreties
@@ -33,24 +34,29 @@ export default class BaseModel {
     }
 
     /**
-     * Parse data into Object
+     * Parse data into Object. Also parse the value of object items
      * @param {any} data input data
      * @returns {object}
      */
     intoObject(data) {
+        let obj = {};
+        if (!data) return obj;
+
         if (typeof data === "string") {
-            return JSON.parse(data);
+            obj = JSON.parse(data);
         } else if (Array.isArray(data)) {
-            let i = 0,
-                obj = {};
-            for (i; i < data.length; ++i) {
-                obj[i] = data[i];
-            }
-            return obj;
+            data.forEach((e, i) => (obj[i] = e));
         } else if (typeof data === "object") {
-            return data;
+            obj = data;
         }
-        return {};
+
+        if (Object.keys(obj).length !== 0) {
+            for (const key in obj) {
+                obj[key] = parseValue(obj[key]);
+            }
+        }
+
+        return obj;
     }
 
     /**
