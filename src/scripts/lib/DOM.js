@@ -219,6 +219,35 @@ class HtmlModifier {
     }
 
     /**
+     * Create an svg element
+     * @param {object} props html tag and attributes for svg and path
+     * @returns {HTMLElement}
+     */
+    createSVGElement(props) {
+        const { size, d, dPath, fill, viewBox } = props;
+        const icoPath = this.createElement({
+            tag: "path",
+            d: d || dPath,
+            fill: fill || "currentColor",
+        });
+        const icoSize = { width: "16", height: "16" };
+        if (size && typeof size === "string") {
+            let [width, height] = size.split(" ");
+
+            icoSize.width = width || icoSize.width;
+            icoSize.height = height || icoSize.height;
+        }
+
+        return this.createElement({
+            tag: "svg",
+            width: icoSize.width,
+            height: icoSize.height,
+            viewBox: viewBox,
+            html: icoPath.outerHTML,
+        });
+    }
+
+    /**
      * Set/Edit single or multiple element style
      * @param {string | HTMLElement} selector target element
      * @param {object} props element style properties
