@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.0.2](https://github.com/wayfu-id/wayfu-userscript/compare/v4.0.1...v4.0.2) (2022-04-14)
+
+
+### Bug Fixes
+
+* **view:** download button on report doesn\'t appear ([2a5fd8f](https://github.com/wayfu-id/wayfu-userscript/commit/2a5fd8f5a9e2149947f0ef85862c0521b997f8e8))
+* **view:** download button on report doesn\'t appear ([4de3dde](https://github.com/wayfu-id/wayfu-userscript/commit/4de3ddeb20492938241564bbf68e6fbaf2e9ba00))
+
 ### [4.0.1](https://github.com/wayfu-id/wayfu-userscript/compare/v4.0.0...v4.0.1) (2022-04-12)
 
 
