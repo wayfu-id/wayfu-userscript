@@ -1,5 +1,5 @@
 import GM_Library from "./GM_Library";
-import { setName, isNumeric, isDateStr, dateFormat, JSONParse } from "../lib/Util";
+import { setName, dateFormat, JSONParse } from "../lib/Util";
 import { modal } from "./Modals.js";
 import { options } from "./Settings";
 import MyDate from "../models/MyDate";
@@ -37,8 +37,6 @@ class Users extends GM_Library {
      * @returns
      */
     init() {
-        const savedUser = this.getValue("wayfu-user");
-
         for (let person of window.WAPI.Contact.models) {
             if (person.isMe) {
                 const { userid, id, displayName, pushname } = person;
@@ -48,7 +46,7 @@ class Users extends GM_Library {
             }
         }
 
-        return this.updateData(savedUser);
+        return this;
     }
 
     /**
@@ -94,11 +92,9 @@ class Users extends GM_Library {
         }
 
         this.end =
-            this.end && this.end instanceof Date
-                ? this.end
-                : this.reg && this.mon
+            this.reg && this.mon
                 ? new MyDate(this.reg).addMonths(this.mon)
-                : null;
+                : this.end || null;
         return this;
     }
 
@@ -107,8 +103,9 @@ class Users extends GM_Library {
      * @param {object} data User data as object
      */
     setUser(data) {
-        if (data && typeof data !== "undefined" && data !== null && data !== "") {
-            this.reset().init().updateData(data).save();
+        const user = data || this.getValue("wayfu-user");
+        if (user && typeof user !== "undefined" && user !== null && user !== "") {
+            this.reset().updateData(user).save();
             options.setOption("userType", this.type);
         }
 
