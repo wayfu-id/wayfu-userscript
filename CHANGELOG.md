@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.0.3](https://github.com/wayfu-id/wayfu-userscript/compare/v4.0.2...v4.0.3) (2022-04-16)
+
+
+### Bug Fixes
+
+* **user:** expiress date doesn\'t update ([88cf519](https://github.com/wayfu-id/wayfu-userscript/commit/88cf519a23c67b8c25a792846c59042132b6a945))
+
 ### [4.0.2](https://github.com/wayfu-id/wayfu-userscript/compare/v4.0.1...v4.0.2) (2022-04-14)
 
 
