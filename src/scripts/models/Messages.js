@@ -83,11 +83,10 @@ class Messages extends BaseModel {
                     isNumber = isNumeric(value);
 
                 if (i === 0 && isNumber) {
-                    const target = options.targetBp,
-                        toGo = (value) => {
-                            const val = target - Number(value);
-                            return val > 0 ? val : 0;
-                        };
+                    const toGo = (value) => {
+                        const val = options.targetBp - Number(value);
+                        return val > 0 ? val : 0;
+                    };
                     message = message
                         .replace(/P_BP/g, `${value} BP`)
                         .replace(/K_BP/g, `${toGo(value)} BP`);
@@ -95,7 +94,7 @@ class Messages extends BaseModel {
                     message = message
                         .replace(/L_DAY/g, this.lastDay(value))
                         .replace(/S_DAY/g, this.lastDay(value, 1));
-                } else {
+                } else if (i === 2 && !(isNumber || isDate)) {
                     message = message
                         .replace(/F_INVS/g, setName(value, true))
                         .replace(/INVS/g, setName(value));
