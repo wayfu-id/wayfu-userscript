@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.0.4](https://github.com/wayfu-id/wayfu-userscript/compare/v4.0.3...v4.0.4) (2022-04-17)
+
+
+### Bug Fixes
+
+* **message:** sponsor name failed to be printed ([d01b42e](https://github.com/wayfu-id/wayfu-userscript/commit/d01b42e04a2f4d49cfc74fd45c71a041f8484b54))
+
 ### [4.0.3](https://github.com/wayfu-id/wayfu-userscript/compare/v4.0.2...v4.0.3) (2022-04-16)
 
 
