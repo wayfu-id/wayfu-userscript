@@ -16,7 +16,7 @@ const webpackConfig = require("../webpack.config");
 // Import utilities
 const { end } = require("./utils/bundleLogger");
 const { readJSON, createFile, cleanDir } = require("./utils/fileUtils");
-const { scriptHeader, styleHeader, metaUpdate } = require("./utils/generateHeader");
+const { scriptHeader, styleHeader } = require("./utils/generateHeader");
 const { handleErrors } = require("./utils/handleErrors");
 
 const sass = gulpSass(dartSass);
@@ -66,7 +66,8 @@ function createMetaUpdate(done) {
 
     const pkg = readJSON("package.json");
 
-    return createFile("update.meta.js", metaUpdate(pkg))
+    return createFile("update.meta.js", "")
+        .pipe(scriptHeader(pkg))
         .pipe(rename({ basename: "update", extname: ".meta.js" }))
         .pipe(_dest("./"));
 }

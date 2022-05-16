@@ -95,5 +95,5 @@ function generateMetaUpdate(package) {
 module.exports = {
     scriptHeader: generateHeader,
     styleHeader: generateStyleHeader,
-    metaUpdate: generateMetaUpdate,
+    metaUpdate: generateHeader,
 };
