@@ -7,6 +7,7 @@ import { queue } from "../models/Queue";
 import { user } from "../models/Users";
 import { changes } from "../models/Changeslog";
 import { DOM } from "../lib/DOM";
+import { csvFile } from "../models/CSVFile";
 import { dateFormat, isNumeric } from "../lib/Util";
 import {
     loadRecipient,
@@ -109,20 +110,12 @@ class AppEvents {
             useImage: elm.checked,
         });
     }
-    loadData(e) {
+    async loadData(e) {
         const elm = e.currentTarget || e.target,
-            reader = new FileReader(),
             file = elm.files[0];
-
-        reader.onloadend = (function (file) {
-            return function (f) {
-                const target = f.target || f.currentTarget,
-                    lines = target.result.split(/\r\n|\r|\n/);
-                loadRecipient(lines, file);
-            };
-        })(file);
         resetRecipient();
-        reader.readAsText(file);
+
+        loadRecipient(await csvFile.import(file));
     }
     imagePreview(e) {
         const elm = e.currentTarget || e.target,
