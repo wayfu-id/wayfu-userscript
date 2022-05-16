@@ -79,21 +79,7 @@ function generateHeader(package) {
     });
 }
 
-function generateMetaUpdate(package) {
-    const app = package;
-    const userscript = app.userscript;
-    const setKey = (key) => `@${key.padEnd(12, " ")}`;
-
-    const header = ["// ==UserScript=="];
-    header.push(`// ${setKey("name")} ${userscript["name"]}`);
-    header.push(`// ${setKey("version")} ${app["version"]}`);
-    header.push("// ==/UserScript==");
-
-    return header.join("\n") + "\n\n";
-}
-
 module.exports = {
     scriptHeader: generateHeader,
     styleHeader: generateStyleHeader,
-    metaUpdate: generateHeader,
 };
