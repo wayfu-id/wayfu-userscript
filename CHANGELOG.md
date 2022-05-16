@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.0.6](https://github.com/wayfu-id/wayfu-userscript/compare/v4.0.5...v4.0.6) (2022-05-16)
+
+
+### Bug Fixes
+
+* error on checking update [#7](https://github.com/wayfu-id/wayfu-userscript/issues/7) ([c8b6ff4](https://github.com/wayfu-id/wayfu-userscript/commit/c8b6ff43a3084a4a1f8fccb154be128195d3abf8))
+
 ### [4.0.5](https://github.com/wayfu-id/wayfu-userscript/compare/v4.0.4...v4.0.5) (2022-05-16)
 
 
