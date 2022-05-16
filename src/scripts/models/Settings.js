@@ -12,7 +12,6 @@ class Settings extends GM_Library {
             hasImage: false,
             imageFile: null,
             useImage: false,
-            fileName: "",
             activeTab: 0,
             targetBp: 100,
             maxQueue: 500,

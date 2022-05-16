@@ -7,7 +7,7 @@ import { options } from "../models/Settings";
 import { user } from "../models/Users";
 import { message } from "../models/Messages";
 import { validator } from "./Validators";
-import { loadFile, exportToCsv } from "../lib/Util";
+import { csvFile } from "../models/CSVFile";
 import { DOM } from "../lib/DOM";
 
 async function checkStatus() {
@@ -48,25 +48,24 @@ async function checkStatus() {
     return !isValid;
 }
 
-function loadRecipient(lines, file) {
-    const onLoaded = loadFile(lines),
-        fileName = file.name.split(".")[0];
-
+/**
+ * Load the recepient data
+ * @param {csvFile} csvFile
+ */
+function loadRecipient(csvFile) {
     let mIdx =
         options.dateFormat !== "auto"
             ? options.dateFormat
-            : onLoaded.option.monthIndex || options.monthIndex;
+            : csvFile.options.monthIndex || options.monthIndex;
 
     let isFormat = mIdx == 2;
-
     options.setOptions(
-        Object.assign({}, onLoaded.option, {
+        Object.assign({}, csvFile.options, {
             monthIndex: mIdx,
             isFormat: isFormat,
-            fileName: fileName,
         })
     );
-    queue.setData(onLoaded.data);
+    queue.setData(csvFile.data);
     updateUI();
     // console.info(`Blast!: ${this.queue.size} Data Loaded`);
 }
@@ -214,7 +213,7 @@ function showReport() {
         const { count, data } = report.createData(type);
         if (data.isEmpty) return count;
 
-        const { fileUrl, fileName } = exportToCsv(options.fileName, type, data);
+        const { fileUrl, fileName } = csvFile.export(type, data);
         const downloadIco = {
             viewBox: "0 0 512 512",
             fill: "currentColor",
