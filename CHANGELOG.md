@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.0.5](https://github.com/wayfu-id/wayfu-userscript/compare/v4.0.4...v4.0.5) (2022-05-16)
+
+
+### Bug Fixes
+
+* annoying nasted report filename(s) [#1](https://github.com/wayfu-id/wayfu-userscript/issues/1) ([d47f896](https://github.com/wayfu-id/wayfu-userscript/commit/d47f896efd9da96df4f7c5b88fa363cadc78f7b6))
+* blast icon doesn/'t change [#5](https://github.com/wayfu-id/wayfu-userscript/issues/5) ([86266ca](https://github.com/wayfu-id/wayfu-userscript/commit/86266ca06c9a8926757621b9617b6e7149141bf6))
+* blast icon not working again [#5](https://github.com/wayfu-id/wayfu-userscript/issues/5) ([3b105dc](https://github.com/wayfu-id/wayfu-userscript/commit/3b105dc06cc6673110a71751ba5178de062a8eaa))
+
 ### [4.0.4](https://github.com/wayfu-id/wayfu-userscript/compare/v4.0.3...v4.0.4) (2022-04-17)
 
 
