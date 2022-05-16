@@ -100,7 +100,7 @@ function setStatus(stat) {
 
     DOM.setElements([
         {
-            elm: "#_blast",
+            elm: "#_blast-ico",
             props: {
                 d: stat ? stopIc : blastIc,
             },
