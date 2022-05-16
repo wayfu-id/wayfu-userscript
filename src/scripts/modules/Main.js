@@ -101,7 +101,7 @@ function setStatus(stat) {
 
     DOM.setElements([
         {
-            elm: "#blastIc",
+            elm: "#_blast",
             props: {
                 d: stat ? stopIc : blastIc,
             },
