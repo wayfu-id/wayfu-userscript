@@ -2,7 +2,8 @@
  * Regular Expression (RegExp) list pattern for some purpose
  */
 const rgx = {
-    forVersion: /^\d+((\.|-)\d+[A-Za-z]?)*$/,
+    forVersion: /^\d+(?:(?:\.|-)\d+[A-Za-z]?)*$/,
+    getVersion: /(?:@version\s*(\d+(?:(?:\.|-)\d+[A-Za-z]?)*))/,
     phonePattern: /^(?:[\+\d]?[\- \d]{10,})$/,
     phoneValue: /^[0\+]*(?:(\d{9,})|([\d]{1,3}(?:[\- ]?[\d]{2,})+))$/,
     datePattern: /\d{1,4}[\/|-|:]\d{1,2}[\/|-|:]\d{2,4}/,

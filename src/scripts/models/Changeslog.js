@@ -1,6 +1,7 @@
 import GM_Library from "./GM_Library";
 import { isUpToDate } from "../lib/Util";
 import { modal } from "./Modals";
+import { rgx } from "../lib/Constant";
 import MyArray from "./MyArray";
 
 class Changelog extends GM_Library {
@@ -50,7 +51,7 @@ class Changelog extends GM_Library {
      * @param {any} data script update metadata
      */
     async doUpdate(data) {
-        const newVers = /\d+((\.|-)\d+[A-Za-z]?)*/.exec(data)[0],
+        const newVers = rgx.getVersion.exec(data)[1],
             { version, name, downloadURL } = this.appInfo;
         if (!isUpToDate(version, newVers)) {
             const msg = `${name} ${newVers} sudah tersedia, perbaharui sekarang?`;
