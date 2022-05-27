@@ -63,7 +63,7 @@ class CSVFile {
             const data = this.toArray(row, splitter),
                 validPhone = (val) => rgx.phonePattern.test(val);
             if (row != "" && data && data.length >= 2) {
-                if (!data.some((val) => validPhone(val))) return false;
+                if (!data.some((val, idx) => validPhone(val) && idx !== 0)) return false;
                 data.forEach((a, i) => {
                     data[i] = /^"(.*)"$/.test(a) ? a.replace(/(^")|("$)/g, "") : data[i];
                     data[i] = validPhone(a)
