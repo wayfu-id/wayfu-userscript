@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.0.8](https://github.com/wayfu-id/wayfu-userscript/compare/v4.0.7...v4.0.8) (2022-06-02)
+
+
+### Bug Fixes
+
+* report filename extension missing on some devices [#11](https://github.com/wayfu-id/wayfu-userscript/issues/11) ([dddb1d0](https://github.com/wayfu-id/wayfu-userscript/commit/dddb1d08cf5b3503a4f0c32995f2e329a835d2d1))
+
 ### [4.0.7](https://github.com/wayfu-id/wayfu-userscript/compare/v4.0.6...v4.0.7) (2022-05-27)
 
 
