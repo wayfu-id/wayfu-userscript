@@ -225,7 +225,7 @@ function showReport() {
             html: DOM.createSVGElement(downloadIco).outerHTML,
             download: `${fileName}`,
             classid: "wfu-export-csv",
-            title: `Download "${fileName}.csv"`,
+            title: `Download "${fileName}"`,
         };
 
         return `${count} ` + DOM.createElement(elm).outerHTML;
