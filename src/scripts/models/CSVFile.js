@@ -6,7 +6,7 @@ import * as util from "../lib/CSVUtil";
 class CSVFile {
     constructor() {
         this.types = new MyArray("gagal", "error");
-        this.fileName = { fname: [], ftype: "", numb: 1 };
+        this.fileName = { fname: [], ftype: "", numb: 1, ext: ".csv" };
         this.options = {};
     }
 
@@ -19,17 +19,18 @@ class CSVFile {
         const data = await file.text();
         if (!data) return this;
 
-        this.constructFileName(file.name.split(".")[0]);
+        this.constructFileName(file.name);
 
         return this.readData(data.split(/\r\n|\r|\n/), file);
     }
 
     /**
      * Construct current CSV filename
-     * @param {String} name
+     * @param {String} filename
      */
-    constructFileName(name) {
-        const newName = { fname: [], ftype: "", numb: 1 };
+    constructFileName(filename) {
+        let [name, ext] = filename.split(".");
+        const newName = { fname: [], ftype: "", numb: 1, ext: `.${ext || "csv"}` };
         name.replace(rgx.forFilename, (m, t, n, f) => {
             if (f !== undefined) {
                 newName.fname.push(f);
@@ -161,7 +162,7 @@ class CSVFile {
          * Create new file name to export
          */
         const newName = ((type) => {
-            let { fname } = this.fileName;
+            let { fname, ext } = this.fileName;
 
             const getNumb = () => {
                 let { ftype, numb } = this.fileName;
@@ -170,7 +171,7 @@ class CSVFile {
                 return `_${numb + 1}`;
             };
 
-            return `${fname.join("_")}_${type}${getNumb()}`;
+            return `${fname.join("_")}_${type}${getNumb()}${ext}`;
         })(type);
 
         return { fileUrl: URL.createObjectURL(csvData), fileName: newName };
