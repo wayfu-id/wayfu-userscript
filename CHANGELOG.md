@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.0.9](https://github.com/wayfu-id/wayfu-userscript/compare/v4.0.8...v4.0.9) (2022-06-07)
+
+
+### Bug Fixes
+
+* wapi contact models not found [#13](https://github.com/wayfu-id/wayfu-userscript/issues/13) ([3357f2b](https://github.com/wayfu-id/wayfu-userscript/commit/3357f2b81cda07ad88701010cc22adfa228efea0))
+
 ### [4.0.8](https://github.com/wayfu-id/wayfu-userscript/compare/v4.0.7...v4.0.8) (2022-06-02)
 
 
