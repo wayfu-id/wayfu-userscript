@@ -40,13 +40,16 @@ function setWAPI(store) {
                         1
                     )
                         .then(() => {
-                            let media = mc.models[0];
+                            let { models, _models } = mc,
+                                media = (models || _models)[0];
+
                             media.sendToChat(chat, {
                                 caption: caption,
                             });
                             done(true);
                         })
                         .catch((err) => {
+                            console.log(err);
                             done(false);
                         });
                 });
