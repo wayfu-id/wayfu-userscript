@@ -37,7 +37,9 @@ class Users extends GM_Library {
      * @returns
      */
     init() {
-        for (let person of window.WAPI.Contact.models) {
+        const { models, _models } = window.WAPI.Contact;
+
+        for (let person of models || _models) {
             if (person.isMe) {
                 const { userid, id, displayName, pushname } = person;
                 this.phone = Number(userid || id.user) || "";
