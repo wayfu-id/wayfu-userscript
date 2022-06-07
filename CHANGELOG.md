@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.0.10](https://github.com/wayfu-id/wayfu-userscript/compare/v4.0.9...v4.0.10) (2022-06-07)
+
+
+### Bug Fixes
+
+* send image doesn't work [#15](https://github.com/wayfu-id/wayfu-userscript/issues/15) ([aec7b5d](https://github.com/wayfu-id/wayfu-userscript/commit/aec7b5df8832544860b5d1acfaf93d8f844bdfcf))
+
 ### [4.0.9](https://github.com/wayfu-id/wayfu-userscript/compare/v4.0.8...v4.0.9) (2022-06-07)
 
 
