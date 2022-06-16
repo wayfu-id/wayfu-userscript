@@ -27,6 +27,7 @@ const eventLists = [
     { element: "._input select", type: "change", event: "inputSelects" },
     { element: "#changeLogs", type: "click", event: "changeLog" },
     { element: "#_blast", type: "click", event: "runTasks" },
+    { element: "div#app", type: "click", event: "checkChat" },
 ];
 
 /**
@@ -67,6 +68,25 @@ const storeObjects = [
             typeof module.default === "object" &&
             module.default.chat &&
             module.default.active
+                ? module.default
+                : null,
+    },
+    {
+        id: "WebClasses2",
+        conditions: (module) =>
+            module.default &&
+            typeof module.default === "object" &&
+            module.default.menu &&
+            module.default.active
+                ? module.default
+                : null,
+    },
+    {
+        id: "WebClasses3",
+        conditions: (module) =>
+            module.default &&
+            typeof module.default === "object" &&
+            module.default.chatHeader
                 ? module.default
                 : null,
     },
