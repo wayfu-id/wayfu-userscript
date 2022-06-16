@@ -85,6 +85,7 @@ class CSVFile {
 
         data.forEach((e) => {
             let row;
+            console.log(e, isValidRow(e, splitter));
             if ((row = isValidRow(e, splitter))) {
                 newData.push(row);
                 let s;
@@ -175,6 +176,37 @@ class CSVFile {
         })(type);
 
         return { fileUrl: URL.createObjectURL(csvData), fileName: newName };
+    }
+
+    static createFile(name, data) {
+        /**
+         * Proceed array to Blob data
+         */
+        const csvData = ((data) => {
+            function proceedRow(row) {
+                let finalVal = "";
+                for (let j = 0; j < row.length; j++) {
+                    let innerValue = row[j] === null ? "" : row[j].toString();
+                    if (row[j] instanceof Date) {
+                        innerValue = row[j].toLocaleString();
+                    }
+                    let result = innerValue.replace(/"/g, '""');
+                    if (result.search(/("|,|\n)/g) >= 0) result = '"' + result + '"';
+                    if (j > 0) finalVal += ",";
+                    finalVal += result;
+                }
+                return finalVal + "\n";
+            }
+
+            let csvData = "";
+            for (let i = 0; i < data.length; i++) {
+                csvData += proceedRow(data[i]);
+            }
+
+            return new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+        })(data);
+
+        return { fileUrl: URL.createObjectURL(csvData), fileName: `${name}.csv` };
     }
 }
 
