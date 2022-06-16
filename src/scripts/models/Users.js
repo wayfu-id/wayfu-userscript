@@ -37,16 +37,10 @@ class Users extends GM_Library {
      * @returns
      */
     init() {
-        const { models, _models } = window.WAPI.Contact;
+        const { userid, id, displayName, pushname } = window.WAPI.Me;
 
-        for (let person of models || _models) {
-            if (person.isMe) {
-                const { userid, id, displayName, pushname } = person;
-                this.phone = Number(userid || id.user) || "";
-                this.name = displayName || pushname || "";
-                break;
-            }
-        }
+        this.phone = Number(userid || id.user) || "";
+        this.name = displayName || pushname || "";
 
         return this;
     }
@@ -125,7 +119,9 @@ class Users extends GM_Library {
      * @returns {Promise<boolean>}
      */
     async check() {
-        return this.isPremium || (await this.tryApp());
+        let ret = this.isPremium || (await this.tryApp());
+        if (!ret) this.showAlert(2, true);
+        return ret;
     }
 
     /**
