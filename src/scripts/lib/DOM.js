@@ -225,11 +225,20 @@ class HtmlModifier {
      */
     createSVGElement(props) {
         const { size, d, dPath, fill, viewBox } = props;
-        const icoPath = this.createElement({
-            tag: "path",
-            d: d || dPath,
-            fill: fill || "currentColor",
-        });
+        const paths = ((data) => {
+            if (!Array.isArray(data)) return [data];
+            return data;
+        })(d || dPath);
+
+        let icoPath = "";
+        for (let path of paths) {
+            icoPath += this.createElement({
+                tag: "path",
+                d: path,
+                fill: fill || "currentColor",
+            }).outerHTML;
+        }
+
         const icoSize = { width: "16", height: "16" };
         if (size && typeof size === "string") {
             let [width, height] = size.split(" ");
@@ -238,13 +247,17 @@ class HtmlModifier {
             icoSize.height = height || icoSize.height;
         }
 
-        return this.createElement({
-            tag: "svg",
-            width: icoSize.width,
-            height: icoSize.height,
-            viewBox: viewBox,
-            html: icoPath.outerHTML,
-        });
+        return this.createElement(
+            Object.assign(
+                {
+                    tag: "svg",
+                    width: icoSize.width,
+                    height: icoSize.height,
+                    html: icoPath,
+                },
+                viewBox ? { viewBox: viewBox } : {}
+            )
+        );
     }
 
     /**
