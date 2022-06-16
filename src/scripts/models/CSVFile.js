@@ -85,7 +85,6 @@ class CSVFile {
 
         data.forEach((e) => {
             let row;
-            console.log(e, isValidRow(e, splitter));
             if ((row = isValidRow(e, splitter))) {
                 newData.push(row);
                 let s;
