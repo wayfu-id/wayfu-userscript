@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.1.0](https://github.com/wayfu-id/wayfu-userscript/compare/v4.0.10...v4.1.0) (2022-06-16)
+
+
+### Features
+
+* add new premium feature to access and download group participats ([c7d0446](https://github.com/wayfu-id/wayfu-userscript/commit/c7d044659461f1e6f06cbea6289f178fe2cf1929))
+
+
+### Bug Fixes
+
+* no message for non premium users [#17](https://github.com/wayfu-id/wayfu-userscript/issues/17) ([dd07491](https://github.com/wayfu-id/wayfu-userscript/commit/dd0749136c8eabfee8ae8725c1943b5ccb0e9c28))
+
 ### [4.0.10](https://github.com/wayfu-id/wayfu-userscript/compare/v4.0.9...v4.0.10) (2022-06-07)
 
 
