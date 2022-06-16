@@ -164,7 +164,7 @@ class Messages extends BaseModel {
         const { useCaption } = options,
             caption = useCaption === "caption" ? this.inputCaption : this.inputMessage;
 
-        return await window.WAPI.sendImage(
+        return await window.WAPI.SendImgToChat(
             this.phone,
             this.imageFile,
             this.subtitute(caption)
