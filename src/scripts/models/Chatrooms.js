@@ -3,7 +3,7 @@ import { DOM } from "../lib/DOM";
 class Chatroom {
     constructor() {
         this.room = null;
-        this.classId = "";
+        this.classId = { active: "", header: "" };
     }
 
     get isGroup() {
@@ -34,26 +34,36 @@ class Chatroom {
 
     /**
      * Initialize chatoom
-     * @param {string} activeClass chatroom active css class
      * @returns
      */
-    init(activeClass) {
-        this.classId = activeClass;
+    init() {
+        const { active } = window.WAPI.WebClasses,
+            { chatHeader } = window.WAPI.WebClassesV2;
+
+        this.classId = { active: active, header: chatHeader };
         return this;
     }
 
     selectChat() {
-        let elm = this.classId !== "" ? DOM.getElement(`div.${this.classId}`) : null;
-        if (elm !== null) {
-            elm = elm.offsetParent;
-            for (let key of Object.keys(elm)) {
-                let { children } = elm[key];
-                if (children) {
-                    this.room = children.props.chat;
-                    break;
+        this.room = ((classes) => {
+            let room;
+            for (let key in classes) {
+                let elm = DOM.getElement(`.${classes[key]}`);
+                if (elm) {
+                    elm = key === "active" ? elm.offsetParent : elm.parentNode;
+                    for (let key of Object.keys(elm)) {
+                        let { children } = elm[key];
+                        if (children) {
+                            room = children.props.chat;
+                            break;
+                        }
+                    }
+                }
+                if (room) {
+                    return room;
                 }
             }
-        }
+        })(this.classId);
 
         return this;
     }

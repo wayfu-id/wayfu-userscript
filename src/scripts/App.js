@@ -27,7 +27,7 @@ export default class App extends GM_Library {
         // Don't Forget to Check for Update
     }
     registerPanel() {
-        chat.init(window.WAPI.WebClasses.active);
+        chat.init();
         // console.log(chat);
         const html = this.getResource("pnl"),
             style = this.getResource("css"),
