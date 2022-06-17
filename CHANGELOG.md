@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.1.1](https://github.com/wayfu-id/wayfu-userscript/compare/v4.1.0...v4.1.1) (2022-06-17)
+
+
+### Bug Fixes
+
+* cannot detected groupchat when not clicked from side pannel ([aec01f6](https://github.com/wayfu-id/wayfu-userscript/commit/aec01f67b5714b7679d28746cf002ab85c4c3bdc))
+
 ## [4.1.0](https://github.com/wayfu-id/wayfu-userscript/compare/v4.0.10...v4.1.0) (2022-06-16)
 
 
