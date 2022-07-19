@@ -16,7 +16,8 @@ const rgx = {
  */
 const eventLists = [
     { element: "#panelBody .menus", type: "click", event: "tabMenu" },
-    { element: "#_mode", type: "click", event: "autoMode" },
+    { element: "#panelBody textarea", type: "input", event: "updateText" },
+    { element: "#_mode", type: "click", event: "textPreview" },
     { element: "#useImage", type: "click", event: "useImage" },
     { element: "#getFile", type: "change", event: "loadData" },
     { element: "#imgFile", type: "change", event: "imagePreview" },

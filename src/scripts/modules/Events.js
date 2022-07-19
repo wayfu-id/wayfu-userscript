@@ -1,4 +1,5 @@
 import MyDate from "../models/MyDate";
+import { drawdown } from "./Drawdown";
 import { options } from "../models/Settings";
 import { modal } from "../models/Modals";
 import { report } from "../models/Reports";
@@ -7,31 +8,27 @@ import { queue } from "../models/Queue";
 import { user } from "../models/Users";
 import { changes } from "../models/Changeslog";
 import { chat } from "../models/Chatrooms";
+import { message } from "../models/Messages";
 import { DOM } from "../lib/DOM";
 import CSVFile, { csvFile } from "../models/CSVFile";
 import { dateFormat, isNumeric } from "../lib/Util";
 import MyArray from "../models/MyArray";
-import {
-    loadRecipient,
-    resetRecipient,
-    checkStatus,
-    startProcess,
-    initMessage,
-} from "./Main";
+import { loadRecipient, resetRecipient, checkStatus, startProcess } from "./Main";
 
 class AppEvents {
     constructor() {}
     async runTasks(e) {
-        const { autoMode, useImage } = options;
+        if (!(await user.check())) return;
         if (await checkStatus()) return;
 
-        let time = !autoMode ? 10 : !useImage ? 55e2 : 6e3;
-        let fn = () => {
-            return startProcess();
-        };
+        const { useImage } = options,
+            time = !useImage ? 55e2 : 6e3,
+            fn = () => {
+                return startProcess();
+            };
 
-        initMessage();
-        report.reset(autoMode);
+        // initMessage();
+        report.reset();
         loop.set(time, fn);
         startProcess();
     }
@@ -69,55 +66,72 @@ class AppEvents {
 
         options.setOption("activeTab", Array.from(tabs).indexOf(elm));
     }
-    async autoMode(e) {
-        const imgs = DOM.getElement("#useImage"),
-            elm = e.currentTarget || e.target;
+    textPreview(e) {
+        let elm = e.currentTarget || e.target,
+            form = DOM.getElement("#panelBody textarea", true),
+            chk = elm.checked;
 
-        if (elm.checked) elm.checked = await user.check();
-        if (imgs.checked) imgs.click();
+        form.forEach((e) => {
+            const prevId = e.id === "message" ? "msgPreview" : "captPreview";
+            const content = ((chk, { id }) => {
+                let text = message[`input${id === "message" ? "Message" : "Caption"}`];
 
-        options.setOption("autoMode", elm.checked);
+                if (chk) {
+                    message.setData(queue.now);
+                    text = message.subtitute(text);
+                    return drawdown.toHtml(text, !chk);
+                }
+
+                return "";
+            })(chk, e);
+
+            const editable = ((chk, { id }) => {
+                if (id === "message") return !chk;
+
+                const { useCaption: capt } = options;
+                return capt ? !chk : capt;
+            })(chk, e);
+
+            DOM.setElement(`#${prevId}`, { html: content })
+                .setElementStyle(`#${prevId}`, { display: editable ? "none" : "block" })
+                .setElementStyle(e, { display: editable ? "block" : "none" });
+        });
+    }
+    updateText(e) {
+        const { id, value, innerText } = e.target || e.currentTarget,
+            key = id === "message" ? "Message" : "Caption",
+            props = {};
+
+        props[`input${key}`] = value || innerText;
+        message.setProperties(props);
     }
     async useImage(e) {
         const useCapt = options.useCaption === "caption",
             elm = e.currentTarget || e.target,
-            mode = DOM.getElement("#_mode");
-
-        if (elm.checked) {
-            elm.checked = await user.check();
-            mode.checked = elm.checked;
-        }
-
-        const chk = useCapt ? !elm.checked : true,
+            chk = useCapt ? elm.checked : false,
             title = useCapt ? "" : "Caption menggunakan pesan",
             captId = elm.dataset.captId;
 
         DOM.setElements([
-            {
-                elm: `#${elm.value}`,
-                props: { disabled: !elm.checked },
-            },
-            {
-                elm: `#${captId}`,
-                props: { disabled: chk, title: title },
-            },
-            {
-                elm: "#useCaption",
-                props: { disabled: !elm.checked },
-            },
+            { elm: `#${elm.value}`, props: { disabled: !elm.checked } },
+            { elm: `#${captId}`, props: { disabled: !chk, title: title } },
+            { elm: "#useCaption", props: { disabled: !elm.checked } },
         ]);
 
-        options.setOptions({
-            autoMode: mode.checked,
-            useImage: elm.checked,
-        });
+        options.setOptions({ useImage: elm.checked });
     }
     async loadData(e) {
         const elm = e.currentTarget || e.target,
             file = elm.files[0];
-        resetRecipient();
 
-        loadRecipient(await csvFile.import(file));
+        resetRecipient();
+        if (file) {
+            loadRecipient(await csvFile.import(file));
+        }
+        DOM.setElement("#_mode", {
+            title: !file ? "Masukkan File CSV" : "Mode Pesan",
+            disabled: !file,
+        });
     }
     imagePreview(e) {
         const elm = e.currentTarget || e.target,
@@ -134,9 +148,7 @@ class AppEvents {
                 imgFile = null;
             }
         } else {
-            DOM.setElement(`#${btn}`, {
-                value: "",
-            });
+            DOM.setElement(`#${btn}`, { value: "" });
         }
 
         DOM.setElement("#_img-output", {
@@ -145,6 +157,7 @@ class AppEvents {
             display: imgFile ? "block" : "none",
         });
 
+        message.setProperties({ imageFile: imgFile });
         options.setOptions({ hasImage: !!imgFile, imageFile: imgFile });
     }
     toggleApp(e) {
@@ -163,9 +176,7 @@ class AppEvents {
         DOM.setElements([
             {
                 elm: elm,
-                props: {
-                    max: id === "maxQueue" ? options.queueLimit : options.bpLimit,
-                },
+                props: { max: id === "maxQueue" ? options.queueLimit : options.bpLimit },
             },
             {
                 elm: DOM.getElement("output", elm.parentElement),
@@ -177,20 +188,15 @@ class AppEvents {
         options.setOption(id, value);
     }
     inputChecks(e) {
-        const elm = e.currentTarget || e.target,
-            { id, value } = elm;
+        const { id, value } = e.currentTarget || e.target;
         options.setOption(id, value);
     }
     inputSelects(e) {
-        const elm = e.currentTarget || e.target,
-            { id, value } = elm;
+        const { id, value } = e.currentTarget || e.target;
         switch (id) {
             case "themeColor":
                 (function (id, val) {
-                    DOM.setElementStyle("#wayfuPanel", {
-                        backgroundColor: val,
-                    });
-
+                    DOM.setElementStyle("#wayfuPanel", { backgroundColor: val });
                     options.setOption(id, val);
                 })(id, value);
                 break;
@@ -204,15 +210,10 @@ class AppEvents {
                             dateFormat: val,
                         });
                     } else {
-                        options.setOptions({
-                            isFormat: false,
-                            dateFormat: val,
-                        });
+                        options.setOptions({ isFormat: false, dateFormat: val });
                         const files = DOM.getElement("#getFile");
                         if (!queue.isEmpty || files.value !== "") {
-                            DOM.setElement(files, {
-                                value: "",
-                            });
+                            DOM.setElement(files, { value: "" });
                             modal.alert(
                                 "Untuk opsi <strong>Deteksi Otomatis</strong>, Silahkan masukkan ulang file penerima pesan.",
                                 "[WARNING] Masukkan ulang CSV"
@@ -263,15 +264,8 @@ class AppEvents {
                     append: container,
                 });
 
-            DOM.createElement({
-                tag: "span",
-                text: title,
-                append: items,
-            });
-
-            DOM.createListElement("ul", e.content, {
-                append: items,
-            });
+            DOM.createElement({ tag: "span", text: title, append: items });
+            DOM.createListElement("ul", e.content, { append: items });
         });
         // console.log(container);
         modal.alert(container, "Detail Pembaruan.");
