@@ -8,7 +8,7 @@ class Settings extends GM_Library {
         super();
         this.default = {
             themeColor: "var(--butterbar-connection-background)",
-            autoMode: false,
+            // autoMode: false, @deprecated Mode auto is setted by default
             hasImage: false,
             imageFile: null,
             useImage: false,
@@ -134,7 +134,7 @@ class Settings extends GM_Library {
                 "hasImage",
                 "imageFile",
                 "fileName",
-                "autoMode",
+                // "autoMode", @deprecated Mode auto is setted by default
                 "alert",
                 "bpLimit",
                 "queueLimit",
