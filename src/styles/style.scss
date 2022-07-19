@@ -387,6 +387,20 @@
             background: rgb(0, 0, 0, 0.05);
         }
 
+        textarea#_caption {
+            &::-webkit-input-placeholder {
+                color: white;
+            }
+
+            &:disabled {
+                background: rgb(0, 0, 0, 0.15);
+
+                &::-webkit-input-placeholder {
+                    color: #eee;
+                }
+            }
+        }
+
         div.text-preview {
             display: none;
             padding: 2px 4px;
