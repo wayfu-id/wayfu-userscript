@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name         WayFu - Easy Follow Up
 // @description  WhatsApp Easy Follow Up.
-// @date         2022-06-17
+// @date         2022-07-19
 // @copyright    2018, Rizal Nurhidayat (https://github.com/rzlnhd)
 // @license      CC BY-NC-ND 4.0; https://creativecommons.org/licenses/by-nc-nd/4.0/
 // @icon         https://wayfu.id/v4/assets/wayfu-icon.webp
 // @homepage     https://wayfu.id/
 // @supportURL   https://wayfu.id/
-// @version      4.1.1
+// @version      4.2.0
 // @author       Rizal Nurhidayat (https://github.com/rzlnhd)
 // @match        https://web.whatsapp.com/*
 // @grant        GM_addStyle
