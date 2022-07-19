@@ -1,7 +1,8 @@
 import BaseModel from "../models/BaseModel";
+import MyArray from "../models/MyArray";
 import { DOM } from "../lib/DOM";
 import { options } from "../models/Settings";
-import { chat } from "../models/Chatrooms";
+import { message } from "../models/Messages";
 import { queue } from "../models/Queue";
 import { modal } from "../models/Modals";
 
@@ -15,15 +16,13 @@ class Validators extends BaseModel {
      * Get error list (if any) or return null
      */
     get errorList() {
-        const errList = [];
+        const errList = new MyArray();
         if (Object.entries(this.errors).length !== 0) {
             for (const err in this.errors) {
                 errList.push(this.error(err));
             }
-            return errList;
-        } else {
-            return null;
         }
+        return errList;
     }
 
     /**
@@ -50,17 +49,13 @@ class Validators extends BaseModel {
         let ret = false;
         switch (key) {
             case "message":
-                val = DOM.getElement("#message").value;
+                val = message.inputMessage;
                 ret = val !== "" && val !== null && typeof val !== "undefined";
                 msg = "Silahkan Masukkan Pesan terlebih dahulu...";
                 break;
             case "queue":
                 ret = typeof queue.now !== "undefined";
                 msg = "Silahkan Masukkan File Penerima Pesan...";
-                break;
-            case "chatroom":
-                ret = chat.selected || options.autoMode;
-                msg = "Silahkan Pilih Chatroom Terlebih dahulu";
                 break;
         }
         if (!ret) {
@@ -99,7 +94,7 @@ class Validators extends BaseModel {
      */
     showError() {
         const list = this.errorList;
-        if (list) {
+        if (!list.isEmpty) {
             const errList = DOM.createListElement("ul", list, {
                 classid: "wfu-reports",
             });
