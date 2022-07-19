@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.2.0](https://github.com/wayfu-id/wayfu-userscript/compare/v4.1.1...v4.2.0) (2022-07-19)
+
+
+### Features
+
+* add drawdown implementation ([5f939c8](https://github.com/wayfu-id/wayfu-userscript/commit/5f939c8c1071d08fd8efe398c52444f6c6948c97))
+* add drawdown to decode whatsapp markdown format from user input ([b9bf462](https://github.com/wayfu-id/wayfu-userscript/commit/b9bf462594f2897f79984be976f4d31b395cd6c7))
+* add new and remove some event listener ([c041714](https://github.com/wayfu-id/wayfu-userscript/commit/c041714ec56177681012d34bf31942b14eb1de9c))
+* **views:** add message or caption preview ([48c2291](https://github.com/wayfu-id/wayfu-userscript/commit/48c2291a4e3ea4987d577256f7457158c6cd07e6))
+
 ### [4.1.1](https://github.com/wayfu-id/wayfu-userscript/compare/v4.1.0...v4.1.1) (2022-06-17)
 
 
