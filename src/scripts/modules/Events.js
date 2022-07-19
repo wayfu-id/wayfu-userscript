@@ -121,14 +121,15 @@ class AppEvents {
         options.setOptions({ useImage: elm.checked });
     }
     async loadData(e) {
-        const elm = e.currentTarget || e.target,
-            file = elm.files[0];
+        const [file] = (e.currentTarget || e.target).files,
+            mode = DOM.getElement("#_mode");
 
         resetRecipient();
         if (file) {
             loadRecipient(await csvFile.import(file));
         }
-        DOM.setElement("#_mode", {
+        if (!file && mode.checked) mode.click();
+        DOM.setElement(mode, {
             title: !file ? "Masukkan File CSV" : "Mode Pesan",
             disabled: !file,
         });
