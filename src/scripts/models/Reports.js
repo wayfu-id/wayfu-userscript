@@ -5,18 +5,15 @@ class Reports {
         this.sukses = 0;
         this.gagal = new MyArray();
         this.error = new MyArray();
-        this.auto = false;
     }
 
     /**
      * reset report
-     * @param {boolean} a automode
      */
-    reset(a) {
+    reset() {
         this.sukses = 0;
         this.gagal = new MyArray();
         this.error = new MyArray();
-        this.auto = a;
     }
 
     /**

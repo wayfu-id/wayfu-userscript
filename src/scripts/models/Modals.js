@@ -143,7 +143,7 @@ class Modals {
      * @param {boolean} stat blasting or not
      * @param {Function} callback calback function when panel closed
      */
-    progressPanel(stat, auto = false, callback = null) {
+    progressPanel(stat, callback = null) {
         if (stat) {
             let id = `wfu-content-${(this.contens += 1)}`,
                 content = DOM.createElement({
@@ -151,14 +151,10 @@ class Modals {
                     classid: "wfu-modal-container progress-panel",
                     id: id,
                 }),
-                title = auto ? "Pesanmu sedang dikirim" : "Linkmu sedang ditulis",
-                info = auto
-                    ? "Mengirim pesan ke <span class='curPhone'></span> "
-                    : "Menulis link ",
                 element = [
                     {
                         tag: "h2",
-                        text: title,
+                        text: "Pesanmu sedang dikirim",
                     },
                     {
                         tag: "div",
@@ -167,7 +163,7 @@ class Modals {
                     },
                     {
                         tag: "p",
-                        html: `${info}(<span class='curNumb'></span>)`,
+                        html: "Mengirim pesan ke <span class='curPhone'></span> (<span class='curNumb'></span>)",
                     },
                     {
                         tag: "a",
