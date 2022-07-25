@@ -1,5 +1,5 @@
 import MyDate from "../models/MyDate";
-import { drawdown } from "./Drawdown";
+import { waydown } from "./Waydown";
 import { options } from "../models/Settings";
 import { modal } from "../models/Modals";
 import { report } from "../models/Reports";
@@ -79,7 +79,7 @@ class AppEvents {
                 if (chk) {
                     message.setData(queue.now);
                     text = message.subtitute(text);
-                    return drawdown.toHtml(text, !chk);
+                    return waydown.toHtml(text, !chk);
                 }
 
                 return "";
