@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.2.1](https://github.com/wayfu-id/wayfu-userscript/compare/v4.2.0...v4.2.1) (2022-07-25)
+
+
+### Bug Fixes
+
+* text preview bugs on multiple new line ([cd9a8ce](https://github.com/wayfu-id/wayfu-userscript/commit/cd9a8ce7fc0497431241e6996c236af6d7d2ddc5))
+
 ## [4.2.0](https://github.com/wayfu-id/wayfu-userscript/compare/v4.1.1...v4.2.0) (2022-07-19)
 
 
