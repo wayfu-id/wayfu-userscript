@@ -405,6 +405,7 @@
             display: none;
             padding: 2px 4px;
             overflow-y: scroll;
+            font: inherit;
             
             &.wayfu-msg{
                 max-height: 145px;
