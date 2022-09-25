@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.2.2](https://github.com/wayfu-id/wayfu-userscript/compare/v4.2.1...v4.2.2) (2022-09-25)
+
+
+### Bug Fixes
+
+* **csv:** fix issue [#21](https://github.com/wayfu-id/wayfu-userscript/issues/21) - edit phone regexp(s) and implement it ([4019ad9](https://github.com/wayfu-id/wayfu-userscript/commit/4019ad98956759037dc84541395377c984d35128))
+
 ### [4.2.1](https://github.com/wayfu-id/wayfu-userscript/compare/v4.2.0...v4.2.1) (2022-07-25)
 
 
