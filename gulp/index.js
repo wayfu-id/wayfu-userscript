@@ -125,7 +125,9 @@ function inserHeader() {
     );
 }
 
-function addStyleHeader() {
+function addStyleHeader(done) {
+    if (environment !== "production") return done();
+
     const pkg = readJSON("package.json");
     return src(`./assets/*.css`, {
         allowEmpty: true,
