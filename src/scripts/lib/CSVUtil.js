@@ -66,7 +66,7 @@ const getSignDate = (date) => {
  */
 const setPhone = (ph) => {
     ph = typeof ph === "string" ? ph : ph.join("");
-    return ph.replace(rgx.phoneValue, function (m0, g1, g2) {
+    return ph.replace(rgx.phoneValue, function (m0, g1, g2, g3) {
         let phone = g1 !== undefined ? g1 : g2.replace(/(\-| )/g, ""),
             extra = phone.charAt(0) === "8" && m0.charAt(0) !== "+" ? "62" : "";
         return extra + phone;
