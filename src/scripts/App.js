@@ -2,6 +2,7 @@ import GM_Library from "./models/GM_Library";
 import { user } from "./models/Users";
 import { options } from "./models/Settings";
 import { chat } from "./models/Chatrooms";
+import { csvFile } from "./models/CSVFile";
 import { createView } from "./modules/PanelView";
 import { changes } from "./models/Changeslog";
 import { DOM } from "./lib/HtmlModifier";
@@ -67,9 +68,15 @@ export default class App extends GM_Library {
         e = typeof e === "boolean" ? e : true;
         options.setOption("debug", e);
         if (e) {
-            Object.assign(App.prototype, { options, user, chat }, window.WAPI);
+            Object.assign(App.prototype, { options, user, chat, csvFile }, window.WAPI);
         } else {
-            for (let key of ["options", "user", "chat", ...Object.keys(window.WAPI)]) {
+            for (let key of [
+                "options",
+                "user",
+                "chat",
+                "csvFile",
+                ...Object.keys(window.WAPI),
+            ]) {
                 delete App.prototype[key];
             }
         }
