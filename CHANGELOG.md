@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.3.0](https://github.com/wayfu-id/wayfu-userscript/compare/v4.2.2...v4.3.0) (2022-11-04)
+
+
+### Features
+
+* **data:** Add Xlsx openxml spreadsheetml documet reader ([8b5ea05](https://github.com/wayfu-id/wayfu-userscript/commit/8b5ea0596107e0c8c9cafb4508f532a8f51a1e90))
+* **data:** Implement xlsx file reader ([ca27f33](https://github.com/wayfu-id/wayfu-userscript/commit/ca27f330cb1e61ff0ea6194988a8589f93a872f2))
+
+
+### Bug Fixes
+
+* **chat:** Fix error on reading current active chatroom data ([52deb45](https://github.com/wayfu-id/wayfu-userscript/commit/52deb45cf74a3995afe11f6dde6dda88feb8eb16))
+* **typo:** Fix duplicate extension file on name when export data from reports ([c4513fd](https://github.com/wayfu-id/wayfu-userscript/commit/c4513fd07df71498b3421422cad75a0094484b4d))
+* **typo:** Fix typo on variable name ([8174f4f](https://github.com/wayfu-id/wayfu-userscript/commit/8174f4ffa4f181a3b92e2877f362ef8fa50327aa))
+
 ### [4.2.2](https://github.com/wayfu-id/wayfu-userscript/compare/v4.2.1...v4.2.2) (2022-09-25)
 
 
