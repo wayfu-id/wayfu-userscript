@@ -1,4 +1,5 @@
 import MyDate from "../models/MyDate";
+import { Debug } from "./Debug";
 import { waydown } from "./Waydown";
 import { options } from "../models/Settings";
 import { modal } from "../models/Modals";
@@ -9,14 +10,22 @@ import { user } from "../models/Users";
 import { changes } from "../models/Changeslog";
 import { chat } from "../models/Chatrooms";
 import { message } from "../models/Messages";
-import { DOM } from "../lib/DOM";
+import { DOM } from "../lib/HtmlModifier";
 import CSVFile, { csvFile } from "../models/CSVFile";
 import { dateFormat, isNumeric } from "../lib/Util";
 import MyArray from "../models/MyArray";
 import { loadRecipient, resetRecipient, checkStatus, startProcess } from "./Main";
 
-class AppEvents {
+/**
+ * A bunch of EventListener
+ * @class AppEvents
+ */ class AppEvents {
     constructor() {}
+    /**
+     * Run blast tasks
+     * @param {Event} e Event
+     * @returns {Promise<void>}
+     */
     async runTasks(e) {
         if (!(await user.check())) return;
         if (await checkStatus()) return;
@@ -32,40 +41,43 @@ class AppEvents {
         loop.set(time, fn);
         startProcess();
     }
+
+    /**
+     * Tab menu Listener
+     * @param {Event} e Event
+     */
     tabMenu(e) {
         const elm = e.currentTarget || e.target,
             menuName = elm.value,
             tabs = DOM.getElement("#panelBody .menus", true);
+
         DOM.setElements([
             {
                 elm: tabs,
-                props: {
-                    removeClass: "active",
-                },
+                props: { removeClass: "active" },
             },
             {
                 elm: elm,
-                props: {
-                    addClass: "active",
-                },
+                props: { addClass: "active" },
             },
         ]).setElementsStyle([
             {
                 elm: "#panelBody .menu-content",
-                props: {
-                    display: "none",
-                },
+                props: { display: "none" },
             },
             {
                 elm: `#${menuName}`,
-                props: {
-                    display: "block",
-                },
+                props: { display: "block" },
             },
         ]);
 
         options.setOption("activeTab", Array.from(tabs).indexOf(elm));
     }
+
+    /**
+     * For preview text message and caption (if any)
+     * @param {Event} e Event
+     */
     textPreview(e) {
         let elm = e.currentTarget || e.target,
             form = DOM.getElement("#panelBody textarea", true),
@@ -97,6 +109,11 @@ class AppEvents {
                 .setElementStyle(e, { display: editable ? "block" : "none" });
         });
     }
+
+    /**
+     * Set message from its type (form or caption)
+     * @param {Event} e Event
+     */
     updateText(e) {
         const { id, value, innerText } = e.target || e.currentTarget,
             key = id === "message" ? "Message" : "Caption",
@@ -105,6 +122,11 @@ class AppEvents {
         props[`input${key}`] = value || innerText;
         message.setProperties(props);
     }
+
+    /**
+     * Allow message to attach an Image
+     * @param {Event} e Event
+     */
     async useImage(e) {
         const useCapt = options.useCaption === "caption",
             elm = e.currentTarget || e.target,
@@ -118,27 +140,34 @@ class AppEvents {
             { elm: "#useCaption", props: { disabled: !elm.checked } },
         ]);
 
-        options.setOptions({ useImage: elm.checked });
+        options.setOption("useImage", elm.checked);
     }
+
+    /**
+     * Load file recipients Data
+     * @param {Event} e Event
+     */
     async loadData(e) {
         const [file] = (e.currentTarget || e.target).files,
             mode = DOM.getElement("#_mode");
 
         resetRecipient();
-        if (file) {
-            loadRecipient(await csvFile.import(file));
-        }
+        if (file) loadRecipient(await csvFile.import(file));
         if (!file && mode.checked) mode.click();
         DOM.setElement(mode, {
             title: !file ? "Masukkan File CSV" : "Mode Pesan",
             disabled: !file,
         });
     }
+
+    /**
+     * Read and preview an Image File
+     * @param {Event} e Event
+     */
     imagePreview(e) {
         const elm = e.currentTarget || e.target,
-            btn = elm.dataset.value,
-            mByte = Math.pow(1024, 2),
-            maxSize = 4 * mByte;
+            maxSize = 4 * Math.pow(1024, 2),
+            btn = elm.dataset.value;
 
         let imgFile = null;
 
@@ -161,6 +190,11 @@ class AppEvents {
         message.setProperties({ imageFile: imgFile });
         options.setOptions({ hasImage: !!imgFile, imageFile: imgFile });
     }
+
+    /**
+     * Open and close panel toggle button
+     * @param {Event} e Event
+     */
     toggleApp(e) {
         const elm = e.currentTarget || e.target,
             id = elm.getAttribute("value"),
@@ -171,6 +205,11 @@ class AppEvents {
 
         options.setOption("openPanel", a);
     }
+
+    /**
+     * For input type `Range` element(s)
+     * @param {Event} e Event
+     */
     inputRange(e) {
         const elm = e.currentTarget || e.target,
             { id, value } = elm;
@@ -188,10 +227,20 @@ class AppEvents {
         ]);
         options.setOption(id, value);
     }
+
+    /**
+     * For input type `Check` element(s)
+     * @param {Event} e Event
+     */
     inputChecks(e) {
         const { id, value } = e.currentTarget || e.target;
         options.setOption(id, value);
     }
+
+    /**
+     * For input type `Select` element(s)
+     * @param {Event} e Event
+     */
     inputSelects(e) {
         const { id, value } = e.currentTarget || e.target;
         switch (id) {
@@ -248,6 +297,11 @@ class AppEvents {
                 break;
         }
     }
+
+    /**
+     * ChangeLog listener
+     * @param {Event} e Event
+     */
     changeLog(e) {
         const container = DOM.createElement({
                 tag: "div",
@@ -266,11 +320,16 @@ class AppEvents {
                 });
 
             DOM.createElement({ tag: "span", text: title, append: items });
-            DOM.createListElement("ul", e.content, { append: items });
+            DOM.createListElement(e.content, "ul", { append: items });
         });
         // console.log(container);
         modal.alert(container, "Detail Pembaruan.");
     }
+
+    /**
+     * Checing current chat active
+     * @param {Event} e Event
+     */
     async checkChat(e) {
         const { chatHeader, menu, menuDefault, item, button } = window.WAPI.WebClassesV2,
             chatMenu = DOM.getElement(`.${chatHeader} .${menu}.${menuDefault}`),
@@ -321,9 +380,13 @@ class AppEvents {
                 { subject, participants } = groupMetadata;
 
             let contacts = new MyArray();
-            for (let person of participants.getModelsArray()) {
-                const { id, displayName } = person.contact;
-                contacts.push([displayName, id.user]);
+            for (const { contact } of participants.getModelsArray()) {
+                let {
+                    id: { user },
+                    name,
+                    pushname,
+                } = contact.serialize();
+                contacts.push([pushname || name || user, user]);
             }
 
             let data = CSVFile.createFile(subject, contacts),

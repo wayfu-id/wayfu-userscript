@@ -1,21 +1,70 @@
-import { DOM } from "../lib/DOM";
+import { DOM } from "../lib/HtmlModifier";
+import BaseModel from "./BaseModel";
 
-class Chatroom {
+/**
+ * @typedef {{
+ *     active: string;
+ *     header: string;
+ * }} classId
+ *
+ * @typedef {{
+ *     id: string;
+ *     name: string;
+ *     pushname: string;
+ *     serialize: () => {
+ *        id: string;
+ *        name: string;
+ *        pushname: string;
+ *     };
+ * }} contact
+ *
+ * @typedef {{
+ *     _model: room[];
+ *     getModelsArray: () => room[];
+ * }} contacts
+ *
+ * @typedef {{
+ *     subject: string;
+ *     participants: contacts;
+ * }} groupMeta;
+ *
+ * @typedef {{
+ *     isGroup: boolean;
+ *     contact: contact;
+ *     groupMetadata?: groupMeta;
+ * }} room
+ */
+
+class Chatroom extends BaseModel {
     constructor() {
+        super();
+
+        /** @type {room | null} */
         this.room = null;
+
+        /** @type {classId} */
         this.classId = { active: "", header: "" };
     }
 
+    /**
+     * Is this a Group Chatroom?
+     * @return {boolean}
+     */
     get isGroup() {
         return this.selected ? this.room.isGroup : false;
     }
 
+    /**
+     * Get group metadata
+     * @return {groupMeta | null}
+     */
     get groupMetadata() {
         return this.selected && this.isGroup ? this.room.groupMetadata : null;
     }
 
     /**
-     * get contact from active chatroom
+     * Get contact from active chatroom
+     * @return {contact|null}
      */
     get contact() {
         if (this.room) {
@@ -26,7 +75,8 @@ class Chatroom {
     }
 
     /**
-     * any selected chatroom?
+     * Any selected chatroom?
+     * @return {boolean}
      */
     get selected() {
         return !!this.room;
@@ -44,24 +94,26 @@ class Chatroom {
         return this;
     }
 
+    /**
+     * Select, get, and set current active chatroom
+     * @returns
+     */
     selectChat() {
         this.room = ((classes) => {
             let room;
-            for (let key in classes) {
-                let elm = DOM.getElement(`.${classes[key]}`);
-                if (elm) {
-                    elm = key === "active" ? elm.offsetParent : elm.parentNode;
+            for (let idx in classes) {
+                room = ((elm) => {
+                    if (!elm) return null;
+                    elm = idx === "active" ? elm.offsetParent : elm.parentNode;
                     for (let key of Object.keys(elm)) {
-                        let { children } = elm[key];
-                        if (children) {
-                            room = children.props.chat;
-                            break;
-                        }
+                        let child = this.findObjectValue("children", elm[key]);
+                        if (!child) continue;
+                        let { chat } = this.findObjectValue("props", child);
+                        return chat;
                     }
-                }
-                if (room) {
-                    return room;
-                }
+                })(DOM.getElement(`.${classes[idx]}`));
+
+                if (room) return room;
             }
         })(this.classId);
 
