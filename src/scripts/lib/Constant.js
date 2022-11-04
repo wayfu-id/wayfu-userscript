@@ -101,18 +101,27 @@ const storeObjects = [
                 : null,
     },
     {
-        id: "Features",
-        conditions: (module) =>
-            module.FEATURE_CHANGE_EVENT && module.GK ? module.GK : null,
-    },
-    {
         id: "Debug",
         conditions: (module) => (module.Debug ? module.Debug : null),
     },
-    {
-        id: "Conn",
-        conditions: (module) => (module.PLATFORMS && module.Conn ? module.Conn : null),
-    },
+    // {
+    //     id: "Features",
+    //     conditions: (module) =>
+    //         module.FEATURE_CHANGE_EVENT && module.GK ? module.GK : null,
+    // },
+    // {
+    //     id: "Conn",
+    //     conditions: (module) => (module.PLATFORMS && module.Conn ? module.Conn : null),
+    // },
+    // {
+    //     id: "Wap",
+    //     conditions: (module) =>
+    //         module.default && module.default.queryLinkPreview ? module.default : null,
+    // },
+    // {
+    //     id: "MDBeckend",
+    //     conditions: (module) => (module.isMDBackend ? module.isMDBackend() : null),
+    // },
 ];
 
 export { rgx, queryElm, dateOptDefault, eventLists, storeObjects };

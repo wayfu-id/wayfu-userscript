@@ -5,6 +5,11 @@ import { options } from "./Settings";
 import { rgx } from "../lib/Constant";
 import { setName, isNumeric, dateFormat } from "../lib/Util";
 
+/**
+ * Messages Class Model
+ * @class {Messages}
+ * @classdesc Contains message model
+ */
 class Messages extends BaseModel {
     constructor() {
         super();
@@ -43,12 +48,8 @@ class Messages extends BaseModel {
      * Get message as encodedURIComponent
      */
     get encodedMsg() {
-        const { autoMode, useImage, hasImage, useCaption } = options;
-        const printLink = autoMode
-            ? useImage && hasImage
-                ? useCaption === "caption"
-                : true
-            : true;
+        const { useImage, hasImage, useCaption } = options;
+        const printLink = useImage && hasImage ? useCaption === "caption" : true;
         const message =
             this.inputMessage && printLink ? this.subtitute(this.inputMessage) : "";
 
@@ -71,11 +72,11 @@ class Messages extends BaseModel {
      * Set message and subtitute it data to the Keywords
      * @param {string} message raw message
      * @param {number} column column index of data
-     * @param {any} value data value
-     * @param {number} size size of data
+     * @param {string} value data value
      * @returns
      */
     setMessage(message, column, value) {
+        /** @type {(numb: number) => RegExp} */
         const dataKey = (numb) => new RegExp(String.raw`(DATA_${numb})(\s|\D|$)`, "g");
         if (options.userType === "oriflame") {
             for (let i = column; i < 3; i++) {
@@ -83,6 +84,7 @@ class Messages extends BaseModel {
                     isNumber = isNumeric(value);
 
                 if (i === 0 && isNumber) {
+                    /** @type {(value: string) => number} */
                     const toGo = (value) => {
                         const val = options.targetBp - Number(value);
                         return val > 0 ? val : 0;
@@ -93,7 +95,7 @@ class Messages extends BaseModel {
                 } else if (i === 1 && isDate) {
                     message = message
                         .replace(/L_DAY/g, this.lastDay(value))
-                        .replace(/S_DAY/g, this.lastDay(value, 1));
+                        .replace(/S_DAY/g, this.lastDay(value, false));
                 } else if (i === 2 && !(isNumber || isDate)) {
                     message = message
                         .replace(/F_INVS/g, setName(value, true))
@@ -134,12 +136,12 @@ class Messages extends BaseModel {
     }
 
     /**
-     *
+     * Set last day data which is signup date + 30 days
      * @param {string} dateStr Date string
-     * @param {number} i selector
+     * @param {boolean} isLastDay selector
      * @returns {string} Date String formated
      */
-    lastDay(dateStr, i = 0) {
+    lastDay(dateStr, isLastDay = false) {
         const mIdx_ = options.monthIndex,
             mIdx = options.default.monthIndex;
 
@@ -149,14 +151,13 @@ class Messages extends BaseModel {
                 : dateStr
         );
 
-        if (i === 0) {
-            date = date.addDays(30);
-        }
-        return dateFormat(date, i);
+        date = isLastDay ? date.addDays(30) : date;
+
+        return dateFormat(date, isLastDay);
     }
 
     /**
-     *
+     * Send Image attachment
      * @param {ImageBitmap} imgFile
      * @returns
      */

@@ -4,29 +4,32 @@ import { options } from "./models/Settings";
 import { chat } from "./models/Chatrooms";
 import { createView } from "./modules/PanelView";
 import { changes } from "./models/Changeslog";
-import { DOM } from "./lib/DOM";
+import { DOM } from "./lib/HtmlModifier";
 import { loadWapi } from "./lib/WAPI";
 
 export default class App extends GM_Library {
-    constructor() {
+    /**
+     *
+     * @param {Window} target
+     */
+    constructor(target) {
         super();
-
-        this.initialize();
+        this.#initialize(target);
     }
-    initialize() {
+    #initialize(target) {
         // Initialize WAPI Module;
-        loadWapi(unsafeWindow);
+        loadWapi(target);
         // Create App Panel
-        this.registerPanel();
+        this.#registerPanel();
         // Initialize and Register the User
-        this.registerUser();
+        this.#registerUser();
         // Initialize and Register the App Options
-        this.registerOptions();
+        this.#registerOptions();
         // Whenever all loaded
-        this.onLoadView();
+        this.#onLoadView();
         // Don't Forget to Check for Update
     }
-    registerPanel() {
+    #registerPanel() {
         chat.init();
         // console.log(chat);
         const html = this.getResource("pnl"),
@@ -37,25 +40,39 @@ export default class App extends GM_Library {
         createView(html, style, details);
         // console.info('Panel Created Successfully.');
     }
-    registerUser() {
+    #registerUser() {
         user.init().gettingData();
         // console.info('User Data Loaded Successfully.');
     }
-    registerOptions() {
+    #registerOptions() {
         options.init();
         // console.info('Options Loaded Successfully.');
     }
-    async onLoadView() {
+    async #onLoadView() {
         // console.log(settings);
         DOM.setElementStyle("#wayfuPanel", {
             "background-color": options.themeColor,
+        }).setElement("input#getFile", {
+            accept: ".csv,.txt,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         });
+
         DOM.getElement("#panelBody .menus", true)[options.activeTab || 0].click();
         if (options.openPanel) DOM.getElement("#toggleApp").click();
 
         changes.checkUpdate();
-
         // console.log(this);
         // console.log(`${this.name} ${this.version} - ${this.tagLine}`);
+    }
+    debug(e) {
+        e = typeof e === "boolean" ? e : true;
+        options.setOption("debug", e);
+        if (e) {
+            Object.assign(App.prototype, { options, user, chat }, window.WAPI);
+        } else {
+            for (let key of ["options", "user", "chat", ...Object.keys(window.WAPI)]) {
+                delete App.prototype[key];
+            }
+        }
+        return this;
     }
 }

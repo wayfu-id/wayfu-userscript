@@ -1,4 +1,4 @@
-import { DOM } from "../lib/DOM";
+import { DOM } from "../lib/HtmlModifier";
 
 /**
  * Waydown : A WhatsApp markdown/Format decoder
@@ -6,7 +6,6 @@ import { DOM } from "../lib/DOM";
  * Inspired by Drawdown (c) Adam Leggett
  * https://github.com/adamvleggett/drawdown
  */
-
 class Waydown {
     constructor() {
         this.src = "";
@@ -21,16 +20,33 @@ class Waydown {
         this.plain = false;
     }
 
-    element(tag, content, opt = {}) {
+    /**
+     * Create HTML elemenet and return it's `outerHTML` value
+     * @param {string} tag
+     * @param {string} content
+     * @param {import("./../lib/HtmlModifier").elemenOptions} opt
+     * @returns
+     */
+    #element(tag, content, opt = {}) {
         const elm = DOM.createElement(Object.assign({ tag: tag, html: content }, opt));
         return elm.outerHTML;
     }
 
-    raw(content) {
+    /**
+     * Get `raw` string from input content
+     * @param {string} content
+     * @returns
+     */
+    #raw(content) {
         return content.replace(this.rgx.escape, "$1");
     }
 
-    highlight(content) {
+    /**
+     * Set HMTL tag highlighter to input content
+     * @param {string} content
+     * @returns {string}
+     */
+    #highlight(content) {
         let { format: hg } = this.rgx;
         return !this.plain
             ? content.replace(hg, (all, _, p1, bold, italic, strike, mono, content) => {
@@ -39,16 +55,17 @@ class Waydown {
                   })(bold, italic, strike, mono);
 
                   content = mono ? content.replace(/`/g, "") : content;
-                  return `${_}${this.element(tag, this.highlight(content))}`;
+                  return `${_}${this.#element(tag, this.#highlight(content))}`;
               })
             : content;
     }
 
-    link() {
+    /** Chreate link element upon every `link like` string */
+    #link() {
         let { link } = this.rgx;
         this.src = this.src.replace(link, (m, ...g) => {
             let [proc, domain] = g;
-            return this.element("a", m, {
+            return this.#element("a", m, {
                 href: m,
                 title: domain,
                 alt: domain,
@@ -59,21 +76,29 @@ class Waydown {
         return this;
     }
 
-    paragraph() {
+    /** Create paragraph element upon every paragraph string */
+    #paragraph() {
         let { para } = this.rgx;
         this.src = this.src.replace(para, (all, _, content) => {
             _ = _ ? _.replace(/\n/, "<br/>") : "";
-            return `${_}${this.element("div", this.raw(this.highlight(content)))}`;
+            return `${_}${this.#element("div", this.#raw(this.#highlight(content)))}`;
         });
 
         return this;
     }
 
-    trim() {
+    /** Trim string source */
+    #trim() {
         this.src = this.src.trim();
         return this.src;
     }
 
+    /**
+     * Convert formated text to HTML string
+     * @param {string} source
+     * @param {boolean} plain
+     * @returns {string}
+     */
     toHtml(source, plain = false) {
         const { lt, gt } = this.rgx;
 
@@ -82,7 +107,7 @@ class Waydown {
 
         this.src = this.src.replace(lt, "&lt;").replace(gt, "&gt;");
 
-        return this.paragraph().link().trim();
+        return this.#paragraph().#link().#trim();
     }
 }
 

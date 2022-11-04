@@ -7,14 +7,12 @@ import { storeObjects } from "./Constant";
  * @return {String | null}
  */
 const getWebpack = (window) => {
-    let keys = Object.keys(window),
-        val;
-    for (let key of keys) {
-        if (/[^|]?webpack./g.test(key)) {
-            val = key;
-        }
+    // let keys = Object.keys(window),
+    //     val;
+    for (let key of Object.keys(window)) {
+        if (/[^|]?webpack./g.test(key)) return key;
     }
-    return val || null;
+    return null;
 };
 
 /**
@@ -30,36 +28,27 @@ function setWAPI(store) {
 
     Object.defineProperties(WAPI, {
         Me: {
-            get: function () {
-                let me = {};
+            get: function getMe() {
                 for (let person of this.Contact.getModelsArray()) {
-                    if (person.isMe) {
-                        me = person;
-                        break;
-                    }
+                    if (person.isMe) return person.serialize();
                 }
-
-                return me;
+                return {};
             },
             enumerable: true,
         },
         SendImgToChat: {
-            value: function (number, imgFile, caption = "", getChat = false) {
-                if (!number || !imgFile) return false;
-                let atc = { file: imgFile };
+            value: function sendImgToChat(phone, imgFile, caption = "", getChat = false) {
+                if (!phone || !imgFile) return false;
                 return new Promise((done) => {
-                    this.Chat.find(`${number}@c.us`).then((chat) => {
+                    this.Chat.find(`${phone}@c.us`).then((chat) => {
                         let mc = new this.MediaCollection(chat);
-                        mc.processAttachments([atc, 1], chat, 1)
+                        mc.processAttachments([{ file: imgFile }, 1], chat, 1)
                             .then(() => {
                                 let [media] = mc.getModelsArray();
                                 media.sendToChat(chat, { caption: caption });
                                 done(getChat ? chat : true);
                             })
-                            .catch((err) => {
-                                console.log(err);
-                                done(false);
-                            });
+                            .catch((err) => (console.log(err), done(false)));
                     });
                 });
             },
@@ -84,20 +73,18 @@ function setWAPI(store) {
 const loadWapi = (target) => {
     if (!window.WAPI || !window.WAPI.Msg) {
         function getStore(modules) {
-            let foundCount = 0;
+            // let foundCount = 0;
             for (let idx in modules.m) {
                 if (typeof modules(idx) === "object" && modules(idx) !== null) {
                     storeObjects.forEach((needObj) => {
                         if (!needObj.conditions || needObj.foundedModule) return;
                         let neededModule = needObj.conditions(modules(idx));
                         if (neededModule !== null) {
-                            foundCount++;
+                            // foundCount++;
                             needObj.foundedModule = neededModule;
                         }
                     });
-                    if (foundCount == storeObjects.length) {
-                        break;
-                    }
+                    // if (foundCount == storeObjects.length) break;
                 }
             }
             let neededStore = storeObjects.find((needObj) => needObj.id === "Store"),
@@ -108,19 +95,14 @@ const loadWapi = (target) => {
                     windowStore[needObj.id] = needObj.foundedModule;
                 }
             });
+            // console.log(windowStore);
             return setWAPI(windowStore);
         }
         const parasite = `parasite${Date.now()}`;
         const webpack = getWebpack(target);
 
         if (webpack && typeof target[webpack] === "object") {
-            target[webpack].push([
-                [parasite],
-                {},
-                (o, e, t) => {
-                    getStore(o);
-                },
-            ]);
+            target[webpack].push([[parasite], {}, (o) => getStore(o)]);
         } else {
             console.error("Failed to load WAPI Module!");
         }

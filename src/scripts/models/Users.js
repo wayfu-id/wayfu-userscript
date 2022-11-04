@@ -5,6 +5,48 @@ import { options } from "./Settings";
 import MyDate from "../models/MyDate";
 import MyArray from "./MyArray";
 
+/**
+ * @typedef {{
+ *     method: "POST" | "GET";
+ *     url: string;
+ *     headers: {"Content-Type": string};
+ * }} userOpt
+ *
+ * @typedef { ObjectConstructor & {
+ *     name: string | number;
+ *     phone: string;
+ *     type: "oriflame" | "umum";
+ *     attempt?: number;
+ *     reg?: string;
+ *     mon: number;
+ *     end?: MyDate;
+ *     expires?: MyDate;
+ * }} userData
+ *
+ * @typedef { GM_Library & userData & {
+ *     today: MyDate;
+ *     defaultOpt: userOpt;
+ *     isPremium: () => boolean;
+ *     isTrial: () => boolean;
+ *     init: () => User;
+ *     gettingData: () => void;
+ *     gettingData(): Promise<any>;
+ *     updateData(prop: userData): User;
+ *     setUser(data?: userData): void;
+ *     check(): Promise<boolean>;
+ *     tryApp(): Promise<boolean>;
+ *     updateTrial(type?: "add" | "update"): Promise<boolean>;
+ *     showAlert(i: number, on?: boolean): void;
+ *     reset(): User;
+ *     save(): void;
+ * }} User
+ */
+
+/**
+ * User Class Model
+ * @class {Users}
+ * @type {User}
+ */
 class Users extends GM_Library {
     constructor() {
         super();
@@ -37,10 +79,9 @@ class Users extends GM_Library {
      * @returns
      */
     init() {
-        const { userid, id, displayName, pushname } = window.WAPI.Me;
-
-        this.phone = Number(userid || id.user) || "";
-        this.name = displayName || pushname || "";
+        const { id, name, pushname } = window.WAPI.Me;
+        this.phone = Number(id.user) || "";
+        this.name = name || pushname || "";
 
         return this;
     }
@@ -75,7 +116,7 @@ class Users extends GM_Library {
 
     /**
      * Set/update current user data
-     * @param {object} prop User data as object
+     * @param {userData} prop User data as object
      * @returns
      */
     updateData(prop) {
@@ -96,7 +137,7 @@ class Users extends GM_Library {
 
     /**
      * Set user properties
-     * @param {object} data User data as object
+     * @param {userData?} data User data as object
      */
     setUser(data) {
         const user = data || this.getValue("wayfu-user");
@@ -143,8 +184,8 @@ class Users extends GM_Library {
     }
 
     /**
-     *
-     * @param {string} type type of trial ["add" | "update"]
+     * Update user's trial data
+     * @param {"add" | "update"} type type of trial
      * @returns {Promise<boolean>}
      */
     updateTrial(type = "add") {
@@ -155,12 +196,11 @@ class Users extends GM_Library {
             action: type,
         };
 
-        const add = {};
-        if (type === "add") {
-            add.expires = new MyDate(this.today).addDays(2).toLocaleString("id-ID");
-        } else {
-            add.attempt = this.attempt += 1;
-        }
+        const add = ((t) => {
+            let exp = new MyDate(this.today).addDays(2).toLocaleString("id-ID"),
+                atmp = (this.attempt += 1);
+            return t === "add" ? { expires: exp } : { attempt: atmp };
+        })(type);
 
         return new Promise((resolve, reject) => {
             let opt = Object.assign({}, this.defaultOpt, {
@@ -168,9 +208,7 @@ class Users extends GM_Library {
                 onload: async (res) => {
                     const { status, responseText } = res;
                     let data = null;
-                    if (status === 200) {
-                        data = await JSONParse(responseText);
-                    }
+                    if (status === 200) data = await JSONParse(responseText);
                     user.setUser(data);
                     resolve(status === 200 && data);
                 },
@@ -242,6 +280,7 @@ class Users extends GM_Library {
      * Save current user data to UserScript Manager Storage
      */
     save() {
+        /** @type {keyof userData} */
         const keys = new MyArray(
                 "name",
                 "phone",
@@ -253,16 +292,15 @@ class Users extends GM_Library {
                 "expires"
             ),
             data = {};
-        for (let prop in this) {
-            if (this.hasOwnProperty(prop) && keys.isOnArray(prop)) {
-                let val =
-                    this[prop] instanceof Date ? this[prop].toISOString() : this[prop];
-                data[prop] = val;
+        for (let key in this) {
+            if (this.hasOwnProperty(key) && keys.isOnArray(key)) {
+                data[key] = ((v) => (v instanceof Date ? v.toISOString() : v))(this[key]);
             }
         }
         this.setValue("wayfu-user", data);
     }
 }
 
+/** @type {User} */
 const user = new Users();
 export { Users as default, user };

@@ -1,19 +1,29 @@
 /**
  * Extended Built-in Array
+ * @class MyArray
+ * @classdesc An custom array extends built in array
+ * @augments {Array}
  */
 export default class MyArray extends Array {
     /**
-     * Get array isEmpty status
+     * Get empty status current array
      */
     get isEmpty() {
         return this.length <= 0;
     }
 
     /**
-     * Change the index of an array item.
-     * Will modify and override current array
-     * @param {number} oldIndex Old or current array index
-     * @param {number} newIndex New or target index
+     * Get all non epmty array items
+     */
+    get nonEmptyValue() {
+        return this.filter((val) => !!val);
+    }
+
+    /**
+     * Change index order of an items, and return this array.
+     * `Carefull: This function will override old array.`
+     * @param {number} oldIndex
+     * @param {number} newIndex
      * @returns
      */
     changeIndex(oldIndex, newIndex) {
@@ -28,9 +38,9 @@ export default class MyArray extends Array {
     }
 
     /**
-     * Count a value inside the array
-     * @param {any} val value that want to count in array
-     * @returns
+     * Count number of a value in current array;
+     * @param {any} val
+     * @returns {number}
      */
     countValue(val) {
         let count = 0;
@@ -41,7 +51,7 @@ export default class MyArray extends Array {
     }
 
     /**
-     * Check one item is on this array or not.
+     * Check given value is on this array or not
      * @param {any} item
      * @returns {boolean}
      */
@@ -50,10 +60,10 @@ export default class MyArray extends Array {
     }
 
     /**
-     * Create array by spliting from string
-     * @param {string} string string
-     * @param {string} delimiter delimiter
-     * @returns
+     * Create an array by spliting a string with a delimiter
+     * @param {String} string
+     * @param {String} delimiter
+     * @returns {MyArray}
      */
     static split(string, delimiter) {
         let arr = string.split(delimiter);

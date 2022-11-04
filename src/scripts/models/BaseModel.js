@@ -17,7 +17,7 @@ export default class BaseModel {
 
     /**
      * Serialize to string
-     * @param {any} input
+     * @param {typeof Date | string | number | {}} input
      * @returns {string}
      */
     serialize(input) {
@@ -30,13 +30,14 @@ export default class BaseModel {
             }
             return arr.join("&");
         }
+        if (input.toString) return input.toString();
         return input;
     }
 
     /**
      * Parse data into Object. Also parse the value of object items
-     * @param {any} data input data
-     * @returns {object}
+     * @param {String | Array | Object} data input data
+     * @returns {{[k:string]: any}}
      */
     intoObject(data) {
         let obj = {};
@@ -62,22 +63,24 @@ export default class BaseModel {
     /**
      * Get value from Object
      * @param {string} key Object key
-     * @param {object} object Object target
+     * @param {{} | this} object Object target, default is `this` class
+     * @param {number | 2} depthrecursion dept default is `2`
      * @returns
      */
-    findObjectValue(key, object) {
+    findObjectValue(key, object, depth = 2) {
+        if (!depth) return null;
+
         object = object || this;
-        let value;
-        Object.keys(object).some((k) => {
-            if (k === key) {
-                value = object[k];
-                return true;
+        let value = object[key];
+        if (value) return value;
+
+        depth -= 1;
+        for (let id of Object.keys(object)) {
+            if (object[id] && typeof object[id] === "object") {
+                value = this.findObjectValue(key, object[id], depth);
             }
-            if (object[k] && typeof object[k] === "object") {
-                value = this.findObjectValue(key, object[k]);
-                return value !== undefined;
-            }
-        });
+        }
+
         return value;
     }
 }

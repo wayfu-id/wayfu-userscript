@@ -1,6 +1,6 @@
 import BaseModel from "../models/BaseModel";
 import MyArray from "../models/MyArray";
-import { DOM } from "../lib/DOM";
+import { DOM } from "../lib/HtmlModifier";
 import { options } from "../models/Settings";
 import { message } from "../models/Messages";
 import { queue } from "../models/Queue";
@@ -45,23 +45,38 @@ class Validators extends BaseModel {
      * @returns
      */
     notEmpty(key) {
-        let msg, val;
-        let ret = false;
-        switch (key) {
-            case "message":
-                val = message.inputMessage;
-                ret = val !== "" && val !== null && typeof val !== "undefined";
+        let [valid, msg] = ((k) => {
+            let [val, msg] = [false, ""];
+            if (k === "message") {
+                val = message.inputMessage !== "";
                 msg = "Silahkan Masukkan Pesan terlebih dahulu...";
-                break;
-            case "queue":
-                ret = typeof queue.now !== "undefined";
-                msg = "Silahkan Masukkan File Penerima Pesan...";
-                break;
-        }
-        if (!ret) {
-            this.errors[`${key}.isEmpty`] = msg;
-        }
-        return ret;
+            } else if (k === "queue") {
+                val = typeof queue.now !== "undefined";
+                msh = "Silahkan Masukkan File Penerima Pesan...";
+            }
+            return [val, msg];
+        })(key);
+
+        if (!valid) this.errors[`${key}.isEmpty`] = msg;
+        return valid;
+
+        // let msg, val;
+        // let ret = false;
+        // switch (key) {
+        //     case "message":
+        //         val = message.inputMessage;
+        //         ret = val !== "" && val !== null && typeof val !== "undefined";
+        //         msg = "Silahkan Masukkan Pesan terlebih dahulu...";
+        //         break;
+        //     case "queue":
+        //         ret = typeof queue.now !== "undefined";
+        //         msg = "Silahkan Masukkan File Penerima Pesan...";
+        //         break;
+        // }
+        // if (!ret) {
+        //     this.errors[`${key}.isEmpty`] = msg;
+        // }
+        // return ret;
     }
 
     /**
@@ -70,14 +85,15 @@ class Validators extends BaseModel {
      * @returns
      */
     belowMax(key) {
-        let max = options.maxQueue,
-            ret = queue.size <= max;
-        if (!ret) {
+        let { maxQueue: max } = options,
+            { size } = queue;
+        if (!size <= max) {
             this.errors[
                 `${key}.overMax`
             ] = `Blast Auto tidak boleh lebih dari ${max} Nomor!`;
+            return false;
         }
-        return ret;
+        return true;
     }
 
     /**
@@ -95,9 +111,7 @@ class Validators extends BaseModel {
     showError() {
         const list = this.errorList;
         if (!list.isEmpty) {
-            const errList = DOM.createListElement("ul", list, {
-                classid: "wfu-reports",
-            });
+            const errList = DOM.createListElement(list, "ul", { classid: "wfu-reports" });
             modal.alert(errList, "[ERROR] Proses Gagal Dimulai");
         }
     }

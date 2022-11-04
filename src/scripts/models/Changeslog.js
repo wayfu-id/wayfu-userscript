@@ -72,11 +72,12 @@ class Changelog extends GM_Library {
                 url: `${updateURL}`,
                 onload: (res) => {
                     const { status, responseText } = res;
-                    if (status === 200) {
-                        done(responseText);
-                    } else {
-                        done(false);
-                    }
+                    done(status === 200 ? responseText : false);
+                    // if (status === 200) {
+                    //     done(responseText);
+                    // } else {
+                    //     done(false);
+                    // }
                 },
             };
             this.request(req);

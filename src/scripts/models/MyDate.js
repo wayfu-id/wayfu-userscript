@@ -4,7 +4,7 @@
 export default class MyDate extends Date {
     /**
      * Add days from the current date.
-     * Doesn't modify or override current date
+     * `Creating new MyDate instance`
      * @param {number} days how many days
      * @returns
      */
@@ -16,7 +16,7 @@ export default class MyDate extends Date {
 
     /**
      * Add months from the current date.
-     * Doesn't modify or override current date
+     * `Creating new MyDate instance`
      * @param {number} months how many months
      * @returns
      */

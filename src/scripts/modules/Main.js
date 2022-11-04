@@ -8,7 +8,7 @@ import { options } from "../models/Settings";
 import { user } from "../models/Users";
 import { message } from "../models/Messages";
 import { validator } from "./Validators";
-import { DOM } from "../lib/DOM";
+import { DOM } from "../lib/HtmlModifier";
 
 /**
  * Check Current status to conclude current process will be started or not
@@ -101,9 +101,7 @@ function startProcess() {
         return true;
     };
 
-    if (!loop.isRunning) {
-        loop.start(setStatus);
-    }
+    if (!loop.isRunning) loop.start(setStatus);
     if (loop.isRunning && !!queue.now) {
         let no = (queue.currentIndex += 1),
             data = queue.run();
@@ -198,12 +196,12 @@ function showReport() {
     };
     let title = "[REPORT] Kirim Pesan Otomatis Selesai.",
         text = DOM.createListElement(
-            "ul",
             [
                 `SUKSES  = ${report.sukses}`,
                 `GAGAL   = ${btnDownload("gagal")}`,
                 `ERROR   = ${btnDownload("error")}`,
             ],
+            "ul",
             { classid: "wfu-reports" }
         );
     modal.alert(text, title);

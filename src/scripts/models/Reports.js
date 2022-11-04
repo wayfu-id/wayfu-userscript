@@ -8,7 +8,7 @@ class Reports {
     }
 
     /**
-     * reset report
+     * Reset report
      */
     reset() {
         this.sukses = 0;
@@ -17,7 +17,7 @@ class Reports {
     }
 
     /**
-     * create report data for error and failed
+     * Create report data for error and failed
      * @param {"gagal" | "error"} type type report
      * @returns {{count:number, data:MyArray}} report count with it's detail
      */
@@ -27,7 +27,7 @@ class Reports {
     }
 
     /**
-     * add success record
+     * Add success record
      */
     success() {
         this.sukses++;

@@ -134,16 +134,42 @@ const titleCase = (string) => {
 /**
  * Set and print date based on toLocaleDateString format
  * @param {String | Number | Date} value Date value
- * @param {Number} i weekday changing. if 0, then print. If other than 0, don't print
+ * @param {boolean=true} printDays print weekdays?
  * @returns {String}
  */
-const dateFormat = (value, i = 0) => {
+const dateFormat = (value, printDays = true) => {
     return new Date(value).toLocaleDateString(
         "id-ID",
         Object.assign({}, dateOptDefault, {
-            weekday: i == 0 ? "long" : undefined,
+            weekday: printDays ? "long" : undefined,
         })
     );
 };
 
-export { isNumeric, isDateStr, isUpToDate, setName, dateFormat, JSONParse, parseValue };
+/**
+ * Create an Object from Filtered Object
+ * @param {ObjectConstructor} obj inputed object
+ * @param {Object | Array<Object>} filter What value of the filter
+ * @param {"key" | "val"} type Type filter key or value
+ * @return {ObjectConstructor} new object
+ */
+const createFilteredObject = (obj, filter, type = "key") => {
+    let useFilter = Array.isArray(filter) ? filter : [filter];
+    return Object.fromEntries(
+        Object.entries(obj).filter(([k, v]) => {
+            let val = type == "key" ? k : v;
+            return useFilter.some((e) => val === e);
+        })
+    );
+};
+
+export {
+    isNumeric,
+    isDateStr,
+    isUpToDate,
+    setName,
+    dateFormat,
+    JSONParse,
+    parseValue,
+    createFilteredObject,
+};

@@ -1,5 +1,10 @@
 import MyArray from "./MyArray";
 
+/**
+ * Queue Model Class
+ * @class {Queue}
+ * @classdesc Easy way to make Queue
+ */
 class Queue {
     constructor() {
         this.currentIndex = 0;
@@ -37,8 +42,8 @@ class Queue {
     }
 
     /**
-     * set queue data
-     * @param {MyArray} data
+     * Set queue data
+     * @param {MyArray<Object>} data
      */
     setData(data) {
         this.queue = data;
@@ -48,7 +53,7 @@ class Queue {
     /**
      * Get current queue items, increase it's counter.
      * Decrease it's size when it's counter is more or equal to half of the size
-     * @returns {any} current queue items
+     * @returns {Object} current queue items
      */
     run() {
         if (this.queue.isEmpty) return undefined;
@@ -61,7 +66,7 @@ class Queue {
     }
 
     /**
-     * reset queue
+     * Reset queue
      */
     reset() {
         this.queue = new MyArray();
@@ -71,7 +76,7 @@ class Queue {
     }
 
     /**
-     * reload queue with last setted data
+     * Reload queue with last setted data
      */
     reload() {
         this.queue = this.stock;

@@ -1,15 +1,24 @@
 import BaseModel from "./BaseModel";
 
+/**
+ * GM_Library Model Class
+ * @class GM_Library
+ * @classdesc Contains Greasemonkey or Tampermonkey UserScript API
+ */
+
 export default class GM_Library extends BaseModel {
     constructor() {
         super();
     }
+
     /**
      * Get current app information
+     * @returns {{ [k: string]: string }}
      */
     get appInfo() {
         return this.getInfo("script");
     }
+
     /**
      * Get current userscript manager name
      */
@@ -41,21 +50,22 @@ export default class GM_Library extends BaseModel {
             }
         }
     }
+
     /**
      * Get some app informations using keyname
      * @param {String} key keyname
-     * @returns
+     * @returns {string | { [k: string]: string }}
      */
     getInfo(key = "") {
-        if (!GM_info) {
-            return null;
-        }
+        if (!GM_info) return null;
+
         return key === "" ? GM_info : this.findObjectValue(key, GM_info);
     }
+
     /**
      * Get app resource
      * @param {String} key name of the resource
-     * @param {String} mode type of resource (text | url)
+     * @param {"text" | "url"} mode type of resource (text | url)
      * @returns
      */
     getResource(key, mode = "text") {
@@ -65,6 +75,7 @@ export default class GM_Library extends BaseModel {
             return GM_getResourceURL(key);
         }
     }
+
     /**
      * Delete value on local storage (not implemented yet)
      * @param {String} name value name
@@ -73,14 +84,11 @@ export default class GM_Library extends BaseModel {
         if (typeof GM_deleteValue !== "undefined") {
             const vals = GM_listValues();
             for (const key of vals) {
-                if (name && name !== key) {
-                    continue;
-                } else {
-                    GM_deleteValue(key);
-                }
+                if (name && name === key) GM_deleteValue(key);
             }
         }
     }
+
     /**
      * Set and save some value to local storage
      * @param {String} name what name
@@ -91,6 +99,7 @@ export default class GM_Library extends BaseModel {
             GM_setValue(name, value);
         }
     }
+
     /**
      * Get value from local storage using it's name as keyword
      * @param {String} name what name
@@ -100,14 +109,13 @@ export default class GM_Library extends BaseModel {
     getValue(name, base = null) {
         if (typeof GM_listValues !== "undefined" && typeof GM_getValue !== "undefined") {
             const keys = GM_listValues();
-            if (keys.length !== 0) {
-                if (keys.some((key) => name === key)) {
-                    return GM_getValue(name, base);
-                }
+            if (keys.length !== 0 && keys.some((key) => name === key)) {
+                return GM_getValue(name, base);
             }
         }
         return base;
     }
+
     /**
      * GM XMLHttpRequest Implementation
      * @param {Tampermonkey.Request} options

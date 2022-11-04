@@ -1,3 +1,7 @@
+/**
+ * @typedef {{ (stat: boolean) => void }} callbackFunction
+ */
+
 class Interval {
     constructor() {
         this.timer = false;
@@ -24,7 +28,7 @@ class Interval {
 
     /**
      * Start the interval interval
-     * @param {Function} callback will be execute when interval started
+     * @param {callbackFunction} callback will be execute when interval started
      */
     start(callback = null) {
         if (!this.isRunning) {
@@ -37,7 +41,7 @@ class Interval {
 
     /**
      * Break the interval
-     * @param {Function} callback will be execute when interval broke
+     * @param {callbackFunction} callback will be execute when interval broke
      */
     break(callback = null) {
         if (this.isRunning) {
@@ -51,7 +55,7 @@ class Interval {
 
     /**
      * Stop the interval
-     * @param {Function} callback will be execute when interval stoped
+     * @param {callbackFunction} callback will be execute when interval stoped
      */
     stop(callback = null) {
         this.fn = null;

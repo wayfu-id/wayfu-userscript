@@ -1,14 +1,56 @@
-import { DOM } from "../lib/DOM";
+import { DOM } from "../lib/HtmlModifier";
 import { parseValue } from "../lib/Util";
 import GM_Library from "./GM_Library";
 import MyArray from "./MyArray";
 
+/**
+ * @typedef { "MM/DD/YYYY" | "DD/MM/YYYY" | "YYYY/MM/DD" } datePaternOpt
+ *
+ * @typedef { ObjectConstructor & {
+ *      themeColor: string,
+ *      debug: boolean,
+ *      hasImage: boolean,
+ *      imageFile: File,
+ *      useImage: boolean,
+ *      activeTab: number,
+ *      targetBp: number,
+ *      maxQueue: number,
+ *      dateFormat: "auto" | datePaternOpt,
+ *      openPanel: boolean,
+ *      useCaption: "caption" | "pesan",
+ *      userType: "umum" | "oriflame",
+ *      splitter: "," | ";",
+ *      monthIndex: 0 | 1 | 2,
+ *      isFormat: boolean,
+ *      alert: boolean,
+ *      queueLimit: number,
+ *      bpLimit: number,
+ * }} defaultOpt
+ *
+ * @typedef { GM_Library & defaultOpt & {
+ *      constructor: () => Setting;
+ *      default: defaultOpt,
+ *      init: () => Setting,
+ *      setOptions: (options?: object) => Setting;
+ *      setOption: (key: string, val: any) => void;
+ *      fillList: () => Setting;
+ *      colorList: () => Setting;
+ *      save: () => void;
+ * }} Setting
+ */
+
+/**
+ * Options Class Model
+ * @class {Settings}
+ * @type {Setting}
+ */
 class Settings extends GM_Library {
     constructor() {
         super();
         this.default = {
             themeColor: "var(--butterbar-connection-background)",
             // autoMode: false, @deprecated Mode auto is setted by default
+            debug: false,
             hasImage: false,
             imageFile: null,
             useImage: false,
@@ -36,15 +78,16 @@ class Settings extends GM_Library {
         const set = this.getValue("wayfu-options"),
             opt = Object.assign({}, this.default, this.intoObject(set));
 
+        Object.assign(Settings.prototype, this.default);
         return this.setOptions(opt).colorList();
     }
 
     /**
      * Set options properties
-     * @param {object} options options properties
+     * @param {{ [k:string]: any }?} options options properties
      * @returns
      */
-    setOptions(options = {}) {
+    setOptions(options) {
         if (options !== {}) {
             options = this.intoObject(options);
             for (let key in options) {
@@ -138,6 +181,7 @@ class Settings extends GM_Library {
                 "alert",
                 "bpLimit",
                 "queueLimit",
+                "debug",
                 "default"
             ),
             data = {};
@@ -151,5 +195,6 @@ class Settings extends GM_Library {
     }
 }
 
+/** @type {Setting} */
 const options = new Settings();
 export { Settings as default, options };

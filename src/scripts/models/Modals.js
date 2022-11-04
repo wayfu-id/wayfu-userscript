@@ -1,4 +1,11 @@
-import { DOM } from "../lib/DOM";
+import { DOM } from "../lib/HtmlModifier";
+
+/**
+ * @typedef {{
+ *  (text: string, title?: string) => Promise<void>;
+ *  (text: string, title: string, confirm: true) => Promise<boolean>;
+ * }} constructedModal;
+ */
 
 /**
  * Classes for Modal
@@ -16,12 +23,9 @@ class Modals {
 
     /**
      * Construct and display the modal
-     * @param {boolean} confirm is it confirmation?
-     * @param {string} text innerText | innerHTML for the modal
-     * @param {string} title modal title
-     * @returns
+     * @type {constructedModal}
      */
-    construct(confirm = false, text, title = "") {
+    #construct(text, title = "", confirm = false) {
         return new Promise((done) => {
             let id = `wfu-content-${(this.contens += 1)}`,
                 content = DOM.createElement({
@@ -122,26 +126,26 @@ class Modals {
      * Construct and display the alert modal
      * @param {string} text innerText | innerHTML for the modal
      * @param {string} title modal title
-     * @returns
+     * @returns {Promise<void>}
      */
     async alert(text, title = "") {
-        return await this.construct(false, text, title);
+        return await this.#construct(text, title);
     }
 
     /**
      * Construct and display the alert confirm
      * @param {string} text innerText | innerHTML for the modal
      * @param {string} title modal title
-     * @returns
+     * @returns {Promise<boolean>}
      */
     async confirm(text, title = "") {
-        return await this.construct(true, text, title);
+        return await this.#construct(text, title, true);
     }
 
     /**
      * Show or destroy progress panel
      * @param {boolean} stat blasting or not
-     * @param {Function} callback calback function when panel closed
+     * @param {(e: Event) => void} callback? calback function when panel closed
      */
     progressPanel(stat, callback = null) {
         if (stat) {
@@ -184,9 +188,7 @@ class Modals {
             let elm = DOM.getElement(".wfu-modal-container.progress-panel"),
                 popUp = DOM.getElement(".wfu-modal-container", true),
                 modal = DOM.getElement("#wayfu-modal");
-            if (elm) {
-                DOM.removeElement(elm, modal);
-            }
+            if (elm) DOM.removeElement(elm, modal);
             if (modal && popUp.length === 0) {
                 modal.classList.remove("is-visible");
             }
