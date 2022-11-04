@@ -52,7 +52,7 @@ class Validators extends BaseModel {
                 msg = "Silahkan Masukkan Pesan terlebih dahulu...";
             } else if (k === "queue") {
                 val = typeof queue.now !== "undefined";
-                msh = "Silahkan Masukkan File Penerima Pesan...";
+                msg = "Silahkan Masukkan File Penerima Pesan...";
             }
             return [val, msg];
         })(key);
@@ -87,7 +87,7 @@ class Validators extends BaseModel {
     belowMax(key) {
         let { maxQueue: max } = options,
             { size } = queue;
-        if (!size <= max) {
+        if (size > max) {
             this.errors[
                 `${key}.overMax`
             ] = `Blast Auto tidak boleh lebih dari ${max} Nomor!`;
