@@ -1,0 +1,1 @@
+export function loadWapi(target: Window & typeof globalThis): void;
