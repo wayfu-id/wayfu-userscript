@@ -217,7 +217,7 @@ class CSVFile {
                 return `_${numb + 1}`;
             };
 
-            return `${fname.join("_")}_${type}${getNumb()}.csv`;
+            return `${fname.join("_")}_${type}${getNumb()}`;
         })(type);
 
         // return { fileUrl: URL.createObjectURL(csvData), fileName: newName };
