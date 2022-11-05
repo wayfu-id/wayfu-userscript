@@ -50,11 +50,18 @@ export default class App extends GM_Library {
         // console.info('Options Loaded Successfully.');
     }
     async #onLoadView() {
+        const MIME = [
+            ".txt",
+            ".csv",
+            "text/plain",
+            "text/csv",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        ];
         // console.log(settings);
         DOM.setElementStyle("#wayfuPanel", {
             "background-color": options.themeColor,
         }).setElement("input#getFile", {
-            accept: ".csv,.txt,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            accept: MIME.join(","),
         });
 
         DOM.getElement("#panelBody .menus", true)[options.activeTab || 0].click();

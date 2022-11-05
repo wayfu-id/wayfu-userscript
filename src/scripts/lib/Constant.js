@@ -9,6 +9,8 @@ const rgx = {
     datePattern: /\d{1,4}[\/|-|:]\d{1,2}[\/|-|:]\d{2,4}/,
     formatedDate: /^\d{4}[\/|-|:]\d{1,2}[\/|-|:]\d{1,2}$/,
     forFilename: /(?!\s*$)\s*(?:(gagal|error)|(?:\(?([0-9]*)\)?)|([^_]*))(?:_|\s|$)/g,
+    xlsxFileCheck: /^app.*\/vnd\.(?:([^\.]*)\.([^\.]*sheet(?:.*)?))$/g,
+    csvFileCheck: /^(?:(?:app.*\/.*csv.*)|(?:text\/.*(?:csv|separated|plain).*))$/g,
 };
 
 /**

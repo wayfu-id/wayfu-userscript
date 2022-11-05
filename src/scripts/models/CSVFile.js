@@ -39,12 +39,15 @@ class CSVFile {
      */
     async import(file) {
         if (!file) return this;
-        const data = await ((f) => {
-            return f.type === "text/csv" ? f.text() : f.arrayBuffer();
-        })(file);
-
-        if (!data) return this;
         this.constructFileName(file.name);
+        const { ext } = this.fileName;
+        const data = await ((f) => {
+            let isXlsx = rgx.xlsxFileCheck.test(f.type) || /(?:xlsx)/g.test(ext),
+                isCsv = rgx.csvFileCheck.test(f.type) || /(?:txt|csv)/g.test(ext);
+            console.log(isCsv, isXlsx);
+            return isXlsx ? f.arrayBuffer() : isCsv ? f.text() : null;
+        })(file);
+        if (!data) return this;
         return this.readData(data);
     }
 
