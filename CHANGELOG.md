@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.3.1](https://github.com/wayfu-id/wayfu-userscript/compare/v4.3.0...v4.3.1) (2022-11-05)
+
+
+### Bug Fixes
+
+* **data:** Fixing wrong checking input file type ([382f362](https://github.com/wayfu-id/wayfu-userscript/commit/382f362a682121a196a9d8c3a5daf80f1249d4fb))
+
 ## [4.3.0](https://github.com/wayfu-id/wayfu-userscript/compare/v4.2.2...v4.3.0) (2022-11-04)
 
 
