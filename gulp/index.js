@@ -119,7 +119,7 @@ function inserHeader() {
             allowEmpty: true,
         })
             // Insert userscript header
-            .pipe(scriptHeader(pkg))
+            .pipe(scriptHeader(pkg, environment))
             // Output the file
             .pipe(_dest(dest))
     );
@@ -132,7 +132,7 @@ function addStyleHeader(done) {
     return src(`./assets/*.css`, {
         allowEmpty: true,
     })
-        .pipe(styleHeader(pkg))
+        .pipe(styleHeader(pkg, environment))
         .pipe(_dest(`./assets`));
 }
 

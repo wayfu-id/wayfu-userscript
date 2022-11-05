@@ -4,9 +4,9 @@ function setDate() {
     return new Date().toISOString().split("T")[0];
 }
 
-function generateHeaderItem(key, pkg) {
-    const app = pkg;
-    const userscript = app.userscript;
+function generateHeaderItem(key, app, env) {
+    // const app = pkg;
+    const { userscript } = app;
     const setKey = (key) => `@${key.padEnd(12, " ")}`;
 
     let data = userscript[key] || app[key],
@@ -25,7 +25,8 @@ function generateHeaderItem(key, pkg) {
             }
             return newData.join("\n");
         }
-        return `// ${setKey(key)} ${userscript[key] || app[key]}`;
+        data = key === "name" && env !== "production" ? "WayFu Dev" : data;
+        return `// ${setKey(key)} ${data}`;
     } else {
         throw new Error(`No ${key} spesified in package.json`);
     }
@@ -44,7 +45,7 @@ function generateStyleHeader(package) {
     );
 }
 
-function generateHeader(package) {
+function generateHeader(package, environment) {
     const data = [
         "name",
         "description",
@@ -67,7 +68,7 @@ function generateHeader(package) {
     const header = ["// ==UserScript=="];
 
     for (let key of data) {
-        header.push(generateHeaderItem(key, package));
+        header.push(generateHeaderItem(key, package, environment));
     }
 
     header.push("// ==/UserScript==");
