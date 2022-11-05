@@ -44,7 +44,7 @@ class CSVFile {
         const data = await ((f) => {
             let isXlsx = rgx.xlsxFileCheck.test(f.type) || /(?:xlsx)/g.test(ext),
                 isCsv = rgx.csvFileCheck.test(f.type) || /(?:txt|csv)/g.test(ext);
-            console.log(isCsv, isXlsx);
+            // console.log(isCsv, isXlsx);
             return isXlsx ? f.arrayBuffer() : isCsv ? f.text() : null;
         })(file);
         if (!data) return this;
