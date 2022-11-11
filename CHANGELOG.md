@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.3.2](https://github.com/wayfu-id/wayfu-userscript/compare/v4.3.1...v4.3.2) (2022-11-11)
+
+
+### Bug Fixes
+
+* **chat:** Bugfix unsycronized active chatroom data ([a7ac5fb](https://github.com/wayfu-id/wayfu-userscript/commit/a7ac5fb969d805916dddecfe4eab55c60a3bc6fe))
+
 ### [4.3.1](https://github.com/wayfu-id/wayfu-userscript/compare/v4.3.0...v4.3.1) (2022-11-05)
 
 
