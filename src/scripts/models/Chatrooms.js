@@ -102,16 +102,17 @@ class Chatroom extends BaseModel {
         this.room = ((classes) => {
             let room;
             for (let idx in classes) {
-                room = ((elm) => {
+                room = ((elm, id) => {
                     if (!elm) return null;
-                    elm = idx === "active" ? elm.offsetParent : elm.parentNode;
+                    elm = id === "active" ? elm.offsetParent : elm.parentNode;
                     for (let key of Object.keys(elm)) {
                         let child = this.findObjectValue("children", elm[key]);
                         if (!child) continue;
-                        let { chat } = this.findObjectValue("props", child);
+                        let { chat, active } = this.findObjectValue("props", child);
+                        if (active) return active.value;
                         return chat;
                     }
-                })(DOM.getElement(`.${classes[idx]}`));
+                })(DOM.getElement(`.${classes[idx]}`), idx);
 
                 if (room) return room;
             }
