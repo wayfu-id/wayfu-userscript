@@ -148,15 +148,32 @@ import { loadRecipient, resetRecipient, checkStatus, startProcess } from "./Main
      * @param {Event} e Event
      */
     async loadData(e) {
-        const [file] = (e.currentTarget || e.target).files,
+        const elm = e.currentTarget || e.target,
+            [file] = elm.files,
             mode = DOM.getElement("#_mode");
 
+        const data = await (async (f) => {
+            if (!f) return null;
+            try {
+                return await csvFile.import(f);
+            } catch (err) {
+                modal.alert("[ERROR] File .xlsx penerima tidak valid!");
+                console.error(err);
+                return null;
+            }
+        })(file);
+
         resetRecipient();
-        if (file) loadRecipient(await csvFile.import(file));
-        if (!file && mode.checked) mode.click();
+        if (data) {
+            loadRecipient(data);
+        } else {
+            DOM.setElement(elm, { value: null });
+            if (mode.checked) mode.click();
+        }
+        // if (!data && mode.checked) mode.click();
         DOM.setElement(mode, {
-            title: !file ? "Masukkan File CSV" : "Mode Pesan",
-            disabled: !file,
+            title: !data ? "Masukkan File CSV" : "Mode Pesan",
+            disabled: !data,
         });
     }
 
