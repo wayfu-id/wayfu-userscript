@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.3.3](https://github.com/wayfu-id/wayfu-userscript/compare/v4.3.2...v4.3.3) (2022-11-22)
+
+
+### Bug Fixes
+
+* **xlsx:** Fix error while reading Date type value, format it to string type ([547db72](https://github.com/wayfu-id/wayfu-userscript/commit/547db725830901191aae4d3e7cc2969306bc3cf7))
+* **xlsx:** Fix xlsx file checking RegExp also remove csv checking RegExp ([4da3048](https://github.com/wayfu-id/wayfu-userscript/commit/4da3048f79729e39223d6e59a4f125ec0c334535))
+* **xlsx:** Improve file checking on import function ([078fc93](https://github.com/wayfu-id/wayfu-userscript/commit/078fc936bec0f70ded11c7276bda64bde040a6ec))
+* **xlsx:** Try get file data before load it to queue ([8c2da45](https://github.com/wayfu-id/wayfu-userscript/commit/8c2da4519e8795a84ee1474516142882293662b7))
+
 ### [4.3.2](https://github.com/wayfu-id/wayfu-userscript/compare/v4.3.1...v4.3.2) (2022-11-11)
 
 
