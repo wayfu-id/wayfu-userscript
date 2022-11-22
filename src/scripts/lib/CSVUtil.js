@@ -89,6 +89,9 @@ const transformRow = (data) => {
 
     /** @type {(val: string) => boolean} */
     const validPhone = (val) => rgx.phonePattern.test(val);
+    /** @type {(d: Date) => String} */
+    const formatDate = (d) => [d.getDate(), d.getMonth() + 1, d.getFullYear()].join("/");
+
     if (!data.some((val, idx) => validPhone(val) && idx !== 0)) return false;
 
     data.forEach((e, i) => {
@@ -97,6 +100,8 @@ const transformRow = (data) => {
             ? setPhone(e)
             : isNumeric(e)
             ? Number(e).toString()
+            : e instanceof Date
+            ? formatDate(e)
             : data[i];
     });
     return data;
