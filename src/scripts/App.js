@@ -53,8 +53,6 @@ export default class App extends GM_Library {
         const MIME = [
             ".txt",
             ".csv",
-            "text/plain",
-            "text/csv",
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         ];
         // console.log(settings);
