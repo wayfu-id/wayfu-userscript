@@ -8,7 +8,7 @@ export namespace rgx {
     const formatedDate: RegExp;
     const forFilename: RegExp;
     const xlsxFileCheck: RegExp;
-    const csvFileCheck: RegExp;
+    // const csvFileCheck: RegExp; // seems no longer needed
 }
 
 /** Element's query selector list for some kind of element */
