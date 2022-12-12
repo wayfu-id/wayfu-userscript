@@ -26,6 +26,7 @@ import * as util from "../lib/CSVUtil";
 
 class CSVFile {
     constructor() {
+        /** @type {MyArray<string>} */
         this.types = new MyArray("gagal", "error");
         /** @type {fileName} */
         this.fileName = { fname: [], ftype: "", numb: 1, ext: ".csv" };
@@ -41,7 +42,7 @@ class CSVFile {
         if (!file) return this;
         this.constructFileName(file.name);
         const data = await ((f, { xlsxFileCheck }, { ext }) => {
-            return xlsxFileCheck.test(f.type) && /(?:xlsx)/g.test(ext)
+            return xlsxFileCheck.test(f.type) && /xlsx/.test(ext)
                 ? f.arrayBuffer()
                 : f.text();
         })(file, rgx, this.fileName);
@@ -147,6 +148,7 @@ class CSVFile {
                         val: ["'", '"', `$1`][i],
                     };
                 })(i);
+                if (v === "") data.length++;
                 if (!!v) data.push(v.replace(rgx, val));
             });
             return "";
@@ -154,7 +156,7 @@ class CSVFile {
         text.replace(util.rowValue(delimiter, "g"), replacer);
 
         if (/,\s*$/.test(text)) data.push("");
-        return data.nonEmptyValue;
+        return data;
     }
 
     /**
