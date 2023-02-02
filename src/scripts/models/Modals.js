@@ -1,13 +1,6 @@
 import { DOM } from "../lib/HtmlModifier";
 
 /**
- * @typedef {{
- *  (text: string, title?: string) => Promise<void>;
- *  (text: string, title: string, confirm: true) => Promise<boolean>;
- * }} constructedModal;
- */
-
-/**
  * Classes for Modal
  */
 class Modals {
@@ -23,7 +16,10 @@ class Modals {
 
     /**
      * Construct and display the modal
-     * @type {constructedModal}
+     * @param {string | HTMLElement} text Modal Content, wether it text or HTML Element
+     * @param {string?} title Modal Title. (Optional)
+     * @param {boolean?} confirm Is it confirm modal? (Optional)
+     * @return {Promise<boolean | void>}
      */
     #construct(text, title = "", confirm = false) {
         return new Promise((done) => {

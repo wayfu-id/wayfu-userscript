@@ -3,10 +3,11 @@ export default class BaseModel {
     /**
      * Set message propreties
      * @param {object} props Message properties
+     * @param {boolean?} parse
      * @returns
      */
-    setProperties(props) {
-        props = this.intoObject(props);
+    setProperties(props, parse = true) {
+        props = this.intoObject(props, parse);
         for (let key in props) {
             if (this.hasOwnProperty(key)) {
                 this[key] = props[key];
@@ -37,9 +38,10 @@ export default class BaseModel {
     /**
      * Parse data into Object. Also parse the value of object items
      * @param {String | Array | Object} data input data
+     * @param {boolean} parse input data
      * @returns {{[k:string]: any}}
      */
-    intoObject(data) {
+    intoObject(data, parse = true) {
         let obj = {};
         if (!data) return obj;
 
@@ -53,7 +55,7 @@ export default class BaseModel {
 
         if (Object.keys(obj).length !== 0) {
             for (const key in obj) {
-                obj[key] = parseValue(obj[key]);
+                obj[key] = parse ? parseValue(obj[key]) : obj[key];
             }
         }
 

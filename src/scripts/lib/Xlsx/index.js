@@ -6,18 +6,39 @@ import {
     parseSheet,
     parseStyles,
 } from "./modules/parser";
+import { createXlsx } from "./modules/write";
+
 import MyArray from "../../models/MyArray";
+/** Import types */
+import {
+    baseOptions,
+    parsedFilePath,
+    parsedStyles,
+    parsedProperties,
+} from "./modules/parser";
+import { sheetData } from "./files/worksheet";
 
 /**
  * Open and read Xlsx file data
  * @param {File | Blob | ArrayBuffer} file
- * @param {import("./modules/parser").baseOptions} options
+ * @param {baseOptions} options
  * @returns
  */
 export default async function readXlsxFile(file, options = {}) {
     options = Object.assign({}, options);
     const contents = await getXlsContents(file);
     return readXlsx(contents, options);
+}
+
+/**
+ * Create and download file Xlsx
+ * @param {sheetData} data
+ * @param {string} filename
+ * @param {string?} sheetname
+ */
+export function writeXlsx(data, filename, sheetname) {
+    const config = { filename, sheetname: sheetname || filename, data };
+    return createXlsx(config);
 }
 
 /**
@@ -46,7 +67,7 @@ async function getXlsContents(input) {
 /**
  * Read Xlsx contens data
  * @param {Map<string, string>} contents
- * @param {import("./modules/parser").baseOptions} options
+ * @param {baseOptions} options
  * @returns
  */
 function readXlsx(contents, options = { sheet: 1 }) {
@@ -66,7 +87,7 @@ function readXlsx(contents, options = { sheet: 1 }) {
         return contents.get(filePath);
     };
 
-    /** @type { import("./modules/parser").parsedFilePath } */
+    /** @type { parsedFilePath } */
     const paths = parseFilePaths(getXmlContent("xl/_rels/workbook.xml.rels"));
 
     /** @type { MyArray<string> } */
@@ -74,10 +95,10 @@ function readXlsx(contents, options = { sheet: 1 }) {
         ? parseSharedStrings(getXmlContent(paths.sharedStrings))
         : [];
 
-    /** @type { import("./modules/parser").parsedStyles } */
+    /** @type { parsedStyles } */
     const styles = paths.styles ? parseStyles(getXmlContent(paths.styles)) : {};
 
-    /** @type { import("./modules/parser").parsedProperties } */
+    /** @type { parsedProperties } */
     const properties = parseProperties(getXmlContent("xl/workbook.xml"));
 
     /** @type { string } */
@@ -90,7 +111,7 @@ function readXlsx(contents, options = { sheet: 1 }) {
     /** @type { string } */
     const content = getXmlContent(paths.sheets[sheetId]);
 
-    /** @type { import("./modules/parser").parsedSheetData } */
+    /** @type { parsedSheetData } */
     const sheets = parseSheet(content, values, styles, properties, options);
 
     /** @type { MyArray<MyArray<string | typeof Date | number>>} */

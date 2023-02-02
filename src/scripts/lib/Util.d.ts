@@ -1,7 +1,7 @@
 import MyDate from "./../models/MyDate";
 
 /** Conver string to Title Case */
-declare function titleCase(string: string): string;
+export function titleCase(string: string): string;
 
 /** Check and detect the string is numeric or not */
 export function isNumeric(str: string): boolean;

@@ -168,6 +168,7 @@ export {
     isDateStr,
     isUpToDate,
     setName,
+    titleCase,
     dateFormat,
     JSONParse,
     parseValue,

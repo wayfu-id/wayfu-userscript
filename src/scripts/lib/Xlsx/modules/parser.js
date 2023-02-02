@@ -115,7 +115,7 @@ function isDateTimestamp(styleId, styles, options) {
 /**
  * Parse document dimensions
  * @param {Document} sheet on What document sheet?
- * @returns {docDimension[]}
+ * @returns {docDimension[] | null}
  */
 function parseDimensions(sheet) {
     let dimensions = Xlsx.getDimensions(sheet);
@@ -135,6 +135,8 @@ function parseDimensions(sheet) {
 
         return dm;
     }
+
+    return null;
 }
 
 /**
@@ -295,7 +297,7 @@ function calculateDimensions(cells) {
      * @type {{(string): [number, number]}}
      */
     const getRange = (kind) => {
-        let arr = cells.map((c) => c[kind]).short(comparator);
+        let arr = cells.map((c) => c[kind]).sort(comparator);
         return [arr.shift(), arr.pop()];
     };
 

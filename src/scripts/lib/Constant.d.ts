@@ -11,6 +11,12 @@ export namespace rgx {
     // const csvFileCheck: RegExp; // seems no longer needed
 }
 
+export namespace svgData {
+    const downloadBtnSvg: {type: 'path', data: SVGPathElement};
+    const checksSvg: {type: 'polyline', data: SVGPolylineElement};
+    const groupDownloadBtnSvg: Array<{type: 'path', data: SVGPathElement}>;
+}
+
 /** Element's query selector list for some kind of element */
 export namespace queryElm {
     const send: string;

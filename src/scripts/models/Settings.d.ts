@@ -23,6 +23,8 @@ interface defaultOpt extends ObjectConstructor{
     alert: boolean,
     queueLimit: number,
     bpLimit: number,
+    exportType: "ask" | "csv" | "xlsx",
+    fileType: "csv" | "xlsx",
 }
 
 interface Settings extends GM_Library, defaultOpt{
@@ -32,10 +34,10 @@ interface Settings extends GM_Library, defaultOpt{
     init(): Settings;
 
     /** Set options properties */
-    setOptions(options?: {[k:string]: any}): Settings;
+    setOptions(options?: {[k: keyof defaultOpt]: any}): Settings;
 
     /** Set option property */
-    setOption(key: string, val: any): void;
+    setOption(key: keyof defaultOpt, val: any): void;
 
     /** Fill options panel with all of the options properties */
     fillList(): Settings;

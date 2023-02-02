@@ -1,6 +1,6 @@
 import CSVFile, { csvFile } from "../models/CSVFile";
 import Queue, { queue } from "../models/Queue";
-import { queryElm } from "../lib/Constant";
+import { queryElm, svgData } from "../lib/Constant";
 import { loop } from "../models/Interval";
 import { report } from "../models/Reports";
 import { modal } from "../models/Modals";
@@ -9,6 +9,7 @@ import { user } from "../models/Users";
 import { message } from "../models/Messages";
 import { validator } from "./Validators";
 import { DOM } from "../lib/HtmlModifier";
+import MyArray from "../models/MyArray";
 
 /**
  * Check Current status to conclude current process will be started or not
@@ -128,7 +129,7 @@ function startProcess() {
                         stat = (await message.sendImg()) === true ? "SUCCESS" : "FAILED";
                     }
 
-                    stat === "SUCCESS" ? report.success() : report.fail(data, 0);
+                    stat === "SUCCESS" ? report.success(data) : report.fail(data, 0);
                 }
             }, 45e2);
         } else {
@@ -168,43 +169,56 @@ function stopProcess() {
 /**
  * Show last porcess report
  */
-function showReport() {
+async function showReport() {
     if (queue.isEmpty) {
         DOM.setElement("#getFile", { value: "" });
         resetRecipient();
     }
+    /** @type {(type: "sukses" | "gagal" | "error") => string} */
     const btnDownload = (type) => {
-        const { count, data } = report.createData(type);
+        const { count, data } = report.createData(type),
+            { downloadBtnSvg } = svgData;
+
         if (data.isEmpty) return count;
 
-        const { fileUrl, fileName } = csvFile.export(type, data);
-        const downloadIco = {
-            viewBox: "0 0 512 512",
-            fill: "currentColor",
-            d: "M480 352h-133.5l-45.25 45.25C289.2 409.3 273.1 416 256 416s-33.16-6.656-45.25-18.75L165.5 352H32c-17.67 0-32 14.33-32 32v96c0 17.67 14.33 32 32 32h448c17.67 0 32-14.33 32-32v-96C512 366.3 497.7 352 480 352zM432 456c-13.2 0-24-10.8-24-24c0-13.2 10.8-24 24-24s24 10.8 24 24C456 445.2 445.2 456 432 456zM233.4 374.6C239.6 380.9 247.8 384 256 384s16.38-3.125 22.62-9.375l128-128c12.49-12.5 12.49-32.75 0-45.25c-12.5-12.5-32.76-12.5-45.25 0L288 274.8V32c0-17.67-14.33-32-32-32C238.3 0 224 14.33 224 32v242.8L150.6 201.4c-12.49-12.5-32.75-12.5-45.25 0c-12.49 12.5-12.49 32.75 0 45.25L233.4 374.6z",
-        };
-        const elm = {
+        const { fileName } = csvFile.export(type, data);
+        const icon = DOM.createSVGElement(downloadBtnSvg, { viewBox: "0 0 512 512" });
+        const btnWrap = DOM.createElement({
             tag: "a",
-            href: fileUrl,
-            html: DOM.createSVGElement(downloadIco).outerHTML,
-            download: `${fileName}`,
-            classid: "wfu-export-csv",
             title: `Download "${fileName}"`,
-        };
+            classid: "wfu-export-csv",
+            href: "#",
+        });
 
-        return `${count} ` + DOM.createElement(elm).outerHTML;
+        btnWrap.appendChild(icon);
+        btnWrap.dataset.reportType = type;
+
+        return `${count} ` + btnWrap.outerHTML;
     };
-    let title = "[REPORT] Kirim Pesan Otomatis Selesai.",
-        text = DOM.createListElement(
-            [
-                `SUKSES  = ${report.sukses}`,
-                `GAGAL   = ${btnDownload("gagal")}`,
-                `ERROR   = ${btnDownload("error")}`,
-            ],
-            "ul",
-            { classid: "wfu-reports" }
-        );
+    let title = "[REPORT] Kirim Pesan Otomatis Selesai.";
+    let text = DOM.createListElement(
+        [
+            `SUKSES  = ${btnDownload("sukses")}`,
+            `GAGAL   = ${btnDownload("gagal")}`,
+            `ERROR   = ${btnDownload("error")}`,
+        ],
+        "ul",
+        { classid: "wfu-reports" }
+    );
     modal.alert(text, title);
+    if (await DOM.hasElement(".wfu-reports a[data-report-type]")) {
+        let downloadBtn = DOM.getElement(".wfu-reports a[data-report-type]", true);
+        /** @type {EventListener} */
+        function download(e) {
+            let elm = e.currentTarget || e.target,
+                type = elm.dataset.reportType;
+            let { data } = report.createData(type),
+                { fileName } = csvFile.export(type, data);
+
+            return exportDataToFile(data, fileName);
+        }
+        downloadBtn.forEach((el) => DOM.onEvent(el, "click", download));
+    }
     if (!user.isPremium) {
         user.showAlert(!user.isTrial ? (DOM.getElement("#auto").click(), 4) : 3, true);
     }
@@ -250,4 +264,122 @@ function showProgress(queue, index) {
     DOM.setElementStyle(".waBar", { width: `${width}%` });
 }
 
-export { checkStatus, loadRecipient, resetRecipient, reloadRecipient, startProcess };
+/**
+ * @param {MyArray} data
+ * @param {string} title
+ * @return {void}
+ */
+async function exportDataToFile(data, title) {
+    /** @type {(classid: string | string[]) => HTMLElement} */
+    const container = (classid) => {
+        return DOM.createElement({ tag: "div", classid: classid });
+    };
+    /** @type {EventListener} */
+    function changeType(e) {
+        const { id, value } = e.currentTarget || e.target;
+        if (id !== "fileType") return;
+        options.setOption(id, value);
+    }
+    /** @type {EventListener} */
+    function saveType(e) {
+        const { id, checked } = e.currentTarget || e.target;
+        if (id !== "set_fileType") return;
+        let { fileType } = options;
+
+        options.setOption("exportType", checked ? fileType : "ask");
+    }
+
+    /** @type {(id: string) => HTMLElement} */
+    let innerModal = (id) => {
+        const outer = container("wfu-options");
+
+        const selectEl = ((id, { fileType }, { checksSvg }) => {
+            const opt = ["csv", "xlsx"];
+            const outer = container("row");
+            const label = (() => {
+                let outer = container("_label"),
+                    inner = DOM.createLabelElement({ id, text: `Simpan file sebagai` });
+                outer.appendChild(inner);
+                return outer;
+            })();
+            const input = (() => {
+                let outer = container("_input"),
+                    inner = DOM.createLabelElement({ id, classid: "select" });
+                let select = DOM.createSelectElement({ id }, opt, { change: changeType }),
+                    ico = DOM.createSVGElement(checksSvg, { viewBox: "0 0 10 6" });
+
+                select.value = fileType;
+                inner.append(select, ico);
+                outer.appendChild(inner);
+                return outer;
+            })();
+
+            outer.append(label, input);
+            return outer;
+        })(id, options, svgData);
+
+        const checksEl = ((id) => {
+            const outer = container("row right");
+            const check = DOM.createCheckElement(
+                { id: `set_${id}`, classid: "_input checks" },
+                { change: saveType }
+            );
+            const label = DOM.createLabelElement({
+                id: `set_${id}`,
+                classid: "_label",
+                text: `Simpan pengaturan`,
+            });
+
+            outer.append(check, label);
+            return outer;
+        })(id);
+        // console.log(outer, checksEl);
+        outer.append(selectEl, checksEl);
+
+        return outer;
+    };
+
+    let { fileUrl, fileName } = CSVFile.createFile(title, data),
+        { exportType } = options;
+
+    if (exportType === "ask") {
+        if (!(await modal.confirm(innerModal("fileType"), `Download "${title}"`))) return;
+        exportType = options.fileType;
+    }
+
+    return exportType === "xlsx"
+        ? CSVFile.exportToXlsx(title, data)
+        : DOM.createElement({ tag: "a", href: fileUrl, download: `${fileName}` }).click();
+    //     return DOM.createElement({
+    //         tag: "a",
+    //         href: fileUrl,
+    //         download: `${fileName}`,
+    //     }).click();
+    // } else {
+    //     return CSVFile.exportToXlsx(title, data);
+    // }
+    // if (await modal.confirm(innerModal("fileType"), `Download "${title}"`)) {
+    //     const { fileUrl, fileName } = CSVFile.createFile(title, data),
+    //         { exportType } = options;
+    //     if (exportType === "csv") {
+    //         DOM.createElement({
+    //             tag: "a",
+    //             href: fileUrl,
+    //             download: `${fileName}`,
+    //         }).click();
+    //     } else {
+    //         CSVFile.exportToXlsx(title, data);
+    //     }
+    // }
+
+    // return;
+}
+
+export {
+    checkStatus,
+    loadRecipient,
+    resetRecipient,
+    reloadRecipient,
+    startProcess,
+    exportDataToFile,
+};

@@ -10,6 +10,7 @@
         {oriflame: true, for: 'dateFormat', name: 'Format Tanggal', type: "select", opt: [{key:'auto', val:'Deteksi Otomatis'},{key:0, val:'MM/DD/YYYY'},{key:1, val:'DD/MM/YYYY'},{key:2, val:'YYYY/MM/DD'}]},
         {oriflame: false, for: 'maxQueue', name: 'Jumlah Penerima', type: "range", opt: {max:1000, step:10}},
         {oriflame: false, for: 'useCaption', name: 'Caption', type: "select", opt: [{key:'caption', val:'Caption'},{key:'pesan',val:'Pesan'}], isBeta: true},
+        {oriflame: false, for: 'exportType', name: 'Output File', type: "select", opt: [{key:'ask', val:'Always Ask'},{key:'csv', val:'CSV (.csv)'},{key:'xlsx',val:'Excel (.xlsx)'}], isBeta: true},
         {oriflame: false, for: 'userType', name: 'Tipe Pengguna'}
     ];
     const social = [

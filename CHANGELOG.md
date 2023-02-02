@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.4.0](https://github.com/wayfu-id/wayfu-userscript/compare/v4.3.3...v4.4.0) (2023-02-02)
+
+
+### Features
+
+* **report:** New report model, add download button on success report ([f5ad44b](https://github.com/wayfu-id/wayfu-userscript/commit/f5ad44b9d80bab9a98338aaa72214115c9e5aa8c))
+* **xlsx:** Add feature to create xlsx file using arrayType data ([9f3471f](https://github.com/wayfu-id/wayfu-userscript/commit/9f3471f7f2f8178c116569d07b42dd38aa825dfa))
+* **xlsx:** Add option to set filetype upon exporting file ([6245cc7](https://github.com/wayfu-id/wayfu-userscript/commit/6245cc7be3f30f5123c0d3a3856b1c320324474e))
+* **xlsx:** Implement export as xlsx on downloading group contacts ([3413e57](https://github.com/wayfu-id/wayfu-userscript/commit/3413e5702833133f2e12b8c00e60341cc20e5aeb))
+* **xlsx:** Implement export file as csv or xlsx filetype ([c09d195](https://github.com/wayfu-id/wayfu-userscript/commit/c09d1958ebbe7a412e858356a393cf9c39cf0be8))
+* **xlsx:** Implement Xlsx lib to create xlsx file ([0e11866](https://github.com/wayfu-id/wayfu-userscript/commit/0e118664b10a8f03262fdab4bb0756960aa83cdf))
+
+
+### Bug Fixes
+
+* **csv:** Allow empty cell value data on csv filetype ([d2cd6b1](https://github.com/wayfu-id/wayfu-userscript/commit/d2cd6b1cc06ac43add67704c20b8b82014db082c))
+* **message:** Fix parsing message when there is a datestring on it ([922ad5a](https://github.com/wayfu-id/wayfu-userscript/commit/922ad5ad3b1825a6d7419e81d1c111362564da4e))
+* **report:** Fix wrong detection upon fail and error process ([b79b6ea](https://github.com/wayfu-id/wayfu-userscript/commit/b79b6ead8cc7da7ca315dd30fbc983eaf6e6beae))
+* **report:** fix wrong reading fail and error status ([9fb7c98](https://github.com/wayfu-id/wayfu-userscript/commit/9fb7c98c605fb965dd530f6470a26d1ecac571cd))
+* **svg:** Fix svg factory and add some html form element factory ([c1bad57](https://github.com/wayfu-id/wayfu-userscript/commit/c1bad575dabd97e37c5620dd00ab4613e25a46b3))
+
 ### [4.3.3](https://github.com/wayfu-id/wayfu-userscript/compare/v4.3.2...v4.3.3) (2022-11-22)
 
 

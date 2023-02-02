@@ -72,7 +72,7 @@ export default class Xlsx {
      */
     static getDimensions(doc) {
         let dimensions = findChild(doc.documentElement, "dimension");
-        if (!dimensions) return "A1:A1";
+        if (!dimensions) return false;
 
         return dimensions.getAttribute("ref");
     }

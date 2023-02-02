@@ -35,9 +35,16 @@ import MyArray from "../models/MyArray";
  *     viewBox?: string
  * }} svgElemenOptions
  *
+ * @typedef {{
+ *     type: keyof SVGElementTagNameMap,
+ *     data: SVGElement
+ * }} svgElementDetails
+ *
  * @typedef { elemenOptions & CSSStyleDeclaration } elementStyles
  *
  * @typedef { elemenOptions & HTMLInputElement } inputElement
+ *
+ * @typedef { {[k: string]: EventListener} } eventDetails
  */
 
 /**
@@ -237,45 +244,91 @@ class HtmlModifier {
     }
 
     /**
-     * Create an svg element
-     * @param {svgElemenOptions} props html tag and attributes for svg and path
-     * @returns {HTMLElement}
+     * Create Select Element
+     * @param {elemenOptions} props
+     * @param {String[]} items
+     * @param {eventDetails?} event
+     * @return {HTMLSelectElement}
      */
-    createSVGElement(props) {
-        const { size, d, dPath, fill, viewBox } = props;
-        const paths = ((data) => {
-            if (!Array.isArray(data)) return [data];
-            return data;
-        })(d || dPath);
+    createSelectElement(props, items, event) {
+        const { id, classid } = props;
+        const parent = this.createElement({ tag: "select", id: id, classid });
+        /** @type {(items: string[]) => HTMLElement[]} */
+        const createOption = (items) => {
+            return items.map((val) =>
+                this.createElement({ tag: "option", value: val, text: val })
+            );
+        };
 
-        let icoPath = "";
-        for (let path of paths) {
-            icoPath += this.createElement({
-                tag: "path",
-                d: path,
-                fill: fill || "currentColor",
-            }).outerHTML;
-        }
+        parent.append(...createOption(items));
+        if (event) for (let evt in event) this.onEvent(parent, evt, event[evt]);
 
-        const icoSize = { width: "16", height: "16" };
-        if (size && typeof size === "string") {
-            let [width, height] = size.split(" ");
+        return parent;
+    }
 
-            icoSize.width = width || icoSize.width;
-            icoSize.height = height || icoSize.height;
-        }
+    /**
+     * Create Check box element
+     * @param {elemenOptions} props
+     * @param {string?} title
+     * @param {eventDetails?} event
+     * @return {HTMLElement}
+     */
+    createCheckElement(props, event) {
+        const { id, classid } = props;
+        const input = this.createElement({
+            tag: "input",
+            type: "checkbox",
+            id: id,
+            name: id,
+            classid,
+        });
 
-        return this.createElement(
-            Object.assign(
-                {
-                    tag: "svg",
-                    width: icoSize.width,
-                    height: icoSize.height,
-                    html: icoPath,
-                },
-                viewBox ? { viewBox: viewBox } : {}
-            )
-        );
+        if (event) for (let evt in event) this.onEvent(input, evt, event[evt]);
+        return input;
+    }
+
+    /**
+     * Create Label element
+     * @param {elemenOptions} props
+     * @return {HTMLElement}
+     */
+    createLabelElement(props) {
+        const { id, classid, text } = props;
+        return this.createElement({ tag: "label", for: id, classid, text });
+    }
+
+    /**
+     * Create an svg element
+     * @param {svgElementDetails | Array.<svgElementDetails>} shape SVG Shape(s), can be object or array of object
+     * @param {SVGSVGElement} attr main SVG attributes if any
+     * @return {SVGElement}
+     */
+    createSVGElement(shape, attr = {}) {
+        /**
+         * @template {keyof SVGElementTagNameMap} T
+         * @type { (type: T, data: SVGElement) => SVGElementTagNameMap[T] }
+         */
+        const getNode = (type, data) => {
+            let node = document.createElementNS("http://www.w3.org/2000/svg", type),
+                keyReplacer = (m) => `-${m.toLocaleLowerCase()}`;
+
+            for (let key in data) {
+                let attrName =
+                    key === "viewBox" ? key : key.replace(/[A-Z]/g, keyReplacer);
+                node.setAttributeNS(null, attrName, data[key]);
+            }
+
+            return node;
+        };
+        const svgContainer = getNode("svg", attr),
+            shapes = Array.isArray(shape) ? shape : [shape];
+
+        shapes.forEach((shape) => {
+            const { type, data } = shape;
+            svgContainer.appendChild(getNode(type, data));
+        });
+
+        return svgContainer;
     }
 
     /**
