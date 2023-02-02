@@ -5,13 +5,13 @@
  */
 
 export default class BaseModel {
-    setProperties(props: object): BaseModel;
+    setProperties(props: object, parse?: true): BaseModel;
 
     /** Serialize to string */
     serialize<T extends typeof Date | string | number | {}>(input: T): string;
 
     /** Parse data into Object. Also parse the value of object items */
-    intoObject<T extends typeof Date | string | number>(data: string | Array<T> | T): {[k:string]: T};
+    intoObject<T extends typeof Date | string | number>(data: string | Array<T> | T): {[k:string]: T, parse?: true};
 
     /** Get value from Object */
     findObjectValue<T extends object>(key: string, object?: {} | this, depth?: number | 2): T;

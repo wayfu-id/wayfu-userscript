@@ -21,6 +21,7 @@ type fileOutputInfo = {
 export default class CSVFile {
     /** Create a csv file from array data */
     static createFile(name: string, data: MyArray<any> | any[], splitter?: string | null): fileOutputInfo;
+    static exportToXlsx(name: string, data: MyArray<any> | any[]): void;
 
     types: MyArray<string>;
     fileName: fileName;

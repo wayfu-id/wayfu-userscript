@@ -1,3 +1,4 @@
+import MyArray from "../models/MyArray";
 import CSVFile from "./../models/CSVFile";
 import Queue from "./../models/Queue";
 
@@ -33,3 +34,6 @@ export function resetRecipient(): void;
 
 /** Start sending process */
 export function startProcess(): void;
+
+/** Export data */
+export function exportDataToFile(data: MyArray<any>, title: string): void
