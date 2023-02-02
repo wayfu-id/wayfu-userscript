@@ -25,6 +25,8 @@ import MyArray from "./MyArray";
  *      alert: boolean,
  *      queueLimit: number,
  *      bpLimit: number,
+ *      exportType: "ask" | "csv" | "xlsx",
+ *      fileType: "csv" | "xlsx",
  * }} defaultOpt
  *
  * @typedef { GM_Library & defaultOpt & {
@@ -67,6 +69,8 @@ class Settings extends GM_Library {
             alert: true,
             queueLimit: 1000,
             bpLimit: 300,
+            exportType: "csv",
+            fileType: "csv",
         };
     }
 
