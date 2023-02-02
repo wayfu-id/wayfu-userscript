@@ -74,14 +74,16 @@
         h2,
         p,
         .wfu-reports,
-        .wfu-changelog {
+        .wfu-changelog,
+        .wfu-options {
             margin: 0 auto;
             width: 90%;
         }
 
         p,
         .wfu-reports,
-        .wfu-changelog {
+        .wfu-changelog,
+        .wfu-options {
             padding: 1em 0;
         }
 
@@ -126,6 +128,144 @@
                             margin-left: 1.25rem;
                         }
                     }
+                }
+            }
+        }
+
+        .wfu-options {
+            // padding: 0 10px;
+            // height: 146px;
+            // overflow-y: scroll;
+
+            .row {
+                display: flex;
+                flex-wrap: nowrap;
+
+                &.right {
+                    justify-content: end;
+
+                    > * {
+                        width: auto !important;
+                    }
+                }
+
+                &:first-child {
+                    padding-top: 3px;
+                }
+
+                &:last-child {
+                    border-bottom: 2px #888 solid;
+                    padding-bottom: 7px;
+                    margin-bottom: 7px;
+                }
+
+                &:not(:last-child) {
+                    padding-bottom: 3px;
+                }
+
+                ._label > *,
+                ._input > * {
+                    vertical-align: middle;
+                    text-transform: capitalize;
+                    font-size: 0.875em;
+                }
+
+                ._label {
+                    width: 80%;
+
+                    .badge {
+                        display: inline-block;
+                        padding: 0.35em 0.65em;
+                        font-size: 0.75em;
+                        font-weight: 700;
+                        line-height: 1;
+                        color: #fff;
+                        text-align: center;
+                        white-space: nowrap;
+                        vertical-align: baseline;
+                        border-radius: 0.25rem;
+
+                        &.beta {
+                            padding: 0.25em 0.5em;
+                            font-size: 0.5em;
+                            background-color: #dc3545 !important;
+                            border-radius: 50rem !important;
+                            vertical-align: top;
+                            font-weight: normal;
+                            text-transform: uppercase;
+                        }
+                    }
+                }
+
+                label._label {
+                    margin: auto 0;
+                    margin-left: 5px;
+                }
+
+                ._input {
+                    width: 20%;
+
+                    .select {
+                        position: relative;
+                        min-width: 200px;
+
+                        select {
+                            padding: 3px 20px 3px 12px;
+                            width: 100%;
+                            border: none;
+                            border-radius: 5px;
+                            background: var(--panel-background);
+                            color: var(--primary-stronger);
+                            box-shadow: 0 1px 3px -2px #9098a9;
+                            cursor: pointer;
+                            font-family: "Roboto", sans-serif;
+                            font-size: 14px;
+                            transition: all 150ms ease;
+
+                            &:required:invalid {
+                                color: #5a667f;
+                            }
+
+                            &:focus {
+                                outline: none;
+                                border-color: #07f;
+                                box-shadow: 0 0 0 2px rgba(0, 119, 255, 0.2);
+                            }
+
+                            &:hover + svg {
+                                stroke: #07f;
+                            }
+
+                            option {
+                                color: var(--secondary);
+
+                                &[value=""][disabled] {
+                                    display: none;
+                                }
+                            }
+                        }
+
+                        svg {
+                            @include area(10px, 6px);
+                            position: absolute;
+                            right: 12px;
+                            top: calc(50% - 1px);
+                            stroke-width: 2px;
+                            stroke: #9098a9;
+                            fill: none;
+                            stroke-linecap: round;
+                            stroke-linejoin: round;
+                            pointer-events: none;
+                        }
+                    }
+
+                    &.checks {
+                        @include square(1.25em);
+                        position: relative;
+                        float: left;
+                        display: block;
+                        top: 1px;
+                        margin-right: 2px;}
                 }
             }
         }
