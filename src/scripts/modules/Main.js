@@ -1,6 +1,6 @@
 import CSVFile, { csvFile } from "../models/CSVFile";
 import Queue, { queue } from "../models/Queue";
-import { queryElm } from "../lib/Constant";
+import { queryElm, svgData } from "../lib/Constant";
 import { loop } from "../models/Interval";
 import { report } from "../models/Reports";
 import { modal } from "../models/Modals";
@@ -9,6 +9,7 @@ import { user } from "../models/Users";
 import { message } from "../models/Messages";
 import { validator } from "./Validators";
 import { DOM } from "../lib/HtmlModifier";
+import MyArray from "../models/MyArray";
 
 /**
  * Check Current status to conclude current process will be started or not
@@ -128,7 +129,7 @@ function startProcess() {
                         stat = (await message.sendImg()) === true ? "SUCCESS" : "FAILED";
                     }
 
-                    stat === "SUCCESS" ? report.success() : report.fail(data, 0);
+                    stat === "SUCCESS" ? report.success(data) : report.fail(data, 0);
                 }
             }, 45e2);
         } else {
@@ -184,10 +185,6 @@ async function showReport() {
         const icon = DOM.createSVGElement(downloadBtnSvg, { viewBox: "0 0 512 512" });
         const btnWrap = DOM.createElement({
             tag: "a",
-            href: fileUrl,
-            html: DOM.createSVGElement(downloadIco).outerHTML,
-            download: `${fileName}`,
-            classid: "wfu-export-csv",
             title: `Download "${fileName}"`,
             classid: "wfu-export-csv",
             href: "#",
@@ -267,4 +264,122 @@ function showProgress(queue, index) {
     DOM.setElementStyle(".waBar", { width: `${width}%` });
 }
 
-export { checkStatus, loadRecipient, resetRecipient, reloadRecipient, startProcess };
+/**
+ * @param {MyArray} data
+ * @param {string} title
+ * @return {void}
+ */
+async function exportDataToFile(data, title) {
+    /** @type {(classid: string | string[]) => HTMLElement} */
+    const container = (classid) => {
+        return DOM.createElement({ tag: "div", classid: classid });
+    };
+    /** @type {EventListener} */
+    function changeType(e) {
+        const { id, value } = e.currentTarget || e.target;
+        if (id !== "fileType") return;
+        options.setOption(id, value);
+    }
+    /** @type {EventListener} */
+    function saveType(e) {
+        const { id, checked } = e.currentTarget || e.target;
+        if (id !== "set_fileType") return;
+        let { fileType } = options;
+
+        options.setOption("exportType", checked ? fileType : "ask");
+    }
+
+    /** @type {(id: string) => HTMLElement} */
+    let innerModal = (id) => {
+        const outer = container("wfu-options");
+
+        const selectEl = ((id, { fileType }, { checksSvg }) => {
+            const opt = ["csv", "xlsx"];
+            const outer = container("row");
+            const label = (() => {
+                let outer = container("_label"),
+                    inner = DOM.createLabelElement({ id, text: `Simpan file sebagai` });
+                outer.appendChild(inner);
+                return outer;
+            })();
+            const input = (() => {
+                let outer = container("_input"),
+                    inner = DOM.createLabelElement({ id, classid: "select" });
+                let select = DOM.createSelectElement({ id }, opt, { change: changeType }),
+                    ico = DOM.createSVGElement(checksSvg, { viewBox: "0 0 10 6" });
+
+                select.value = fileType;
+                inner.append(select, ico);
+                outer.appendChild(inner);
+                return outer;
+            })();
+
+            outer.append(label, input);
+            return outer;
+        })(id, options, svgData);
+
+        const checksEl = ((id) => {
+            const outer = container("row right");
+            const check = DOM.createCheckElement(
+                { id: `set_${id}`, classid: "_input checks" },
+                { change: saveType }
+            );
+            const label = DOM.createLabelElement({
+                id: `set_${id}`,
+                classid: "_label",
+                text: `Simpan pengaturan`,
+            });
+
+            outer.append(check, label);
+            return outer;
+        })(id);
+        // console.log(outer, checksEl);
+        outer.append(selectEl, checksEl);
+
+        return outer;
+    };
+
+    let { fileUrl, fileName } = CSVFile.createFile(title, data),
+        { exportType } = options;
+
+    if (exportType === "ask") {
+        if (!(await modal.confirm(innerModal("fileType"), `Download "${title}"`))) return;
+        exportType = options.fileType;
+    }
+
+    return exportType === "xlsx"
+        ? CSVFile.exportToXlsx(title, data)
+        : DOM.createElement({ tag: "a", href: fileUrl, download: `${fileName}` }).click();
+    //     return DOM.createElement({
+    //         tag: "a",
+    //         href: fileUrl,
+    //         download: `${fileName}`,
+    //     }).click();
+    // } else {
+    //     return CSVFile.exportToXlsx(title, data);
+    // }
+    // if (await modal.confirm(innerModal("fileType"), `Download "${title}"`)) {
+    //     const { fileUrl, fileName } = CSVFile.createFile(title, data),
+    //         { exportType } = options;
+    //     if (exportType === "csv") {
+    //         DOM.createElement({
+    //             tag: "a",
+    //             href: fileUrl,
+    //             download: `${fileName}`,
+    //         }).click();
+    //     } else {
+    //         CSVFile.exportToXlsx(title, data);
+    //     }
+    // }
+
+    // return;
+}
+
+export {
+    checkStatus,
+    loadRecipient,
+    resetRecipient,
+    reloadRecipient,
+    startProcess,
+    exportDataToFile,
+};
