@@ -40,7 +40,7 @@ const queryElm = {
     send: "#main span[data-testid^='send']",
     input: "#main div[contenteditable='true']",
     linkElm: "div#panelBody span#_api-link a",
-    errModal: ".overlay div[role^='button']",
+    errModal: "#app div[data-testid$='popup'] div[role^='button']",
     chatMessage: "#main div.message-out",
 };
 
