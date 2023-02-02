@@ -1,6 +1,17 @@
 import MyArray from "../../../models/MyArray";
 /**
  * @typedef {{(node: Element, i?:number) => void}} domCb
+ *
+ * @typedef {{
+ *   name: String,
+ *   value: String | Number
+ * }} tagAttribute
+ *
+ * @typedef {{
+ *   tag: String,
+ *   attributes?: tagAttribute | MyArray<tagAttribute>,
+ *   value?: String | Number
+ * }} elementItem
  */
 
 const NAMESPACE_REG_EXP = /.+\:/;
@@ -31,6 +42,27 @@ const findChild = (node, tagName, all = false) => {
  */
 const getTagName = (element) => {
     return element.tagName.replace(NAMESPACE_REG_EXP, "");
+};
+
+/**
+ * Set XML Element attribute(s)
+ * @param {Element} node
+ * @param {tagAttribute | MyArray<tagAttribute>} attributes
+ * @return {Element}
+ */
+const setElementAttr = (node, attributes) => {
+    if (Array.isArray(attributes)) {
+        attributes.forEach((attr) => {
+            setElementAttr(node, attr);
+        });
+    } else {
+        let { name, value } = attributes;
+        if (typeof name !== "undefined" && typeof value !== "undefined") {
+            node.setAttribute(name, value);
+        }
+    }
+    // console.log(node.nodeName, attributes);
+    return node;
 };
 
 /**
@@ -85,4 +117,93 @@ function map(node, tagName, func) {
     return results;
 }
 
-export { getTagName, getOuterXml, findChild, forEach, map };
+/**
+ * Create new XML Documents
+ * @param {(elementItem | String)?} root
+ * @returns {XMLDocument}
+ */
+function createXml(root) {
+    const [parser, serializer] = [new DOMParser(), new XMLSerializer()],
+        prefix = '<?xml version="1.0" encoding="utf-8" standalone="yes"?>',
+        XMLDoc = document.implementation.createDocument(null, "", null);
+
+    const setRoot = ((r) => {
+        if (!r) return null;
+
+        let { tag, attributes } = ((t) => {
+            return typeof t === "string" ? { tag: t, attributes: null } : t;
+        })(r);
+        let rootEl = XMLDoc.createElement(tag.trim());
+
+        return attributes && typeof attributes !== "undefined"
+            ? setElementAttr(rootEl, attributes)
+            : rootEl;
+    })(root);
+
+    if (setRoot) XMLDoc.appendChild(setRoot);
+
+    return ((doc) => {
+        const xmlStr = `${prefix}\n${serializer.serializeToString(doc)}`;
+        return parser.parseFromString(xmlStr, "application/xml");
+    })(XMLDoc);
+}
+
+/**
+ * Create an XML elements
+ * @param {string | elementItem} details
+ * @param {XMLDocument} doc
+ * @return {Element}
+ */
+function createXmlElement(details, doc) {
+    let { tag, attributes, value } = ((d) => {
+        return typeof d === "string" ? { tag: d, attributes: null, value: null } : d;
+    })(details);
+
+    let element = doc.createElement(tag.trim());
+    if (value) element.textContent = `${value}`;
+
+    return attributes && typeof attributes !== "undefined"
+        ? setElementAttr(element, attributes)
+        : element;
+}
+
+/**
+ * Create and append it to parent
+ * If parents are null, then append it to root
+ * @param {XMLDocument} xml
+ * @param {elementItem | Element | MyArray<elementItem | Element>} items
+ * @param {(String | Element)?} parent
+ * @returns {XMLDocument}
+ */
+function addXmlElement(xml, items, parent = null) {
+    let el_parent = parent
+        ? parent instanceof Element
+            ? parent
+            : xml.getElementsByTagName(parent)[0]
+        : xml.childNodes[0];
+
+    if (Array.isArray(items)) {
+        items.forEach((item) => {
+            addXmlElement(xml, item, el_parent);
+        });
+    } else {
+        let element = ((e) => {
+            if (e instanceof Element) return e;
+            return createXmlElement(items, xml);
+        })(items);
+
+        el_parent.appendChild(element);
+    }
+    return xml;
+}
+
+export {
+    getTagName,
+    getOuterXml,
+    findChild,
+    forEach,
+    map,
+    createXml,
+    createXmlElement,
+    addXmlElement,
+};

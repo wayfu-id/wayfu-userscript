@@ -6,6 +6,8 @@ import {
     parseSheet,
     parseStyles,
 } from "./modules/parser";
+import { createXlsx } from "./modules/write";
+
 import MyArray from "../../models/MyArray";
 /** Import types */
 import {
@@ -14,6 +16,7 @@ import {
     parsedStyles,
     parsedProperties,
 } from "./modules/parser";
+import { sheetData } from "./files/worksheet";
 
 /**
  * Open and read Xlsx file data
@@ -25,6 +28,17 @@ export default async function readXlsxFile(file, options = {}) {
     options = Object.assign({}, options);
     const contents = await getXlsContents(file);
     return readXlsx(contents, options);
+}
+
+/**
+ * Create and download file Xlsx
+ * @param {sheetData} data
+ * @param {string} filename
+ * @param {string?} sheetname
+ */
+export function writeXlsx(data, filename, sheetname) {
+    const config = { filename, sheetname: sheetname || filename, data };
+    return createXlsx(config);
 }
 
 /**

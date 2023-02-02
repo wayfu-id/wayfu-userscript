@@ -1,9 +1,13 @@
 import MyArray from "../../models/MyArray";
 
 import { baseOptions, sheetProperties, parsedSheetData } from "./modules/parser";
+import { sheetData } from "./files/worksheet";
 
 /** Open and read Xlsx file data */
 export default function readXlsxFile(file: File | Blob | ArrayBuffer, options?: baseOptions): Promise<ReturnType<typeof readXlsx>>;
+
+/** Create and download file Xlsx */
+export function writeXlsx(data: sheetData, filename: string, sheetname?: string): void;
 
 /** Get Xlsx file contens */
 declare function getXlsContents(input: File | Blob | ArrayBuffer): Promise<Map<string, string>>;
