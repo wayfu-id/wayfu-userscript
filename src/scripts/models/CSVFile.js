@@ -1,7 +1,7 @@
 import MyArray from "./MyArray";
 import { rgx } from "../lib/Constant";
 import { isNumeric, createFilteredObject } from "../lib/Util";
-import readXlsxFile from "../lib/Xlsx";
+import readXlsxFile, { writeXlsx } from "../lib/Xlsx";
 import { options } from "./Settings";
 import * as util from "../lib/CSVUtil";
 
@@ -307,7 +307,16 @@ class CSVFile {
         //     return new Blob([theData], { type: "text/csv;charset=utf-8;" });
         // })(data);
 
-        return { fileUrl: URL.createObjectURL(csvData), fileName: `${name}.csv` };
+        return { fileUrl: URL.createObjectURL(csvData), fileName: `${name}` };
+    }
+
+    /**
+     * Create a Xlsx file from array data
+     * @param {String} name
+     * @param {MyArray | Array} data
+     */
+    static exportToXlsx(name, data) {
+        return writeXlsx(data, name);
     }
 }
 
