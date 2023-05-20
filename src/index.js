@@ -1,8 +1,8 @@
-import { DOM } from "./scripts/lib/HtmlModifier";
+import DOM from "./scripts/utils/DOM";
 import App from "./scripts/App";
 
 async function init() {
-    if (await DOM.hasElement("div.two")) {
+    if (await DOM.has("div.two")) {
         unsafeWindow.WayFu = new App(unsafeWindow);
     } else {
         await init();
