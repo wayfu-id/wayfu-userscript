@@ -69,7 +69,7 @@ class Settings extends GM_Library {
             alert: true,
             queueLimit: 1000,
             bpLimit: 300,
-            exportType: "csv",
+            exportType: "ask",
             fileType: "csv",
         };
     }

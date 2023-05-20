@@ -26,7 +26,8 @@ import {
 /**
  * A bunch of EventListener
  * @class AppEvents
- */ class AppEvents {
+ */
+class AppEvents {
     constructor() {}
     /**
      * Run blast tasks
@@ -93,7 +94,8 @@ import {
         form.forEach((e) => {
             const prevId = e.id === "message" ? "msgPreview" : "captPreview";
             const content = ((chk, { id }) => {
-                let text = message[`input${id === "message" ? "Message" : "Caption"}`];
+                let text =
+                    message[`input${id === "message" ? "Message" : "Caption"}`];
 
                 if (chk) {
                     message.setData(queue.now);
@@ -112,7 +114,9 @@ import {
             })(chk, e);
 
             DOM.setElement(`#${prevId}`, { html: content })
-                .setElementStyle(`#${prevId}`, { display: editable ? "none" : "block" })
+                .setElementStyle(`#${prevId}`, {
+                    display: editable ? "none" : "block",
+                })
                 .setElementStyle(e, { display: editable ? "block" : "none" });
         });
     }
@@ -229,7 +233,9 @@ import {
             acdBody = DOM.getElement(`#${id}`),
             a = elm.classList.toggle("active");
 
-        acdBody.style.height = acdBody.style.height ? null : `${acdBody.scrollHeight}px`;
+        acdBody.style.height = acdBody.style.height
+            ? null
+            : `${acdBody.scrollHeight}px`;
 
         options.setOption("openPanel", a);
     }
@@ -244,7 +250,12 @@ import {
         DOM.setElements([
             {
                 elm: elm,
-                props: { max: id === "maxQueue" ? options.queueLimit : options.bpLimit },
+                props: {
+                    max:
+                        id === "maxQueue"
+                            ? options.queueLimit
+                            : options.bpLimit,
+                },
             },
             {
                 elm: DOM.getElement("output", elm.parentElement),
@@ -274,7 +285,9 @@ import {
         switch (id) {
             case "themeColor":
                 (function (id, val) {
-                    DOM.setElementStyle("#wayfuPanel", { backgroundColor: val });
+                    DOM.setElementStyle("#wayfuPanel", {
+                        backgroundColor: val,
+                    });
                     options.setOption(id, val);
                 })(id, value);
                 break;
@@ -288,7 +301,10 @@ import {
                             dateFormat: val,
                         });
                     } else {
-                        options.setOptions({ isFormat: false, dateFormat: val });
+                        options.setOptions({
+                            isFormat: false,
+                            dateFormat: val,
+                        });
                         const files = DOM.getElement("#getFile");
                         if (!queue.isEmpty || files.value !== "") {
                             DOM.setElement(files, { value: "" });
@@ -330,9 +346,12 @@ import {
                     if (downloadBtn) {
                         // let el = DOM.getElement("span.wfu-link");
                         let title = (({ title: t }) => {
-                            t = t.replace(/(.*)\.[^.]+(["]+)$/g, function (m, g1, g2) {
-                                return `${g1}.${val + g2}`;
-                            });
+                            t = t.replace(
+                                /(.*)\.[^.]+(["]+)$/g,
+                                function (m, g1, g2) {
+                                    return `${g1}.${val + g2}`;
+                                }
+                            );
                             return t;
                         })(downloadBtn);
                         DOM.setElement(downloadBtn, { title: title });
@@ -356,7 +375,9 @@ import {
 
         changelog.forEach((e, i) => {
             let date = dateFormat(new MyDate(e.date), 1),
-                title = `${i == 0 ? "WayFu" + " - " : ""}Version: ${e.version} (${date})`,
+                title = `${i == 0 ? "WayFu" + " - " : ""}Version: ${
+                    e.version
+                } (${date})`,
                 items = DOM.createElement({
                     tag: "div",
                     classid: "wfu-changelog-items",
@@ -375,9 +396,13 @@ import {
      * @param {Event} e Event
      */
     async checkChat(e) {
-        const { chatHeader, menu, menuDefault, item, button } = window.WAPI.WebClassesV2,
+        const { chatHeader, menu, menuDefault, item, button } =
+                window.WAPI.WebClassesV2,
             chatMenu = DOM.getElement(`.${chatHeader} .${menu}.${menuDefault}`),
-            downloadMenu = DOM.getElement("span[data-icon='download-alt']", chatMenu);
+            downloadMenu = DOM.getElement(
+                "span[data-icon='download-alt']",
+                chatMenu
+            );
 
         /** @type {(filename: string) => HTMLElement} */
         const createDonwloadBtn = (filename) => {
@@ -422,12 +447,10 @@ import {
 
             let contacts = new MyArray();
             for (const { contact } of participants.getModelsArray()) {
-                let {
-                    id: { user },
-                    name,
-                    pushname,
-                } = contact.serialize();
-                contacts.push([pushname || name || user, user]);
+                const { id, name, pushname } = contact.serialize(),
+                    { user } = id;
+                let col1 = pushname ? pushname : name ? name : user;
+                contacts.push([col1, user]);
             }
 
             // let { fileUrl, fileName } = CSVFile.createFile(subject, contacts),
