@@ -3,10 +3,16 @@ import { user } from "./models/Users";
 import { options } from "./models/Settings";
 import { chat } from "./models/Chatrooms";
 import { csvFile } from "./models/CSVFile";
-import { createView } from "./modules/PanelView";
+// import { createView } from "./modules/PanelView";
 import { changes } from "./models/Changeslog";
-import { DOM } from "./lib/HtmlModifier";
+// import { DOM } from "./lib/HtmlModifier";
 import { loadWapi } from "./lib/WAPI";
+import Injected from "./utils/Injected";
+import DOM from "./utils/DOM";
+import InterfaceController from "./controllers/InterfaceController";
+import { Jobs } from "./structures/Queue";
+import * as Utils from "./utils";
+import Modal from "./utils/Modal";
 
 export default class App extends GM_Library {
     /**
@@ -15,41 +21,58 @@ export default class App extends GM_Library {
      */
     constructor(target) {
         super();
-        this.#initialize(target);
+        this.initialize(target);
     }
-    #initialize(target) {
+    initialize(target) {
         // Initialize WAPI Module;
-        loadWapi(target);
+        // Object.defineProperties(App.prototype, { WAPI: loadWapi(target) });
+        this.WAPI = new Injected(loadWapi(target));
+        this.DOM = DOM;
+        this.Jobs = Jobs;
+        this.Utils = Utils;
+        this.Modal = Modal;
+
         // Create App Panel
-        this.#registerPanel();
+        this.registerPanel();
+        // let arr = Queue.set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+        // while (arr.now) {
+        //     setTimeout(() => {
+        //         console.log(`Current queue item ${arr.run()}`);
+        //     }, 1000);
+        // }
+
+        console.log(this);
+        return;
         // Initialize and Register the User
-        this.#registerUser();
+        this.registerUser();
         // Initialize and Register the App Options
-        this.#registerOptions();
+        this.registerOptions();
         // Whenever all loaded
-        this.#onLoadView();
+        this.onLoadView();
         // Don't Forget to Check for Update
     }
-    #registerPanel() {
-        chat.init();
-        // console.log(chat);
-        const html = this.getResource("pnl"),
-            style = this.getResource("css"),
-            icon = this.getResource("ico", "url"),
-            details = Object.assign({}, this.appInfo, { icon: icon });
+    registerPanel() {
+        const details = ((fn, info) => {
+            let html = fn("pnl"),
+                style = fn("css"),
+                icon = fn("ico", "url");
 
-        createView(html, style, details);
-        // console.info('Panel Created Successfully.');
+            return Object.assign({ html, style, icon }, info);
+        })(this.getResource, this.appInfo);
+
+        this.UI = InterfaceController.init(details);
+        DOM.get("#wayfuPanel .menus").at(0).click();
+        DOM.get("#wayfuToggle").at(0).click();
     }
-    #registerUser() {
+    registerUser() {
         user.init().gettingData();
         // console.info('User Data Loaded Successfully.');
     }
-    #registerOptions() {
+    registerOptions() {
         options.init();
         // console.info('Options Loaded Successfully.');
     }
-    async #onLoadView() {
+    async onLoadView() {
         const MIME = [
             ".txt",
             ".csv",
@@ -62,7 +85,9 @@ export default class App extends GM_Library {
             accept: MIME.join(","),
         });
 
-        DOM.getElement("#panelBody .menus", true)[options.activeTab || 0].click();
+        DOM.getElement("#wayfuPanel .menus", true)[
+            options.activeTab || 0
+        ].click();
         if (options.openPanel) DOM.getElement("#toggleApp").click();
 
         changes.checkUpdate();
@@ -73,14 +98,18 @@ export default class App extends GM_Library {
         e = typeof e === "boolean" ? e : true;
         options.setOption("debug", e);
         if (e) {
-            Object.assign(App.prototype, { options, user, chat, csvFile }, window.WAPI);
+            Object.assign(
+                App.prototype,
+                { options, user, chat, csvFile },
+                window.WAPI_V2
+            );
         } else {
             for (let key of [
                 "options",
                 "user",
                 "chat",
                 "csvFile",
-                ...Object.keys(window.WAPI),
+                ...Object.keys(window.WAPI_V2),
             ]) {
                 delete App.prototype[key];
             }
