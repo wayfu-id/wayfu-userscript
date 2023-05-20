@@ -9,7 +9,7 @@ body.dark {
             border-color: #555;
         }
 
-        #panel-menus button {
+        button {
             &:hover,
             .active {
                 background: $darkbg;
@@ -56,6 +56,12 @@ body.dark {
             a.wfu-export-csv svg{
                 color: white !important;
             }
+        }
+    }
+    
+    div.two {
+        svg.wayfu-app-icon {
+            .fill0, .fill1, .fill2 {fill:currentColor}
         }
     }
 }
