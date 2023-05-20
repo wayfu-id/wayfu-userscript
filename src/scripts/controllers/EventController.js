@@ -67,13 +67,13 @@ class AppEvents {
         const elm = e.currentTarget || e.target,
             menuName = elm.value;
 
-        let activeTab = DOM.get("#panelBody .menus")
+        let activeTab = DOM.get("#wayfuPanel .menus")
             .set({ removeClass: "active" })
             .indexOf(elm);
 
         // tabs.setProperties({ removeClass: "active" });
         DOM.get(elm).set({ addClass: "active" });
-        DOM.get("#panelBody .menu-content").set({ display: "none" });
+        DOM.get("#wayfuPanel .menu-content").set({ display: "none" });
         DOM.get(`#${menuName}`).set({ display: "block" });
 
         // options.setOption("activeTab", activeTab);
@@ -87,7 +87,7 @@ class AppEvents {
         let elm = e.currentTarget || e.target,
             chk = elm.checked;
 
-        DOM.get("#panelBody textarea").forEach((e) => {
+        DOM.get("#wayfuPanel textarea").forEach((e) => {
             const prevId = e.id === "message" ? "msgPreview" : "captPreview";
             const content = ((chk, { id }) => {
                 let dataId = id === "message" ? "Message" : "Caption";
@@ -120,7 +120,7 @@ class AppEvents {
         const { id, value, innerText } = e.target || e.currentTarget,
             mode = DOM.get("#_mode").first;
 
-        const isEmpty = DOM.get("#panelBody textarea").every((e) => {
+        const isEmpty = DOM.get("#wayfuPanel textarea").every((e) => {
             let { value, innerText } = e;
             return !(value || innerText);
         });
@@ -242,20 +242,22 @@ class AppEvents {
      */
     toggleApp(e) {
         const elm = e.currentTarget || e.target,
-            id = elm.getAttribute("value");
+            { active } = window.WAPI.WebClassesV2;
 
-        const acdBody = DOM.get(`#${id}`),
-            { first: el } = acdBody;
+        const targetEl = ((e) => {
+            let val = e.getAttribute("value"),
+                target = e.dataset.target;
 
-        acdBody.setStyles({
-            height: el.style.height ? null : `${el.scrollHeight}px`,
-        });
-        DOM.get(elm).set({ toggleClass: "active" });
-        // console.log(el.style.height);
+            return DOM.get(`#${val || target}`);
+        })(elm);
 
-        // acdBody.style.height = acdBody.style.height
-        //     ? null
-        //     : `${acdBody.scrollHeight}px`;
+        const { first: el } = targetEl,
+            { style, scrollHeight } = el;
+
+        targetEl.set({ height: style.height ? null : `${scrollHeight}px` });
+        DOM.get(elm)
+            .set({ toggleClass: "active" })
+            .set({ toggleClass: active });
 
         // options.setOption("openPanel", a);
     }
