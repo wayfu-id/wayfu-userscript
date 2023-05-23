@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.4.1](https://github.com/wayfu-id/wayfu-userscript/compare/v4.4.0...v4.4.1) (2023-05-23)
+
+
+### Bug Fixes
+
+* **view:** fix panel menu view on dark mode ([e0118cb](https://github.com/wayfu-id/wayfu-userscript/commit/e0118cb17745143f1e693cbea88ae2536f642099))
+
 ## [4.4.0](https://github.com/wayfu-id/wayfu-userscript/compare/v4.3.3...v4.4.0) (2023-02-02)
 
 
