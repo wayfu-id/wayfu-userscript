@@ -351,30 +351,31 @@ import {
 
     /**
      * ChangeLog listener
+     * @deprecated
      * @param {Event} e Event
      */
     changeLog(e) {
-        const container = DOM.createElement({
-                tag: "div",
-                classid: "wfu-changelog",
-                style: "overflow-y:scroll",
-            }),
-            changelog = changes.Log.slice(0, 5);
-
-        changelog.forEach((e, i) => {
-            let date = dateFormat(new MyDate(e.date), 1),
-                title = `${i == 0 ? "WayFu" + " - " : ""}Version: ${e.version} (${date})`,
-                items = DOM.createElement({
-                    tag: "div",
-                    classid: "wfu-changelog-items",
-                    append: container,
-                });
-
-            DOM.createElement({ tag: "span", text: title, append: items });
-            DOM.createListElement(e.content, "ul", { append: items });
-        });
-        // console.log(container);
-        modal.alert(container, "Detail Pembaruan.");
+        // const container = DOM.createElement({
+        //         tag: "div",
+        //         classid: "wfu-changelog",
+        //         style: "overflow-y:scroll",
+        //     }),
+        //     changelog = changes.Log.slice(0, 5);
+        // changelog.forEach((e, i) => {
+        //     let date = dateFormat(new MyDate(e.date), 1),
+        //         title = `${i == 0 ? "WayFu" + " - " : ""}Version: ${
+        //             e.version
+        //         } (${date})`,
+        //         items = DOM.createElement({
+        //             tag: "div",
+        //             classid: "wfu-changelog-items",
+        //             append: container,
+        //         });
+        //     DOM.createElement({ tag: "span", text: title, append: items });
+        //     DOM.createListElement(e.content, "ul", { append: items });
+        // });
+        // // console.log(container);
+        // modal.alert(container, "Detail Pembaruan.");
     }
 
     /**
