@@ -11,7 +11,7 @@ body.dark {
 
         #panel-menus button {
             &:hover,
-            .active {
+            &.active {
                 background: $darkbg;
             }
         }
