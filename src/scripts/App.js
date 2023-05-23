@@ -15,22 +15,22 @@ export default class App extends GM_Library {
      */
     constructor(target) {
         super();
-        this.#initialize(target);
+        this.initialize(target);
     }
-    #initialize(target) {
+    initialize(target) {
         // Initialize WAPI Module;
         loadWapi(target);
         // Create App Panel
-        this.#registerPanel();
+        this.registerPanel();
         // Initialize and Register the User
-        this.#registerUser();
+        this.registerUser();
         // Initialize and Register the App Options
-        this.#registerOptions();
+        this.registerOptions();
         // Whenever all loaded
-        this.#onLoadView();
+        this.onLoadView();
         // Don't Forget to Check for Update
     }
-    #registerPanel() {
+    registerPanel() {
         chat.init();
         // console.log(chat);
         const html = this.getResource("pnl"),
@@ -41,15 +41,15 @@ export default class App extends GM_Library {
         createView(html, style, details);
         // console.info('Panel Created Successfully.');
     }
-    #registerUser() {
+    registerUser() {
         user.init().gettingData();
         // console.info('User Data Loaded Successfully.');
     }
-    #registerOptions() {
+    registerOptions() {
         options.init();
         // console.info('Options Loaded Successfully.');
     }
-    async #onLoadView() {
+    async onLoadView() {
         const MIME = [
             ".txt",
             ".csv",
