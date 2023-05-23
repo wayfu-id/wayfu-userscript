@@ -45,24 +45,50 @@ const groupDownloadBtnSvg = [
     },
 ];
 
-const svgData = { downloadBtnSvg, checksSvg, groupDownloadBtnSvg };
+const wayFuSvg = [
+    {
+        type: "path",
+        data: {
+            class: "fill0",
+            d: "M84 3c1,0 2,1 3,1 7,3 13,8 19,13 5,5 10,12 13,19 3,7 4,15 4,23 0,6 0,11 -2,16 -1,5 -3,10 -5,14l8 31 -32 -8c-4,3 -9,4 -14,6 -4,1 -9,1 -14,1l0 0c-6,0 -11,0 -16,-2l2 -5c1,1 2,1 3,1 3,1 7,1 11,1 2,0 4,0 6,0 3,-1 5,-1 7,-2 2,0 4,-1 7,-2 2,-1 4,-1 6,-3l1 -1 3 1 22 6 -6 -22 0 -2 1 -2c1,-2 2,-4 3,-7 1,-2 2,-4 2,-6 1,-3 1,-5 2,-7 0,-3 0,-5 0,-8 0,-3 0,-7 -1,-11 -1,-3 -2,-6 -3,-10l0 0c-2,-3 -3,-6 -5,-9 -2,-3 -4,-6 -7,-8 -2,-3 -5,-5 -8,-7 -3,-2 -6,-3 -9,-5l0 0c-1,0 -1,0 -1,0l0 -6zm-29 68c-1,-2 -3,-3 -4,-5 -3,-3 -6,-6 -9,-10 -17,-20 4,-40 20,-51 -6,1 -12,2 -19,5 -13,4 -25,14 -30,30 -1,1 -1,1 -1,2 -4,16 -3,29 2,39 5,13 15,22 22,26l19 -36zm7 -1c-5,-5 -10,-10 -16,-17 -20,-25 33,-51 33,-51 -15,-5 -61,-1 -72,38 -13,45 20,70 31,74l24 -44z",
+        },
+    },
+    {
+        type: "path",
+        data: {
+            class: "fill1",
+            d: "M93 126l-1 0c0,0 0,0 0,1 -5,1 -9,1 -14,1l0 0c-5,0 -10,-1 -15,-2l1 0 0 0c5,0 10,0 14,-2 5,-1 10,-3 14,-5l12 3c-3,2 -7,3 -11,4l0 0zm-14 -116l0 -4c0,0 -2,1 -6,3 -11,7 -34,22 -31,38 2,-19 37,-37 37,-37z",
+        },
+    },
+    {
+        type: "path",
+        data: {
+            class: "fill2",
+            fillRule: "nonzero",
+            d: "M62 84l0 -8 -24 44c-9,-2 -32,-19 -34,-50 -2,35 25,55 34,58l24 -44z",
+        },
+    },
+];
+
+const svgData = { downloadBtnSvg, checksSvg, groupDownloadBtnSvg, wayFuSvg };
 
 /**
  * Event lists details to create eventListener
  */
 const eventLists = [
-    { element: "#panelBody .menus", type: "click", event: "tabMenu" },
-    { element: "#panelBody textarea", type: "input", event: "updateText" },
+    { element: "#wayfuPanel .menus", type: "click", event: "tabMenu" },
+    { element: "#wayfuPanel textarea", type: "input", event: "updateText" },
     { element: "#_mode", type: "click", event: "textPreview" },
     { element: "#useImage", type: "click", event: "useImage" },
     { element: "#getFile", type: "change", event: "loadData" },
     { element: "#imgFile", type: "change", event: "imagePreview" },
     { element: "#_deleteImg", type: "click", event: "imagePreview" },
-    { element: "#toggleApp", type: "click", event: "toggleApp" },
+    // @deprecated { element: "#toggleApp", type: "click", event: "toggleApp" },
+    { element: "#wayfuToggle", type: "click", event: "toggleApp" },
     { element: "._input input[type='range']", type: "input", event: "inputRange" },
     { element: "._input input[type='checkbox']", type: "change", event: "inputChecks" },
     { element: "._input select", type: "change", event: "inputSelects" },
-    { element: "#changeLogs", type: "click", event: "changeLog" },
+    // @deprecated { element: "#changeLogs", type: "click", event: "changeLog" },
     { element: "#_blast", type: "click", event: "runTasks" },
     { element: "div#app", type: "click", event: "checkChat" },
 ];
@@ -73,7 +99,7 @@ const eventLists = [
 const queryElm = {
     send: "#main span[data-testid^='send']",
     input: "#main div[contenteditable='true']",
-    linkElm: "div#panelBody span#_api-link a",
+    linkElm: "div#wayfuPanel span#_api-link a",
     errModal: "#app div[data-testid$='popup'] div[role^='button']",
     chatMessage: "#main div.message-out",
 };

@@ -56,7 +56,7 @@ import {
     tabMenu(e) {
         const elm = e.currentTarget || e.target,
             menuName = elm.value,
-            tabs = DOM.getElement("#panelBody .menus", true);
+            tabs = DOM.getElement("#wayfuPanel .menus", true);
 
         DOM.setElements([
             {
@@ -69,7 +69,7 @@ import {
             },
         ]).setElementsStyle([
             {
-                elm: "#panelBody .menu-content",
+                elm: "#wayfuPanel .menu-content",
                 props: { display: "none" },
             },
             {
@@ -87,7 +87,7 @@ import {
      */
     textPreview(e) {
         let elm = e.currentTarget || e.target,
-            form = DOM.getElement("#panelBody textarea", true),
+            form = DOM.getElement("#wayfuPanel textarea", true),
             chk = elm.checked;
 
         form.forEach((e) => {
@@ -225,11 +225,18 @@ import {
      */
     toggleApp(e) {
         const elm = e.currentTarget || e.target,
-            id = elm.getAttribute("value"),
-            acdBody = DOM.getElement(`#${id}`),
+            { active } = window.WAPI.WebClassesV2,
             a = elm.classList.toggle("active");
 
+        const acdBody = ((e) => {
+            let targetId = e.getAttribute("value") || e.dataset.target;
+
+            return DOM.getElement(`#${targetId}`);
+        })(elm);
+
         acdBody.style.height = acdBody.style.height ? null : `${acdBody.scrollHeight}px`;
+
+        elm.classList.toggle(active);
 
         options.setOption("openPanel", a);
     }

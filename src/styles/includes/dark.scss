@@ -58,4 +58,10 @@ body.dark {
             }
         }
     }
+    
+    div.two {
+        svg.wayfu-app-icon {
+            .fill0, .fill1, .fill2 {fill:currentColor}
+        }
+    }
 }
