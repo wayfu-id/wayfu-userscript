@@ -99,8 +99,8 @@ const eventLists = [
 const queryElm = {
     send: "#main span[data-testid^='send']",
     input: "#main div[contenteditable='true']",
-    linkElm: "div#wayfuPanel span#_api-link a",
-    errModal: "#app div[data-testid$='popup'] div[role^='button']",
+    linkElm: "#wayfuPanel span#_api-link a",
+    errModal: "#app div[data-testid$='popup'] div[role^='dialog']",
     chatMessage: "#main div.message-out",
 };
 
