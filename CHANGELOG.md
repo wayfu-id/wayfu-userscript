@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.4.3](https://github.com/wayfu-id/wayfu-userscript/compare/v4.4.2...v4.4.3) (2023-06-02)
+
+
+### Bug Fixes
+
+* **message:** fix wrong info for L_DAY data ([cb04cb7](https://github.com/wayfu-id/wayfu-userscript/commit/cb04cb78e299347be0c9edd7cf3ddde35b5462b7))
+* **ui:** delete z-index that causing trouble on some devices ([856ffa8](https://github.com/wayfu-id/wayfu-userscript/commit/856ffa84f5a24a280ce7447abe40ee1bed94cc9f))
+
 ### [4.4.2](https://github.com/wayfu-id/wayfu-userscript/compare/v4.4.1...v4.4.2) (2023-05-24)
 
 
