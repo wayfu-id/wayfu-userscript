@@ -141,7 +141,7 @@ class Messages extends BaseModel {
      * @param {boolean} isLastDay selector
      * @returns {string} Date String formated
      */
-    lastDay(dateStr, isLastDay = false) {
+    lastDay(dateStr, isLastDay = true) {
         const mIdx_ = options.monthIndex,
             mIdx = options.default.monthIndex;
 
