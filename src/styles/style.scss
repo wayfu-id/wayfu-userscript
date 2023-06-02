@@ -19,7 +19,6 @@
 --------------------------------------------------------------*/
 
 #wayfuPanel {
-    z-index: 0;
     padding: 0px 16px;
     height: 0;
     background-color: var(--butterbar-connection-background);
@@ -325,18 +324,21 @@
         padding-bottom: 5px;
     }
 
-    textarea, div.text-preview {
+    textarea,
+    div.text-preview {
         box-sizing: border-box;
         width: 100%;
     }
 
-    textarea#message, div.wayfu-msg {
+    textarea#message,
+    div.wayfu-msg {
         height: 145px;
         background-color: var(--compose-input-background);
         color: var(--primary);
     }
 
-    textarea#_caption, div.wayfu-capt {
+    textarea#_caption,
+    div.wayfu-capt {
         height: 21px;
         border-color: rgb(0, 0, 0, 0.1);
         background: rgb(0, 0, 0, 0.05);
@@ -361,20 +363,20 @@
         padding: 2px 4px;
         overflow-y: scroll;
         font: inherit;
-        
-        &.wayfu-msg{
+
+        &.wayfu-msg {
             max-height: 145px;
         }
-        &.wayfu-capt{
+        &.wayfu-capt {
             max-height: 21px;
         }
 
-        &[contenteditable='false']{
-            &.wayfu-msg{
+        &[contenteditable="false"] {
+            &.wayfu-msg {
                 color: var(--compose-input-background) !important;
             }
 
-            &.wayfu-capt{
+            &.wayfu-capt {
                 background: rgb(0, 0, 0, 0.15) !important;
                 color: #eee;
             }
@@ -438,8 +440,8 @@
                 }
             }
 
-            &:disabled + .slider{
-                opacity: .5;
+            &:disabled + .slider {
+                opacity: 0.5;
             }
         }
     }
@@ -452,18 +454,28 @@
 }
 
 div.two {
-    div[data-testid="menu-bar-wayfu-app"] {    
+    div[data-testid="menu-bar-wayfu-app"] {
         svg.wayfu-app-icon {
             fill-rule: evenodd;
-            
-            .fill0, .fill1, .fill2 {fill:currentColor}
+
+            .fill0,
+            .fill1,
+            .fill2 {
+                fill: currentColor;
+            }
         }
 
         &.active {
             svg {
-                .fill0 {fill:#009A4B !important}
-                .fill1 {fill:#1C7DA6 !important}
-                .fill2 {fill:#1C8EBD !important}
+                .fill0 {
+                    fill: #009a4b !important;
+                }
+                .fill1 {
+                    fill: #1c7da6 !important;
+                }
+                .fill2 {
+                    fill: #1c8ebd !important;
+                }
             }
         }
     }
