@@ -63,7 +63,11 @@ export default class App extends GM_Library {
         });
 
         DOM.getElement("#wayfuPanel .menus", true)[options.activeTab || 0].click();
-        if (options.openPanel) DOM.getElement("#wayfuToggle").click();
+        if (options.openPanel) {
+            DOM.getElement("#wayfuToggle").click();
+        } else {
+            DOM.setElementStyle("#wayfuPanel", { visibility: "collapse" });
+        }
 
         changes.checkUpdate();
         // console.log(this);
