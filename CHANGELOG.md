@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.4.4](https://github.com/wayfu-id/wayfu-userscript/compare/v4.4.3...v4.4.4) (2023-06-07)
+
+
+### Bug Fixes
+
+* **performance:** using built-in method to get user isMe contact ([1f3d5f2](https://github.com/wayfu-id/wayfu-userscript/commit/1f3d5f2cacd376ebcc53142d545c80cd42b0ce71))
+* **UI:** add visibility style to main wayfu panel ([9b7ed3a](https://github.com/wayfu-id/wayfu-userscript/commit/9b7ed3a1b25733deb1e2e46c8f90ec5673b573ba))
+
 ### [4.4.3](https://github.com/wayfu-id/wayfu-userscript/compare/v4.4.2...v4.4.3) (2023-06-02)
 
 

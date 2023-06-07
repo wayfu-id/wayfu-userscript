@@ -1,6 +1,6 @@
 {
   "name": "wayfu-userscript",
-  "version": "4.4.3",
+  "version": "4.4.4",
   "viewVersion": "1.7.0",
   "homepage": "https://wayfu.id/",
   "bugs": "https://wayfu.id/",
@@ -129,5 +129,9 @@
     "vinyl-source-stream": "^2.0.0",
     "webpack": "^5.69.1",
     "webpack-stream": "^7.0.0"
+  },
+  "dependencies": {
+    "global": "^4.4.0",
+    "standard-version": "^9.5.0"
   }
 }
