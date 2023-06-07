@@ -238,6 +238,9 @@ import {
 
         elm.classList.toggle(active);
 
+        let tabVisibility = acdBody.style.height ? "unset" : "collapse";
+        DOM.setElementStyle("#wayfuPanel", { visibility: tabVisibility });
+
         options.setOption("openPanel", a);
     }
 
