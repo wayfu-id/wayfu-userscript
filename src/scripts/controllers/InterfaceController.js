@@ -1,7 +1,7 @@
 import { eventLists } from "../lib/Constant";
 import { listeners } from "./EventController";
 import { svgData } from "../lib/Constant";
-import DOM from "../utils/DOM";
+import DOM from "@wayfu/wayfu-dom";
 
 export default class InterfaceController {
     constructor(details) {
@@ -69,7 +69,7 @@ export default class InterfaceController {
 
         DOM.addStyle(style, { id: "wayfuStyle" });
         DOM.create("header", props);
-        DOM.get("img.appIco").setProperties({ src: icon });
+        // DOM.get("img.appIco").set({ src: icon });
 
         createBtnMenu(name).insertBefore(menuEl, true);
         return this.initListener();

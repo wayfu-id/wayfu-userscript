@@ -8,7 +8,7 @@ import { changes } from "./models/Changeslog";
 // import { DOM } from "./lib/HtmlModifier";
 import { loadWapi } from "./lib/WAPI";
 import Injected from "./utils/Injected";
-import DOM from "./utils/DOM";
+import DOM from "@wayfu/wayfu-dom";
 import InterfaceController from "./controllers/InterfaceController";
 import { Jobs } from "./structures/Queue";
 import * as Utils from "./utils";
@@ -85,9 +85,7 @@ export default class App extends GM_Library {
             accept: MIME.join(","),
         });
 
-        DOM.getElement("#wayfuPanel .menus", true)[
-            options.activeTab || 0
-        ].click();
+        DOM.getElement("#wayfuPanel .menus", true)[options.activeTab || 0].click();
         if (options.openPanel) DOM.getElement("#toggleApp").click();
 
         changes.checkUpdate();

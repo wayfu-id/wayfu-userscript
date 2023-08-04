@@ -96,6 +96,9 @@
   "devDependencies": {
     "@babel/preset-env": "^7.16.11",
     "@types/tampermonkey": "^4.0.5",
+    "@wayfu/simple-xlsx": "^0.0.1",
+    "@wayfu/waydown": "^0.0.2",
+    "@wayfu/wayfu-dom": "^0.1.10",
     "ansi-colors": "^4.1.1",
     "babel-core": "^6.26.3",
     "babel-loader": "^8.2.3",
