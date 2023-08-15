@@ -1,8 +1,8 @@
 import Base from "./Base";
 
 /**
- * GM_Library Model Class
- * @class GM_Library
+ * ScriptManager Model Class
+ * @class ScriptManager
  * @classdesc Contains Greasemonkey or Tampermonkey UserScript API
  */
 
@@ -91,26 +91,40 @@ export default class ScriptManager extends Base {
 
     /**
      * Set and save some value to local storage
-     * @param {String} name what name
+     *
+     * @overload
+     * @param {{ [k: string]: any }} props propertie(s) as object
+     *
+     */ /**
+     * Set and save some value to local storage
+     * @overload
+     * @param {string} name what name
      * @param {any} value what value
      */
     setValue(name, value) {
-        if (typeof GM_setValue !== "undefined") {
+        if (typeof GM_setValue === "undefined") return;
+
+        if (typeof name === "object") {
+            for (let key in name) {
+                GM_setValue(key, name[key]);
+            }
+            return;
+        }
+
+        if (typeof name === "string") {
             GM_setValue(name, value);
         }
+        return;
     }
 
     /**
      * Get value from local storage using it's name as keyword
      * @param {String} name what name
-     * @param {any} base set base value if not found. Difault is null
+     * @param {any} base set base value if not found. Difault is `null`
      * @returns {any}
      */
     getValue(name, base = null) {
-        if (
-            typeof GM_listValues !== "undefined" &&
-            typeof GM_getValue !== "undefined"
-        ) {
+        if (typeof GM_listValues !== "undefined" && typeof GM_getValue !== "undefined") {
             const keys = GM_listValues();
             if (keys.length !== 0 && keys.some((key) => name === key)) {
                 return GM_getValue(name, base);

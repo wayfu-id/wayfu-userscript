@@ -1,9 +1,14 @@
 import { parseValue } from "../utils";
+import EventBase from "./EventBase";
 
-export default class Base {
+export default class Base extends EventBase {
+    constructor() {
+        super();
+    }
+
     /**
-     * Set message propreties
-     * @param {object} props Message properties
+     * Set class propreties
+     * @param {object} props properties
      * @param {boolean?} parse
      * @returns
      */
