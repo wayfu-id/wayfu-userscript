@@ -1,4 +1,4 @@
-import { storeObjects } from "./Constant";
+import { storeObjects, rgx } from "./Constant";
 
 /**
  * Get webpack object/array/function from a window.
@@ -51,6 +51,36 @@ function setWAPI(store) {
                             .catch((err) => (console.log(err), done(false)));
                     });
                 });
+            },
+            enumerable: true,
+        },
+        openChat: {
+            value: async function openChat(phone) {
+                const { WapQuery, Chat, Cmd } = this;
+
+                phone = (({ phone: rgx }, p) => {
+                    return rgx.test(p) ? p : `${p}@c.us`;
+                })(rgx, phone);
+
+                let res = await WapQuery.queryPhoneExists(phone);
+
+                if (res) {
+                    let { wid } = res,
+                        chat = await Chat.find(wid);
+                    if (!chat) {
+                        [chat] = Chat.add(
+                            {
+                                createLocally: true,
+                                id: wid,
+                            },
+                            {
+                                merge: true,
+                            }
+                        );
+                    }
+                    return await Cmd.openChatAt(chat);
+                }
+                return false;
             },
             enumerable: true,
         },

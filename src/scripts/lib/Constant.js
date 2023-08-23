@@ -10,6 +10,7 @@ const rgx = {
     formatedDate: /^\d{4}[\/|-|:]\d{1,2}[\/|-|:]\d{1,2}$/,
     forFilename: /(?!\s*$)\s*(?:(gagal|error)|(?:\(?([0-9]*)\)?)|([^_]*))(?:_|\s|$)/g,
     xlsxFileCheck: /^app.*\/vnd\.open[^\.]*(?:[^]*\.sheet)$/,
+    phone: /^[0-9]*@c\.us$/,
     // csvFileCheck: /^(?:app.*\/.*(?:csv|excel))|(?:text\/.*(?:csv|separated|plain).*)$/, // seems no longer needed
 };
 
