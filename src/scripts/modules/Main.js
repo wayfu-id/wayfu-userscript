@@ -114,8 +114,8 @@ function startProcess() {
             data = queue.run();
         message.setData(data);
         if (printLink(message.link)) {
-            setTimeout(() => {
-                window.WAPI.openChat(message.phone);
+            setTimeout(async () => {
+                await window.WAPI.openChat(message.phone);
                 DOM.getElement(linkElm).click();
             }, 5e2);
             setTimeout(async () => {
