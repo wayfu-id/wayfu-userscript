@@ -101,11 +101,4 @@ export default class Contact extends Base {
     async getChat() {
         return await this.app.findChat(this.id._serialized);
     }
-
-    /**
-     * Gets the Contact's common groups with you. Returns empty array if you don't have any common group.
-     */
-    async getCommonGroups() {
-        return await this.app.getCommonGroups(this.id._serialized);
-    }
 }

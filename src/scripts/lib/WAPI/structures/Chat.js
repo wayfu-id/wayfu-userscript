@@ -1,10 +1,4 @@
 import Base from "./Base";
-
-/**
- * @typedef {import("../index").MessageMedia} MessageMedia
- * @typedef {import("../index").MessageSendOptions} MessageSendOptions
- */
-
 /**
  * @type {import("../index").Chat}
  */
@@ -40,28 +34,32 @@ export default class Chat extends Base {
          */
         this.timestamp = data.t;
 
+        /**
+         * @type {import("../index").Contact}
+         */
+        this.contact = data.contact.getContactModel();
+
         return super._patch(data);
     }
 
     async open() {
-        return await this.app.openChat(this.id._serialized);
+        await this.app.openChat(this.id._serialized);
     }
 
     /**
-     * Send a message to this chat
-     * @param {string|MessageMedia} content
-     * @param {MessageSendOptions?} options
-     * @returns
+     * Send text message
+     * @param {string} message
      */
-    async sendMessage(content, options) {
-        return this.app.sendMessage(this.id._serialized, content, options);
+    sendText(message) {
+        return this.app.sendMessage(this.id._serialized, message);
     }
 
     /**
-     * Returns the Contact that corresponds to this Chat.
-     * @returns
+     * Send Image with caption (optional)
+     * @param {File} file
+     * @param {string?} caption
      */
-    async getContact() {
-        return await this.app.findContact(this.id._serialized);
+    sendImage(file, caption = "") {
+        return this.app.sendMessage(this.id._serialized, "", { media: file, caption });
     }
 }

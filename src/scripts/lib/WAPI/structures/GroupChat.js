@@ -1,5 +1,9 @@
 import Chat from "./Chat";
+import GroupParticipant from "./GroupParticipant";
 
+/**
+ * @type {import("../index").GroupChat}
+ */
 export default class GroupChat extends Chat {
     _patch(data) {
         this.groupMetadata = data.groupMetadata;
@@ -7,19 +11,25 @@ export default class GroupChat extends Chat {
         return super._patch(data);
     }
 
-    /**
-     * Gets the group owner
-     * @type {ContactId}
-     */
     get owner() {
-        return this.groupMetadata.owner;
+        /** @type {import("../index").GroupMetadata} */
+        let { owner } = this.groupMetadata;
+        if (!owner) return Promise.resolve(null);
+        let { _serialized: id } = owner;
+        return this.app.findContact(id);
     }
 
-    /**
-     * Gets the group participants
-     * @type {Array<GroupParticipant>}
-     */
     get participants() {
-        return this.groupMetadata.participants;
+        let participants = this.groupMetadata.participants,
+            results = [];
+
+        for (let data of participants.getModelsArray()) {
+            results.push(GroupParticipant.create(data));
+        }
+        return results;
+    }
+
+    async getOwner() {
+        return await this.owner;
     }
 }

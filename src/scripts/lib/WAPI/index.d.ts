@@ -1,174 +1,32 @@
-declare namespace WAPILib { 
-    export class WAPI {
-        private constructor(store);
+import { Contact } from "./structures"
 
-        myContact(): Contact;
-
-        findChat(id: string): Promise<Chat>;
-
-        findContact(id: string): Promise<Contact>;
-
-        openChat(id: string): Promise<void>;
-
-        sendMessage(chatId: string, message: MessageContent, options: MessageSendOptions): Promise<Message>;
-
-        getCommonGroups(id: string): Promise<ChatId[]>;
-
-        static init(target: Window): WAPI;
-    }
-    
-    /** Message types */
-    export enum MessageTypes {
-        TEXT = 'chat',
-        IMAGE = 'image'
-    }
-    
-    /** Message ACK */
-    export enum MessageAck {
-        ACK_ERROR = -1,
-        ACK_PENDING = 0,
-        ACK_SERVER = 1,
-        ACK_DEVICE = 2,
-        ACK_READ = 3,
-        ACK_PLAYED = 4,
-    }
-
-    /**
-     * Represents a Message on WhatsApp
-     * 
-     * @example
-     * {
-     *   mediaKey: undefined,
-     *   id: {
-     *     fromMe: false,
-     *     remote: `554199999999@c.us`,
-     *     id: '1234567890ABCDEFGHIJ',
-     *     _serialized: `false_554199999999@c.us_1234567890ABCDEFGHIJ`
-     *   },
-     *   ack: -1,
-     *   hasMedia: false,
-     *   body: 'Hello!',
-     *   type: 'chat',
-     *   timestamp: 1591482682,
-     *   from: `554199999999@c.us`,
-     *   to: `554188888888@c.us`,
-     *   author: undefined,
-     *   isForwarded: false,
-     *   broadcast: false,
-     *   fromMe: false,
-     *   hasQuotedMsg: false,
-     *   hasReaction: false,
-     *   location: undefined,
-     *   mentionedIds: []
-     * }
-     */
-    export interface Message {
-        /** ACK status for the message */
-        ack: MessageAck,
-        /** If the message was sent to a group, this field will contain the user that sent the message. */
-        author?: string,
-        /** Message content */
-        body: string,
-        /** ID for the Chat that this message was sent to, except if the message was sent by the current user */
-        from: string,
-        /** Indicates if the message was sent by the current user */
-        fromMe: boolean,
-        /** Indicates if the message has media available for download */
-        hasMedia: boolean,
-        /** ID that represents the message */
-        id: MessageId,
-        /** MediaKey that represents the sticker 'ID' */
-        mediaKey?: string,
-        /** Unix timestamp for when the message was created */
-        timestamp: number,
+declare namespace WAPI { 
+    export interface wid {
         /**
-         * ID for who this message is for.
-         * If the message is sent by the current user, it will be the Chat to which the message is being sent.
-         * If the message is sent by another user, it will be the ID for the current user.
+         * Whatsapp server domain
+         * @example `c.us`
          */
-        to: string,
-        /** Message type */
-        type: MessageTypes,
-        /** Links included in the message. */
-        links: Array<{
-            link: string,
-            isSuspicious: boolean
-        }>,
-        /** Returns message in a raw format */
-        rawData: object,
-        /** Returns the Chat this message was sent in */
-        getChat: () => Promise<Chat>,
-        /** Returns the Contact this message was sent from */
-        getContact: () => Promise<Contact>,
-    }
-
-    /** ID that represents a message */
-    export interface MessageId {
-        fromMe: boolean,
-        remote: string,
-        id: string,
+        server: string,
+        /**
+         * User whatsapp number
+         * @example `554199999999`
+         */
+        user: string,
+        /**
+         * Serialized id
+         * @example `554199999999@c.us`
+         */
         _serialized: string,
     }
-
+    export interface ContactId extends wid {}
+    export interface ChatId extends wid {}
+    
     export interface MessageSendOptions {
-        /** Show links preview. Has no effect on multi-device accounts. */
-        linkPreview?: boolean
-        /** Send audio as voice message with a generated waveform */
-        sendAudioAsVoice?: boolean
-        /** Send video as gif */
-        sendVideoAsGif?: boolean
-        /** Send media as sticker */
-        sendMediaAsSticker?: boolean
-        /** Send media as document */
-        sendMediaAsDocument?: boolean
-        /** Send photo/video as a view once message */
-        isViewOnce?: boolean
-        /** Automatically parse vCards and send them as contacts */
-        parseVCards?: boolean
-        /** Image or videos caption */
+        /** Image caption */
         caption?: string
-        /** Id of the message that is being quoted (or replied to) */
-        quotedMessageId?: string
-        /** Contacts that are being mentioned in the message */
-        mentions?: Contact[]
-        /** Send 'seen' status */
-        sendSeen?: boolean
         /** Media to be sent */
-        media?: MessageMedia
-        /** Extra options */
-        extra?: any
-        /** Sticker name, if sendMediaAsSticker is true */
-        stickerName?: string
-        /** Sticker author, if sendMediaAsSticker is true */
-        stickerAuthor?: string
-        /** Sticker categories, if sendMediaAsSticker is true */
-        stickerCategories?: string[]
+        media?: File
     }
-
-    /** Media attached to a message */
-    export class MessageMedia {
-        /** MIME type of the attachment */
-        mimetype: string
-        /** Base64-encoded data of the file */
-        data: string
-        /** Document file name. Value can be null */
-        filename?: string | null
-        /** Document file size in bytes. Value can be null. */
-        filesize?: number | null
-
-        /**
-         * @param {string} mimetype MIME type of the attachment
-         * @param {string} data Base64-encoded data of the file
-         * @param {?string} filename Document file name. Value can be null
-         * @param {?number} filesize Document file size in bytes. Value can be null.
-         */
-        constructor(mimetype: string, data: string, filename?: string | null, filesize?: number | null)
-
-        /** Creates a MessageMedia instance from a local file path */
-        static fromFilePath: (filePath: string) => MessageMedia
-    }
-
-    export type MessageContent = string | MessageMedia;
 
     /**
      * Represents a Contact on WhatsApp
@@ -225,17 +83,11 @@ declare namespace WAPILib {
         /** Returns the Chat that corresponds to this Contact.  
          * Will return null when getting chat for currently logged in user.
          */
-        getChat: () => Promise<Chat>,
+        getChat(): Promise<Chat>,
         
         /** Gets the Contact's common groups with you. Returns empty array if you don't have any common group. */
-        getCommonGroups: () => Promise<ChatId[]>
+        getCommonGroups(): Promise<ChatId[]>
 
-    }
-
-    export interface ContactId {
-        server: string,
-        user: string,
-        _serialized: string,
     }
 
     /**
@@ -262,53 +114,63 @@ declare namespace WAPILib {
         name: string,
         /** Unix timestamp for when the last activity occurred */
         timestamp: number,
-
-        /** Send a message to this chat */
-        sendMessage: (content: MessageContent, options?: MessageSendOptions) => Promise<Message>,
-        /** Returns the Contact that corresponds to this Chat. */
-        getContact: () => Promise<Contact>,
+        /** Contact model */
+        contact: Contact,
+        /** Open this chat */
+        open(): Promise<void>,
+        /** Send text message to this chat */
+        sendText(message: string): Promise<any>,
+        /** Send image message to this chat */
+        sendImage(file: File, caption: string): Promise<any>,
     }
-
-    /**
-     * Id that represents the chat
-     * 
-     * @example
-     * id: {
-     *   server: 'c.us',
-     *   user: '554199999999',
-     *   _serialized: `554199999999@c.us`
-     * },
-     */
-    export interface ChatId {
-        /**
-         * Whatsapp server domain
-         * @example `c.us`
-         */
-        server: string,
-        /**
-         * User whatsapp number
-         * @example `554199999999`
-         */
-        user: string,
-        /**
-         * Serialized id
-         * @example `554199999999@c.us`
-         */
-        _serialized: string,
-    }
-
-    export type GroupParticipant = {
+    export interface GroupParticipant {
         id: ContactId,
+        contact: Contact, 
         isAdmin: boolean
         isSuperAdmin: boolean
     }
-
     export interface GroupChat extends Chat {
         /** Group owner */
-        owner: ContactId;
+        owner: Promise<Contact | null>;
+        groupMetadata: GroupMetadata
         /** Group participants */
-        participants: Array<GroupParticipant>;
+        participants: GroupParticipant[];
+        /** Group owner */
+        getOwner(): Promise<Contact | null>;
     }
+    export interface GroupMetadata {
+        owner: wid | undefined,
+        participants: {
+            getModelsArray:() => Array<any>
+        }
+    }
+
 }
 
-export = WAPILib;
+declare class WAPI {
+    BUILD_ID: string;
+    DESKTOP_BETA: boolean;
+    /** WhatsApp Web Version */
+    VERSION: string;
+    /** HTML classes that web are using */
+    WebClasses: {[k:string]: string};
+    WebClassesV2: {[k:string]: string};
+    /** Current contact info */
+    myContact: Contact;
+    /** Check given phone number */
+    checkPhone(phone:string): Promise<WAPI.wid | null>;
+    /** Find chat by Id */
+    findChat(id: string): Promise<WAPI.Chat>;
+    /** Find contact by Id */
+    findContact(id: string): Promise<WAPI.Contact>;
+    /** Get current active chat data */
+    getActiveChat(): WAPI.Chat | null;
+    /** Open chat by id */
+    openChat(id: string): Promise<any>;
+    /** Send message to id */
+    sendMessage(id: string, message: string, option: WAPI.MessageSendOptions): Promise<any>;
+
+    static init(target: Window): WAPI;
+}
+
+export = WAPI;

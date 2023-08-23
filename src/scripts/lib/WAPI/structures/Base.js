@@ -1,5 +1,5 @@
 /**
- * @typedef {import("../index").WAPI} WAPI
+ * @typedef {import("../index")} WAPI
  */
 
 /**
@@ -12,6 +12,7 @@ export default class Base {
     constructor(app) {
         /**
          * The main app that instantiated this
+         * @type {WAPI} app
          * @readonly
          */
         this.app = app;

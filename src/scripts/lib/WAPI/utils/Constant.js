@@ -14,50 +14,13 @@ const storeObjects = [
         conditions: (module) => (module.Cmd ? module.Cmd : null),
     },
     {
-        id: "ChatCollection",
-        conditions: (module) => (module.ChatCollection ? module.ChatCollection : null),
-    },
-    {
-        id: "OpaqueData",
-        conditions: (module) =>
-            module.default && module.default.createFromData ? module.default : null,
-    },
-    {
-        id: "MediaPrep",
-        conditions: (module) => (module.prepRawMedia ? module : null),
-    },
-    {
-        id: "MediaObject",
-        conditions: (module) => (module.getOrCreateMediaObject ? module : null),
-    },
-    {
-        id: "MediaTypes",
-        conditions: (module) => (module.msgToMediaType ? module : null),
-    },
-    {
-        id: "MediaUpload",
-        conditions: (module) => (module.uploadMedia ? module : null),
-    },
-    {
         id: "WidFactory",
         conditions: (module) => (module.createWid ? module : null),
     },
     {
-        id: "MsgKey",
-        conditions: (module) =>
-            module.default && module.default.fromString ? module.default : null,
-    },
-    {
-        id: "EphemeralFields",
-        conditions: (module) => (module.getEphemeralFields ? module : null),
-    },
-    {
-        id: "AddAndSendMsgToChat",
-        conditions: (module) => (module.addAndSendMsgToChat ? module : null),
-    },
-    {
         id: "SendTextMsgToChat",
-        conditions: (module) => (module.sendTextMsgToChat ? module : null),
+        conditions: (module) =>
+            module.sendTextMsgToChat ? module.sendTextMsgToChat : null,
     },
     {
         id: "WebClasses",
@@ -98,15 +61,6 @@ const storeObjects = [
                 : null,
     },
     {
-        id: "Debug",
-        conditions: (module) => (module.Debug ? module.Debug : null),
-    },
-    {
-        id: "UploadUtils",
-        conditions: (module) =>
-            module.default && module.default.encryptAndUpload ? module.default : null,
-    },
-    {
         id: "WapQuery",
         conditions: (module) =>
             module.queryExist
@@ -115,6 +69,14 @@ const storeObjects = [
                 ? module.default
                 : null,
     },
+    {
+        id: "Debug",
+        conditions: (module) => (module.Debug ? module.Debug : null),
+    },
 ];
 
-export { storeObjects };
+const rgx = {
+    phone: /^[0-9]*@c\.us$/,
+};
+
+export { storeObjects, rgx };
