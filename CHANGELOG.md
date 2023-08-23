@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.4.6](https://github.com/wayfu-id/wayfu-userscript/compare/v4.4.5...v4.4.6) (2023-08-23)
+
+
+### Bug Fixes
+
+* **WAPI:** error on `openChat` function ([c1e98cc](https://github.com/wayfu-id/wayfu-userscript/commit/c1e98cce69dcc5d9a58386122c142c986fb2dd8f))
+
 ### [4.4.5](https://github.com/wayfu-id/wayfu-userscript/compare/v4.4.4...v4.4.5) (2023-08-23)
 
 
