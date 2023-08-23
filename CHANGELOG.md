@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.4.5](https://github.com/wayfu-id/wayfu-userscript/compare/v4.4.4...v4.4.5) (2023-08-23)
+
+
+### Bug Fixes
+
+* **UI:** error modal query ([552485a](https://github.com/wayfu-id/wayfu-userscript/commit/552485ae2550555e8338f53e8f192375a52edb6b))
+* **UI:** error modal query ([db98d0b](https://github.com/wayfu-id/wayfu-userscript/commit/db98d0b3eddbb4509e4b97e41b7655c47411fc48))
+* **UI:** improve UI ([3dc76b9](https://github.com/wayfu-id/wayfu-userscript/commit/3dc76b9175cb8d8db5e80377f42277856a6baa7b))
+* **ui:** query for send button ([9c9fe09](https://github.com/wayfu-id/wayfu-userscript/commit/9c9fe092b9e70429bd58e54466ab9d0b4e2bb621))
+* **user:** fix get Me contact on WAPI lib ([dfa16dd](https://github.com/wayfu-id/wayfu-userscript/commit/dfa16dd892ee29c3c22d066406f25c8c58a740c1))
+
 ### [4.4.4](https://github.com/wayfu-id/wayfu-userscript/compare/v4.4.3...v4.4.4) (2023-06-07)
 
 
