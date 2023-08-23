@@ -96,7 +96,8 @@ function setStatus(stat) {
  * Start sending process
  */
 function startProcess() {
-    const { linkElm, errModal, send } = queryElm;
+    const { linkElm, errModal, send } = queryElm,
+        { sendButtonContainer } = window.WAPI.WebClassesV2;
     const printLink = (link) => {
         DOM.setElement(linkElm, { href: `https://${link}` });
         return true;
