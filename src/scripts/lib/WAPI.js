@@ -63,17 +63,12 @@ function setWAPI(store) {
 
                 if (res) {
                     let { wid } = res,
-                        chat = await Chat.find(wid);
+                        chat = Chat.get(wid);
                     if (!chat) {
-                        [chat] = Chat.add(
-                            {
-                                createLocally: true,
-                                id: wid,
-                            },
-                            {
-                                merge: true,
-                            }
-                        );
+                        chat = await Chat.add(
+                            { createLocally: true, id: wid },
+                            { merge: true }
+                        )[0];
                     }
                     return await Cmd.openChatAt(chat);
                 }
