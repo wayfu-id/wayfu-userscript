@@ -21,8 +21,8 @@ const getWebpack = (window) => {
  * @return {Object} WAPI Module
  */
 function setWAPI(store) {
-    let { WebClasses2, WebClasses3, ...WAPI } = store,
-        WebClassesV2 = Object.assign({}, WebClasses2, WebClasses3);
+    let { WebClasses2, WebClasses3, WebClasses4, ...WAPI } = store,
+        WebClassesV2 = Object.assign({}, WebClasses2, WebClasses3, WebClasses4);
 
     Object.assign(WAPI, { WebClassesV2: WebClassesV2 });
 
