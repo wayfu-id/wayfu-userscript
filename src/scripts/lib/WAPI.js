@@ -29,10 +29,7 @@ function setWAPI(store) {
     Object.defineProperties(WAPI, {
         Me: {
             get: function getMe() {
-                for (let person of this.Contact.getModelsArray()) {
-                    if (person.isMe) return person.serialize();
-                }
-                return {};
+                return this.Contact.getMeContact();
             },
             enumerable: true,
         },
