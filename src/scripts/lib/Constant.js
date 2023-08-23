@@ -155,6 +155,15 @@ const storeObjects = [
                 : null,
     },
     {
+        id: "WebClasses4",
+        conditions: (module) =>
+            module.default &&
+            typeof module.default === "object" &&
+            module.default.sendButtonContainer
+                ? module.default
+                : null,
+    },
+    {
         id: "MediaCollection",
         conditions: (module) =>
             module.default &&
