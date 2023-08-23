@@ -101,6 +101,11 @@ function startProcess() {
         DOM.setElement(linkElm, { href: `https://${link}` });
         return true;
     };
+    const sendBtn = () => {
+        let btn = DOM.getElement(send);
+        if (!btn) btn = DOM.getElement(`.${sendButtonContainer}`);
+        return btn;
+    };
 
     if (!loop.isRunning) loop.start(setStatus);
     if (loop.isRunning && !!queue.now) {
@@ -122,7 +127,7 @@ function startProcess() {
                     err.click();
                 } else {
                     const { useCaption: c, useImage: i, hasImage: h } = options;
-                    const btn = DOM.getElement(send);
+                    const btn = sendBtn();
 
                     stat = btn ? (btn.click(), "SUCCESS") : "FAILED";
 
