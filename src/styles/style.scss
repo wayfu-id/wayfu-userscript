@@ -455,6 +455,9 @@
 
 div.two {
     div[data-testid="menu-bar-wayfu-app"] {
+        div[role="button"]{
+            padding: 8px;
+        }
         svg.wayfu-app-icon {
             fill-rule: evenodd;
 
