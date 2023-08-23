@@ -167,24 +167,19 @@ const storeObjects = [
         id: "Debug",
         conditions: (module) => (module.Debug ? module.Debug : null),
     },
-    // {
-    //     id: "Features",
-    //     conditions: (module) =>
-    //         module.FEATURE_CHANGE_EVENT && module.GK ? module.GK : null,
-    // },
-    // {
-    //     id: "Conn",
-    //     conditions: (module) => (module.PLATFORMS && module.Conn ? module.Conn : null),
-    // },
-    // {
-    //     id: "Wap",
-    //     conditions: (module) =>
-    //         module.default && module.default.queryLinkPreview ? module.default : null,
-    // },
-    // {
-    //     id: "MDBeckend",
-    //     conditions: (module) => (module.isMDBackend ? module.isMDBackend() : null),
-    // },
+    {
+        id: "WapQuery",
+        conditions: (module) =>
+            module.queryExist
+                ? module
+                : module.default && module.default.queryExist
+                ? module.default
+                : null,
+    },
+    {
+        id: "Cmd",
+        conditions: (module) => (module.Cmd ? module.Cmd : null),
+    },
 ];
 
 export { rgx, svgData, queryElm, dateOptDefault, eventLists, storeObjects };
