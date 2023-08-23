@@ -101,7 +101,7 @@ const queryElm = {
     send: "#main span[data-icon^='send']",
     input: "#main div[contenteditable='true']",
     linkElm: "#wayfuPanel span#_api-link a",
-    errModal: "#app div[data-testid$='popup'] div[role^='dialog']",
+    errModal: "#app div[role^='dialog']",
     chatMessage: "#main div.message-out",
 };
 
