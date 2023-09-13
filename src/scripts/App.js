@@ -69,6 +69,8 @@ export default class App extends GM_Library {
             DOM.setElementStyle("#wayfuPanel", { visibility: "collapse" });
         }
 
+        window.WAPI.Chat.clearAllDraft();
+
         changes.checkUpdate();
         // console.log(this);
         // console.log(`${this.name} ${this.version} - ${this.tagLine}`);
