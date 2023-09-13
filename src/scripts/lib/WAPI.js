@@ -116,26 +116,14 @@ function setWAPI(store) {
                     return rgx.test(p) ? p : `${p}@c.us`;
                 })(rgx, phone);
 
-                let res = await Chat.find(phone);
+                let res;
+                try {
+                    res = await Chat.find(phone);
+                } catch (e) {}
 
                 if (!res) return false;
 
                 return await res.open();
-
-                // let res = await WapQuery.queryPhoneExists(phone);
-
-                // if (res) {
-                //     let { wid } = res,
-                //         chat = Chat.get(wid);
-                //     if (!chat) {
-                //         chat = await Chat.add(
-                //             { createLocally: true, id: wid },
-                //             { merge: true }
-                //         )[0];
-                //     }
-                //     return await Cmd.openChatAt(chat);
-                // }
-                // return false;
             },
             enumerable: true,
         },
