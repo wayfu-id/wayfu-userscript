@@ -104,7 +104,7 @@ function startProcess() {
     };
     const sendBtn = () => {
         let btn = DOM.getElement(send);
-        if (!btn) btn = DOM.getElement(`.${sendButtonContainer}`);
+        if (!btn) btn = DOM.getElement(`.${sendButtonContainer} span`);
         return btn;
     };
 
