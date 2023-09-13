@@ -26,6 +26,63 @@ function setWAPI(store) {
 
     Object.assign(WAPI, { WebClassesV2: WebClassesV2 });
 
+    Object.defineProperties(WAPI.Chat.constructor.prototype, {
+        findImpl: {
+            value: async function findImpl(e, n) {
+                let wid = await (async (id) => {
+                    if (typeof id === "string") {
+                        let check = await WAPI.WapQuery.queryPhoneExists(e);
+                        if (!check) return null;
+                        return check.wid;
+                    }
+                    return id;
+                })(e);
+
+                if (!wid) return null;
+
+                let result = this.get(wid);
+                if (!result) {
+                    [result] = this.add(
+                        { createLocally: true, id: wid },
+                        { merge: true }
+                    );
+                }
+
+                return result;
+            },
+        },
+        clearAllDraft: {
+            value: function clearAllDraft() {
+                const hasDraft = (c) => {
+                    if (c.draftMessage !== undefined && c.draftMessage.text !== "") {
+                        return true;
+                    }
+                    return c.hasDraftMessage;
+                };
+                for (let chat of this.getModelsArray()) {
+                    if (hasDraft(chat)) {
+                        chat.clearDraft();
+                    }
+                }
+            },
+        },
+    });
+    Object.defineProperties(WAPI.Chat.modelClass.prototype, {
+        open: {
+            value: async function open() {
+                let { Cmd } = WAPI;
+                await Cmd.openChatAt(this);
+            },
+            enumerable: true,
+        },
+        clearDraft: {
+            value: function clearDraft() {
+                this.setComposeContents({ text: "", timestamp: Date.now() });
+                return this;
+            },
+            enumerable: true,
+        },
+    });
     Object.defineProperties(WAPI, {
         Me: {
             get: function getMe() {
@@ -53,26 +110,32 @@ function setWAPI(store) {
         },
         openChat: {
             value: async function openChat(phone) {
-                const { WapQuery, Chat, Cmd } = this;
+                const { Chat } = this;
 
                 phone = (({ phone: rgx }, p) => {
                     return rgx.test(p) ? p : `${p}@c.us`;
                 })(rgx, phone);
 
-                let res = await WapQuery.queryPhoneExists(phone);
+                let res = await Chat.find(phone);
 
-                if (res) {
-                    let { wid } = res,
-                        chat = Chat.get(wid);
-                    if (!chat) {
-                        chat = await Chat.add(
-                            { createLocally: true, id: wid },
-                            { merge: true }
-                        )[0];
-                    }
-                    return await Cmd.openChatAt(chat);
-                }
-                return false;
+                if (!res) return false;
+
+                return await res.open();
+
+                // let res = await WapQuery.queryPhoneExists(phone);
+
+                // if (res) {
+                //     let { wid } = res,
+                //         chat = Chat.get(wid);
+                //     if (!chat) {
+                //         chat = await Chat.add(
+                //             { createLocally: true, id: wid },
+                //             { merge: true }
+                //         )[0];
+                //     }
+                //     return await Cmd.openChatAt(chat);
+                // }
+                // return false;
             },
             enumerable: true,
         },
