@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.4.7](https://github.com/wayfu-id/wayfu-userscript/compare/v4.4.6...v4.4.7) (2023-09-13)
+
+
+### Bug Fixes
+
+* **draft:** clear all draft message every time after login ([1ed52b9](https://github.com/wayfu-id/wayfu-userscript/commit/1ed52b9d664d2ee075c84680424d28580add3ba3))
+* **main:** button not clicked, message not sent ([86bb14b](https://github.com/wayfu-id/wayfu-userscript/commit/86bb14bdb9fb238f0f582e8eafce10777f85a1fc))
+
 ### [4.4.6](https://github.com/wayfu-id/wayfu-userscript/compare/v4.4.5...v4.4.6) (2023-08-23)
 
 
