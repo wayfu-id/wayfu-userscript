@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.4.9](https://github.com/wayfu-id/wayfu-userscript/compare/v4.4.8...v4.4.9) (2023-09-22)
+
+
+### Bug Fixes
+
+* **draft:** Clear message whenever reports are show ([22e7ea4](https://github.com/wayfu-id/wayfu-userscript/commit/22e7ea48c449cffea1614d5eaaa7c8e306aaa5fd))
+* **main:** Fix send image issue ([7200be7](https://github.com/wayfu-id/wayfu-userscript/commit/7200be793357aefc574c4f7483bcfed18c3943d1))
+
 ### [4.4.8](https://github.com/wayfu-id/wayfu-userscript/compare/v4.4.7...v4.4.8) (2023-09-13)
 
 
