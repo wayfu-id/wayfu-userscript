@@ -96,7 +96,7 @@ function setWAPI(store) {
                 return new Promise((done) => {
                     this.Chat.find(`${phone}@c.us`).then((chat) => {
                         let mc = new this.MediaCollection(chat);
-                        mc.processAttachments([{ file: imgFile }, 1], chat, 1)
+                        mc.processAttachments([{ file: imgFile }], chat, chat)
                             .then(() => {
                                 let [media] = mc.getModelsArray();
                                 media.sendToChat(chat, { caption: caption });
