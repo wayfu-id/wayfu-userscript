@@ -229,6 +229,7 @@ async function showReport() {
     if (!user.isPremium) {
         user.showAlert(!user.isTrial ? (DOM.getElement("#auto").click(), 4) : 3, true);
     }
+    window.WAPI.Chat.clearAllDraft();
 }
 
 /**
