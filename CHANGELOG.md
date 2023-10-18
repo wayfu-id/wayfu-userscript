@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.5.0](https://github.com/wayfu-id/wayfu-userscript/compare/v4.4.9...v4.5.0) (2023-10-18)
+
+
+### Features
+
+* **lib:** add composeBox module, can compose text message direcly ([fa154ca](https://github.com/wayfu-id/wayfu-userscript/commit/fa154caffdff21cab7a41eef1ccbae26e6b725e6))
+* **Message:** add value property and sendText method direcly in message model ([038ea89](https://github.com/wayfu-id/wayfu-userscript/commit/038ea89ec4e7935492bdf5f6c892f5a840ff6ad7))
+
 ### [4.4.9](https://github.com/wayfu-id/wayfu-userscript/compare/v4.4.8...v4.4.9) (2023-09-22)
 
 
