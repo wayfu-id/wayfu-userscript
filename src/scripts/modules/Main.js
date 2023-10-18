@@ -1,6 +1,6 @@
 import CSVFile, { csvFile } from "../models/CSVFile";
 import Queue, { queue } from "../models/Queue";
-import { queryElm, svgData } from "../lib/Constant";
+import { svgData } from "../lib/Constant";
 import { loop } from "../models/Interval";
 import { report } from "../models/Reports";
 import { modal } from "../models/Modals";
@@ -88,63 +88,51 @@ function setStatus(stat) {
         modal.progressPanel(stat, interupt);
     }
 
-    // console.log(stat ? "Blasting..." : "Stoped.");
     return stat;
 }
 
 /**
  * Start sending process
  */
-function startProcess() {
-    const { linkElm, errModal, send } = queryElm,
-        { sendButtonContainer } = window.WAPI.WebClassesV2;
-    const printLink = (link) => {
-        DOM.setElement(linkElm, { href: `https://${link}` });
-        return true;
-    };
-    const sendBtn = () => {
-        let btn = DOM.getElement(send);
-        if (!btn) btn = DOM.getElement(`.${sendButtonContainer} span`);
-        return btn;
-    };
-
+async function startProcess() {
+    const wait = (time) => new Promise((resolve) => setTimeout(resolve, time));
     if (!loop.isRunning) loop.start(setStatus);
     if (loop.isRunning && !!queue.now) {
-        let no = (queue.currentIndex += 1),
-            data = queue.run();
+        let { useCaption: c, useImage: i, hasImage: h } = options,
+            no = (queue.currentIndex += 1),
+            data = queue.run(),
+            stat = "";
+
         message.setData(data);
-        if (printLink(message.link)) {
-            setTimeout(async () => {
-                await window.WAPI.openChat(message.phone);
-                DOM.getElement(linkElm).click();
-            }, 5e2);
-            setTimeout(async () => {
-                const err = DOM.getElement(errModal);
-                let stat = "";
-                if (err) {
-                    stat = err.innerText.includes("OK")
-                        ? (report.fail(data), "ERROR")
-                        : (report.fail(data, 0), "FAILED");
-                    err.click();
-                } else {
-                    const { useCaption: c, useImage: i, hasImage: h } = options;
-                    const btn = sendBtn();
-
-                    stat = btn ? (btn.click(), "SUCCESS") : "FAILED";
-
-                    if (i && h && (c !== "caption" || stat === "SUCCESS")) {
-                        stat = (await message.sendImg()) === true ? "SUCCESS" : "FAILED";
-                    }
-
-                    stat === "SUCCESS" ? report.success(data) : report.fail(data, 0);
-                }
-            }, 45e2);
-        } else {
-            modal.alert("If You see this ERROR, Contact Developer!");
-            loop.stop(setStatus);
-            return;
-        }
         updateUI(no, message.phone);
+
+        await wait(5e2);
+        stat = await (async (c) =>
+            (c === "caption"
+                ? await message.sendText()
+                : await window.WAPI.openChat(message.phone)) !== false
+                ? "SUCCESS"
+                : "ERROR")(c);
+
+        await wait(1e2);
+        if (stat === "SUCCESS") {
+            stat = i && h ? ((await message.sendImg()) ? "SUCCESS" : "FAILED") : stat;
+        }
+
+        await wait(4e2);
+        switch (stat) {
+            case "SUCCESS":
+                report.success(data);
+                break;
+            case "FAILED":
+                report.fail(data, 0);
+                break;
+            case "ERROR":
+                report.fail(data);
+                break;
+        }
+
+        await wait(35e2);
     } else {
         stopProcess();
     }
