@@ -126,6 +126,11 @@ const storeObjects = [
                 : null,
     },
     {
+        id: "ComposeBox",
+        conditions: (module) =>
+            module.ComposeBoxActions ? module.ComposeBoxActions : null,
+    },
+    {
         id: "WebClasses",
         conditions: (module) =>
             module.default &&

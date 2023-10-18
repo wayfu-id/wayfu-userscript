@@ -94,16 +94,39 @@ function setWAPI(store) {
             value: function sendImgToChat(phone, imgFile, caption = "", getChat = false) {
                 if (!phone || !imgFile) return false;
                 return new Promise((done) => {
-                    this.Chat.find(`${phone}@c.us`).then((chat) => {
-                        let mc = new this.MediaCollection(chat);
-                        mc.processAttachments([{ file: imgFile }], chat, chat)
-                            .then(() => {
-                                let [media] = mc.getModelsArray();
-                                media.sendToChat(chat, { caption: caption });
-                                done(getChat ? chat : true);
-                            })
-                            .catch((err) => (console.log(err), done(false)));
-                    });
+                    this.Chat.find(`${phone}@c.us`)
+                        .then((chat) => {
+                            let mc = new this.MediaCollection(chat);
+                            mc.processAttachments([{ file: imgFile }], chat, chat)
+                                .then(() => {
+                                    let [media] = mc.getModelsArray();
+                                    media.sendToChat(chat, { caption: caption });
+                                    done(getChat ? chat : true);
+                                })
+                                .catch((err) => (console.log(err), done(false)));
+                        })
+                        .catch((err) => (console.log(err), done(false)));
+                });
+            },
+            enumerable: true,
+        },
+        composeAndSendMsgToChat: {
+            value: function composeAndSendMsgToChat(phone, text, getChat = false) {
+                const wait = (time) =>
+                        new Promise((resolve) => setTimeout(resolve, time)),
+                    { ComposeBox } = this;
+
+                return new Promise((done) => {
+                    this.Chat.find(`${phone}c.us`)
+                        .then(async (chat) => {
+                            if (!chat.active) await chat.open();
+                            await wait(5e2);
+
+                            await ComposeBox.paste(chat, text);
+                            await ComposeBox.send(chat);
+                            done(getChat ? chat : true);
+                        })
+                        .catch((err) => (console.log(err), done(false)));
                 });
             },
             enumerable: true,
