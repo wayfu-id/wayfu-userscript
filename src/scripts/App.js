@@ -1,5 +1,6 @@
 import GM_Library from "./models/GM_Library";
 import { user } from "./models/Users";
+import { message } from "./models/Messages";
 import { options } from "./models/Settings";
 import { chat } from "./models/Chatrooms";
 import { csvFile } from "./models/CSVFile";
@@ -79,9 +80,14 @@ export default class App extends GM_Library {
         e = typeof e === "boolean" ? e : true;
         options.setOption("debug", e);
         if (e) {
-            Object.assign(App.prototype, { options, user, chat, csvFile }, window.WAPI);
+            Object.assign(
+                App.prototype,
+                { message, options, user, chat, csvFile },
+                window.WAPI
+            );
         } else {
             for (let key of [
+                "message",
                 "options",
                 "user",
                 "chat",
