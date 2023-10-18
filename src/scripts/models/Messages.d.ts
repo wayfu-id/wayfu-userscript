@@ -22,6 +22,9 @@ export default class Messages extends BaseModel {
     /** Set message data */
     setData(data: string[]): void;
 
+    /** Get message as value */
+    get value(): string;
+
     /** Get message as encodedURIComponent */
     get encodedMsg(): string;
 
@@ -39,6 +42,9 @@ export default class Messages extends BaseModel {
 
     /** Send Image attachment */
     sendImg(): Promise<any>;
+    
+    /** Send Text message */
+    sendText(): Promise<any>;
 }
 
 export const message: Messages;

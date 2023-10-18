@@ -45,6 +45,13 @@ class Messages extends BaseModel {
     }
 
     /**
+     * Get message as value
+     */
+    get value() {
+        return this.inputMessage ? this.subtitute(this.inputMessage) : "";
+    }
+
+    /**
      * Get message as encodedURIComponent
      */
     get encodedMsg() {
@@ -158,7 +165,6 @@ class Messages extends BaseModel {
 
     /**
      * Send Image attachment
-     * @param {ImageBitmap} imgFile
      * @returns
      */
     async sendImg() {
@@ -170,6 +176,14 @@ class Messages extends BaseModel {
             this.imageFile,
             this.subtitute(caption)
         );
+    }
+
+    /**
+     * Send Text message
+     * @returns
+     */
+    async sendText() {
+        return await window.WAPI.composeAndSendMsgToChat(this.phone, this.value);
     }
 }
 
