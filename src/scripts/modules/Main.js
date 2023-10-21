@@ -108,7 +108,7 @@ async function startProcess() {
 
         await wait(5e2);
         stat = await (async (c) =>
-            (c === "caption"
+            (c === "caption" || !(i && h)
                 ? await message.sendText()
                 : await window.WAPI.openChat(message.phone)) !== false
                 ? "SUCCESS"
