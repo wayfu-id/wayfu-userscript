@@ -117,7 +117,7 @@ function setWAPI(store) {
                     { ComposeBox } = this;
 
                 return new Promise((done) => {
-                    this.Chat.find(`${phone}c.us`)
+                    this.Chat.find(`${phone}@c.us`)
                         .then(async (chat) => {
                             if (!chat.active) await chat.open();
                             await wait(5e2);
