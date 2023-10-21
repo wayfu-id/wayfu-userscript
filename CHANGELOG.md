@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.5.1](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.0...v4.5.1) (2023-10-21)
+
+
+### Bug Fixes
+
+* **main:** fix text not send when caption to 'pesan' with no image ([4d7fe0e](https://github.com/wayfu-id/wayfu-userscript/commit/4d7fe0e8d9bd87e66c9e949925ee11d872a5c731))
+
 ## [4.5.0](https://github.com/wayfu-id/wayfu-userscript/compare/v4.4.9...v4.5.0) (2023-10-18)
 
 
