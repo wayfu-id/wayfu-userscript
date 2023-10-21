@@ -1,7 +1,7 @@
 {
   "name": "wayfu-userscript",
-  "version": "4.4.0",
-  "viewVersion": "1.6.0",
+  "version": "5.0.0",
+  "viewVersion": "1.7.0",
   "homepage": "https://wayfu.id/",
   "bugs": "https://wayfu.id/",
   "description": "WhatsApp Easy Follow Up.",
@@ -96,9 +96,10 @@
   "devDependencies": {
     "@babel/preset-env": "^7.16.11",
     "@types/tampermonkey": "^4.0.5",
-    "@wayfu/simple-xlsx": "^0.0.1",
+    "@wayfu/simple-wapi": "^0.0.5",
+    "@wayfu/simple-xlsx": "^0.0.2",
     "@wayfu/waydown": "^0.0.2",
-    "@wayfu/wayfu-dom": "^0.1.10",
+    "@wayfu/wayfu-dom": "^0.1.11",
     "ansi-colors": "^4.1.1",
     "babel-core": "^6.26.3",
     "babel-loader": "^8.2.3",

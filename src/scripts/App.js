@@ -1,20 +1,12 @@
-import GM_Library from "./models/GM_Library";
-import { user } from "./models/Users";
-import { options } from "./models/Settings";
-import { chat } from "./models/Chatrooms";
-import { csvFile } from "./models/CSVFile";
-// import { createView } from "./modules/PanelView";
-import { changes } from "./models/Changeslog";
-// import { DOM } from "./lib/HtmlModifier";
-import { loadWapi } from "./lib/WAPI";
-import Injected from "./utils/Injected";
+import WAPI from "@wayfu/simple-wapi";
 import DOM from "@wayfu/wayfu-dom";
-import InterfaceController from "./controllers/InterfaceController";
-import { Jobs } from "./structures/Queue";
-import * as Utils from "./utils";
-import Modal from "./utils/Modal";
+import XLSX from "@wayfu/simple-xlsx";
+import Waydown from "@wayfu/waydown";
 
-export default class App extends GM_Library {
+import ScriptManager from "./structures/ScriptManager";
+import InterfaceController from "./controllers/InterfaceController";
+
+export default class App extends ScriptManager {
     /**
      *
      * @param {Window} target
@@ -23,14 +15,20 @@ export default class App extends GM_Library {
         super();
         this.initialize(target);
     }
+    /**
+     * @param {window} target
+     * @returns
+     */
     initialize(target) {
         // Initialize WAPI Module;
         // Object.defineProperties(App.prototype, { WAPI: loadWapi(target) });
-        this.WAPI = new Injected(loadWapi(target));
+        this.WAPI = WAPI.init(target);
         this.DOM = DOM;
-        this.Jobs = Jobs;
-        this.Utils = Utils;
-        this.Modal = Modal;
+        this.XLSX = XLSX;
+        this.Waydown = Waydown;
+        // this.Jobs = Jobs;
+        // this.Utils = Utils;
+        // this.Modal = Modal;
 
         // Create App Panel
         this.registerPanel();
@@ -60,9 +58,9 @@ export default class App extends GM_Library {
             return Object.assign({ html, style, icon }, info);
         })(this.getResource, this.appInfo);
 
-        this.UI = InterfaceController.init(details);
-        DOM.get("#wayfuPanel .menus").at(0).click();
-        DOM.get("#wayfuToggle").at(0).click();
+        this.UI = InterfaceController.init(this);
+        // DOM.get("#wayfuPanel .menus").at(0).click();
+        // DOM.get("#wayfuToggle").at(0).click();
     }
     registerUser() {
         user.init().gettingData();
@@ -113,5 +111,12 @@ export default class App extends GM_Library {
             }
         }
         return this;
+    }
+    static async init() {
+        if (await DOM.has("div.two")) {
+            unsafeWindow.WayFu = new App(unsafeWindow);
+        } else {
+            await App.init();
+        }
     }
 }

@@ -1,11 +1,17 @@
+/**
+ * @typedef {import("../../index")} WayFu
+ */
+
 export default class BaseController {
     /**
      * Base controller
-     * @param {import("../../index").default} app
+     * @param {WayFu} app
      */
     constructor(app) {
-        /** @type {import("../../index").default} */
+        /** @type {WayFu} */
         this.app = app;
+        this.WAPI = app.WAPI;
+        this.DOM = app.DOM;
     }
 
     _clone() {

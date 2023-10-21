@@ -1,6 +1,3 @@
-import { eventLists } from "./events";
-import { svgData, queryElm, mainMenu, groupDownloadMenu } from "./ui";
-
 /**
  * Regular Expression (RegExp) list pattern for some purpose
  */
@@ -25,12 +22,6 @@ const dateOptDefault = {
     day: "numeric",
 };
 
-export {
-    rgx,
-    dateOptDefault,
-    eventLists,
-    svgData,
-    queryElm,
-    mainMenu,
-    groupDownloadMenu,
-};
+export { rgx, dateOptDefault };
+export * from "./events";
+export * from "./ui";

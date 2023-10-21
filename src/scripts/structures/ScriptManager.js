@@ -1,12 +1,12 @@
-import Base from "./Base";
-
+import BaseModel from "./BaseModel";
+import { findValue } from "../utilities";
 /**
  * ScriptManager Model Class
  * @class ScriptManager
  * @classdesc Contains Greasemonkey or Tampermonkey UserScript API
  */
 
-export default class ScriptManager extends Base {
+export default class ScriptManager extends BaseModel {
     constructor() {
         super();
     }
@@ -59,7 +59,7 @@ export default class ScriptManager extends Base {
     getInfo(key = "") {
         if (!GM_info) return null;
 
-        return key === "" ? GM_info : this.findObjectValue(key, GM_info);
+        return key === "" ? GM_info : findValue(key, GM_info);
     }
 
     /**

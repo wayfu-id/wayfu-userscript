@@ -47,11 +47,7 @@ const JSONParse = (str) => {
  */
 const parseValue = (val) => {
     if (typeof val === "string") {
-        val = isNumeric(val)
-            ? Number(val)
-            : isDateStr(val)
-            ? new MyDate(val)
-            : val;
+        val = isNumeric(val) ? Number(val) : isDateStr(val) ? new MyDate(val) : val;
     }
     return val;
 };
@@ -110,10 +106,6 @@ const isUpToDate = (local, remote) => {
  */
 const setName = (string, full = false) => {
     const name = string.split(" ").map((s) => titleCase(s));
-    // let name = [];
-    // str.split(" ").forEach((e) => {
-    //     name.push(titleCase(e));
-    // });
     return full ? name.join(" ") : name[0];
 };
 
@@ -126,8 +118,6 @@ const titleCase = (string) => {
     return ((s) => {
         return s.charAt(0).toUpperCase() + s.slice(1);
     })(string.toLowerCase());
-    // string = string.toLowerCase();
-    // return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
 /**

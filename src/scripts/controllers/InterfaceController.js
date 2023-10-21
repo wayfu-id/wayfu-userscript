@@ -1,78 +1,103 @@
-import { eventLists } from "../lib/Constant";
+import BaseController from "./BaseController";
+import { eventLists, mainMenu } from "../config";
 import { listeners } from "./EventController";
-import { svgData } from "../lib/Constant";
-import DOM from "@wayfu/wayfu-dom";
+// import DOM from "@wayfu/wayfu-dom";
 
-export default class InterfaceController {
-    constructor(details) {
-        this.createView(details);
+/**
+ * @typedef {import("@wayfu/wayfu-dom").svgElementDetails} svgElementDetails
+ *
+ * @typedef {{
+ *      menuItem: {[k: string]: string},
+ *      menuButton: {[k: string]: string},
+ *      button: {[k: string]: string},
+ *      icon: {
+ *          svg: svgElementDetails | svgElementDetails[],
+ *          attr: SVGSVGElement
+ *      }
+ *  }} menuButtonDetails
+ */
 
-        return this;
+export default class InterfaceController extends BaseController {
+    /** @param {import("../../index")} app  */
+    constructor(app) {
+        super(app);
+        return this._init();
+    }
+
+    /**
+     *
+     * @param {menuButtonDetails} details
+     * @returns
+     */
+    _createButtonMenu(details) {
+        const { DOM, WAPI } = this,
+            { item, button } = WAPI.WebClasses.V2;
+
+        let { menuItem, menuButton, button: btn, icon } = details;
+
+        const itemMenu = DOM.create("div", Object.assign(menuItem, { classid: item }));
+
+        const buttonMenu = DOM.create(
+            Object.assign({ tag: "div" }, menuButton, { classid: button })
+        ).insertTo(itemMenu);
+
+        DOM.create("span", btn)
+            .insert(DOM.createIcon(icon.svg, icon.attr))
+            .insertTo(buttonMenu);
+
+        return itemMenu;
     }
 
     /**
      * Inject all view
-     * @param {{ [k: string]: string }} details
      */
-    createView(details) {
-        const { style, icon, name } = details,
-            { menu, menuDefault, item, button } = window.WAPI.WebClassesV2,
-            { wayFuSvg } = svgData;
+    _createView() {
+        const { DOM, WAPI } = this,
+            { menu, menuDefault } = WAPI.WebClasses.V2;
 
-        /** @type {(name: string) => DOM } */
-        const createBtnMenu = (name) => {
-            const menuItem = DOM.create("div", {
-                id: "wayfuToggle",
-                classid: item,
-                "data-testid": "menu-bar-wayfu-app",
-                "data-target": "wayfuPanel",
-            });
-
-            const wayFuMenu = DOM.create("div", {
-                classid: button,
-                role: "button",
-                "data-tab": "2",
-                tabindex: "0",
-                "aria-disabled": false,
-                title: `${name}`,
-                "aria-label": `${name}`,
-            });
-
-            const wayfuBtn = DOM.create("span", {
-                "data-testid": "wayfu-app",
-                "data-icon": "wayfu-app",
-            });
-
-            const btnIcon = DOM.createIcon(wayFuSvg, {
-                size: "24",
-                viewBox: "0 0 128 128",
-                class: "wayfu-app-icon",
-            });
-
-            wayfuBtn.insert(btnIcon);
-            wayFuMenu.insert(wayfuBtn);
-
-            return menuItem.insert(wayFuMenu);
-        };
-
-        const props = (({ html, version }) => {
+        const { style, name, ...details } = (({ app }) => {
+            let { getResource: fn, appInfo: info } = app;
+            return Object.assign({ html: fn("pnl"), style: fn("css") }, info);
+        })(this);
+        const props = (({ html, version }, { VERSION }) => {
             return {
                 id: "wayfuPanel",
                 after: "header",
-                html: html
-                    .replace(/VERSION/, version)
-                    .replace(/WA_VERSION/, window.WAPI.Debug.VERSION),
+                html: html.replace(/VERSION/, version).replace(/WA_VERSION/, VERSION),
             };
-        })(details);
+        })(details, WAPI);
 
-        let menuEl = DOM.get(`header .${menu}.${menuDefault} span`);
+        let ourView = DOM.get(`header #wayfuPanel`).isEmpty,
+            noStyle = DOM.get(`#wayfuStyle`).isEmpty;
 
-        DOM.addStyle(style, { id: "wayfuStyle" });
-        DOM.create("header", props);
-        // DOM.get("img.appIco").set({ src: icon });
+        if (noStyle) DOM.addStyle(style, { id: "wayfuStyle" });
+        if (ourView) {
+            let waMenu = DOM.get(`header .${menu}.${menuDefault} span`);
 
-        createBtnMenu(name).insertBefore(menuEl, true);
-        return this.initListener();
+            DOM.create("header", props);
+            this._createButtonMenu(mainMenu(name)).insertBefore(waMenu, true);
+        }
+    }
+
+    _init() {
+        this._createView();
+
+        return this._patch();
+    }
+
+    _patch() {
+        Object.defineProperties(this, {
+            Events: {
+                value: {},
+                enumerable: true,
+            },
+            Modal: {
+                value: {},
+                enumerable: true,
+            },
+        });
+
+        return super._init();
     }
 
     /**
@@ -94,10 +119,10 @@ export default class InterfaceController {
 
     /**
      * Static method to initialize current UI
-     * @param {{ [k: string]: string }} details
+     * @param {import("../App").default} app
      * @returns
      */
-    static init(details) {
-        return new InterfaceController(details);
+    static init(app) {
+        return new InterfaceController(app);
     }
 }
