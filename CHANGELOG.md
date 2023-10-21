@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.5.2](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.1...v4.5.2) (2023-10-21)
+
+
+### Bug Fixes
+
+* **WAPI:** error report when finding chat ([74f6ea2](https://github.com/wayfu-id/wayfu-userscript/commit/74f6ea229d45b66399e57023cb1c75ccf1d77f48))
+
 ### [4.5.1](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.0...v4.5.1) (2023-10-21)
 
 
