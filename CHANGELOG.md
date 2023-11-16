@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.5.3](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.2...v4.5.3) (2023-11-16)
+
+
+### Bug Fixes
+
+* **message:** Subtitute DATA with empty value of not setted ([a43c460](https://github.com/wayfu-id/wayfu-userscript/commit/a43c4604a809fc8930666d441634081b8e6de67a))
+
 ### [4.5.2](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.1...v4.5.2) (2023-10-21)
 
 
