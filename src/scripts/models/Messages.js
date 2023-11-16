@@ -110,10 +110,10 @@ class Messages extends BaseModel {
                 }
             }
             return column > 2
-                ? message.replace(dataKey(column - 2), `${value}$2`)
+                ? message.replace(dataKey(column - 2), `${value || ""}$2`)
                 : message;
         }
-        return message.replace(dataKey(column + 1), `${value}$2`);
+        return message.replace(dataKey(column + 1), `${value || ""}$2`);
     }
 
     /**
@@ -123,7 +123,9 @@ class Messages extends BaseModel {
      */
     subtitute(message) {
         if (message !== "" && message !== null) {
-            const col = [this.poinValue, this.date, this.sponsorName, ...this.other];
+            const col = [this.poinValue, this.date, this.sponsorName, ...this.other],
+                colTreshold = options.userType === "oriflame" ? 3 : 0;
+
             message = message
                 .replace(/F_NAMA/g, setName(this.name, true))
                 .replace(/NAMA/g, setName(this.name));
@@ -136,7 +138,8 @@ class Messages extends BaseModel {
                       )
                     : message;
             col.forEach((e, i) => {
-                message = e ? this.setMessage(message, i, e) : message;
+                let bypass = i >= colTreshold;
+                message = e || bypass ? this.setMessage(message, i, e) : message;
             });
         }
         return message;
