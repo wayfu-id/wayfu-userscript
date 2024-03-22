@@ -101,22 +101,23 @@ async function startProcess() {
         let { useCaption: c, useImage: i, hasImage: h } = options,
             no = (queue.currentIndex += 1),
             data = queue.run(),
+            messej = message.setData(data),
             stat = "";
 
-        message.setData(data);
-        updateUI(no, message.phone);
+        // message.setData(data);
+        updateUI(no, messej.phone);
 
         await wait(5e2);
         stat = await (async (c) =>
             (c === "caption" || !(i && h)
-                ? await message.sendText()
-                : await window.WAPI.openChat(message.phone)) !== false
+                ? await messej.sendText()
+                : await window.WAPI.openChat(messej.phone)) !== false
                 ? "SUCCESS"
                 : "ERROR")(c);
 
         await wait(1e2);
         if (stat === "SUCCESS") {
-            stat = i && h ? ((await message.sendImg()) ? "SUCCESS" : "FAILED") : stat;
+            stat = i && h ? ((await messej.sendImg()) ? "SUCCESS" : "FAILED") : stat;
         }
 
         await wait(4e2);

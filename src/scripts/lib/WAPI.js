@@ -163,10 +163,53 @@ function setWAPI(store) {
 }
 
 /**
+ * Add support to WhatsApp Web v2.3xxx.xx
+ * @param {Window & globalThis} target
+ *
+ */
+const webpackFactory = (target) => {
+    const __debug = () => {
+        return target.require("__debug");
+    };
+    const webpackRequire = (id) => {
+        try {
+            target.ErrorGuard.skipGuardGlobal(true);
+            return target.importNamespace(id);
+        } catch (error) {}
+        return null;
+    };
+
+    Object.defineProperty(webpackRequire, "m", {
+        get: () => {
+            const modulesMap = __debug().modulesMap;
+            const ids = Object.keys(modulesMap).filter((id) => /^(?:use)?WA/.test(id));
+            const result = {};
+
+            for (const id of ids) {
+                result[id] = modulesMap[id]?.factory;
+            }
+
+            return result;
+        },
+    });
+
+    return webpackRequire;
+};
+
+/**
  * Load WAPI needed modules from WhatsApp Web window
- * @param {window} target window target
+ * @param {Window} target window target
  */
 const loadWapi = (target) => {
+    /** @type {"webpack" | "meta"} */
+    let loaderType = ((t) => {
+        let _global = t || self || window;
+        if (!_global.require || !_global.__d) {
+            return "webpack";
+        }
+        return "meta";
+    })(target);
+
     if (!window.WAPI || !window.WAPI.Msg) {
         function getStore(modules) {
             // let foundCount = 0;
@@ -199,6 +242,9 @@ const loadWapi = (target) => {
 
         if (webpack && typeof target[webpack] === "object") {
             target[webpack].push([[parasite], {}, (o) => getStore(o)]);
+        } else if (loaderType === "meta") {
+            let webpackStore = webpackFactory(target);
+            getStore(webpackStore);
         } else {
             console.error("Failed to load WAPI Module!");
         }

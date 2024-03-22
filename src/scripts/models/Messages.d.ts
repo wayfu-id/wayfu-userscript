@@ -20,7 +20,7 @@ export default class Messages extends BaseModel {
     other: any[];
 
     /** Set message data */
-    setData(data: string[]): void;
+    setData(data: string[]): Messages;
 
     /** Get message as value */
     get value(): string;

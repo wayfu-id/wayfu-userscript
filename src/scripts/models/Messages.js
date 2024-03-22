@@ -29,6 +29,7 @@ class Messages extends BaseModel {
     /**
      * Set message data
      * @param {string[]} data message arguments
+     * @returns
      */
     setData(data) {
         const validPhone = (val) => rgx.phonePattern.test(val);
@@ -42,6 +43,7 @@ class Messages extends BaseModel {
             this.sponsorName,
             ...this.other
         ] = validPhone(data[2]) ? data : ["", ...data];
+        return this;
     }
 
     /**
