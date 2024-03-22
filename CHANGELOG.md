@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.5.4-alpha.0](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.3...v4.5.4-alpha.0) (2024-03-22)
+
+
+### Bug Fixes
+
+* **WA:** add support to WA v2.3000 ([d56058e](https://github.com/wayfu-id/wayfu-userscript/commit/d56058eefd1abf655523eecbe0102b45dcfc147d))
+
 ### [4.5.3](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.2...v4.5.3) (2023-11-16)
 
 
