@@ -69,4 +69,20 @@ export default class MyArray extends Array {
         let arr = string.split(delimiter);
         return new MyArray(...arr);
     }
+
+    /**
+     * Reconstruct `Array.from` to create new MyArray
+     * From `IterableObject`.
+     * @param {Iterable<any> | ArrayLike<any>} arrayLike
+     * @returns {MyArray}
+     */
+    static create(arrayLike) {
+        const convert = (o) => {
+            return Array.isArray(o) || typeof o[Symbol.iterator] === "function"
+                ? o
+                : Object.keys(o);
+        };
+
+        return new MyArray(...Array.from(convert(arrayLike)));
+    }
 }
