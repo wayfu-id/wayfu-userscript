@@ -22,7 +22,7 @@ export default class App extends GM_Library {
         // Initialize WAPI Module;
         await loadWapi(target);
         // Create App Panel
-        this.registerPanel();
+        this.registerPanel(target);
         // Initialize and Register the User
         this.registerUser();
         // Initialize and Register the App Options
@@ -31,7 +31,7 @@ export default class App extends GM_Library {
         this.onLoadView();
         // Don't Forget to Check for Update
     }
-    registerPanel() {
+    registerPanel(target) {
         chat.init();
         // console.log(chat);
         const html = this.getResource("pnl"),
@@ -39,7 +39,7 @@ export default class App extends GM_Library {
             icon = this.getResource("ico", "url"),
             details = Object.assign({}, this.appInfo, { icon: icon });
 
-        createView(html, style, details);
+        createView(html, style, details, target);
         // console.info('Panel Created Successfully.');
     }
     registerUser() {

@@ -15,16 +15,16 @@ import { Debug } from "./Debug";
  *  @param {string} html
  *  @param {string} style
  *  @param {appDetails} details
+ *  @param {Window} target
  */
-function createView(html, style, details) {
-    const { name, version, icon } = details;
+function createView(html, style, details, target) {
+    const { name, version, icon } = details,
+        waVers = window.WAPI.Debug.VERSION || target.Debug.VERSION;
     DOM.createElement({
         tag: "header",
         id: "wayfuPanel",
         after: "header",
-        html: html
-            .replace(/VERSION/, version)
-            .replace(/WA_VERSION/, window.WAPI.Debug.VERSION),
+        html: html.replace(/VERSION/, version).replace(/WA_VERSION/, waVers),
     });
 
     DOM.addStyle(style, { id: "wayfuStyle" }).setElement("img.appIco", { src: icon });
