@@ -236,6 +236,7 @@ const loadWapi = async (target) => {
     if (!window.WAPI || !window.WAPI.Msg) {
         function getStore(modules) {
             // let foundCount = 0;
+            console.log(modules);
             for (let idx in modules.m) {
                 if (typeof modules(idx) === "object" && modules(idx) !== null) {
                     storeObjects.forEach((needObj) => {
@@ -270,6 +271,7 @@ const loadWapi = async (target) => {
             target[webpack].push([[parasite], {}, (o) => getStore(o)]);
         } else if (loaderType === "meta") {
             let webpackStore = webpackFactory(target);
+            console.log(webpackStore);
             getStore(webpackStore);
         } else {
             console.error("Failed to load WAPI Module!");
