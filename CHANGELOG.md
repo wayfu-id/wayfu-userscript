@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.5.4-alpha.4](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.4-alpha.3...v4.5.4-alpha.4) (2024-03-23)
+
+
+### Bug Fixes
+
+* **WA:** fix error at webpackFactory ([32ab9f0](https://github.com/wayfu-id/wayfu-userscript/commit/32ab9f00b6f0c00805d9d7c12c75ee42c271814a))
+
 ### [4.5.4-alpha.3](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.4-alpha.2...v4.5.4-alpha.3) (2024-03-23)
 
 
