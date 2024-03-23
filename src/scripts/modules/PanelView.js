@@ -18,13 +18,14 @@ import { Debug } from "./Debug";
  *  @param {Window} target
  */
 function createView(html, style, details, target) {
-    const { name, version, icon } = details,
-        waVers = window.WAPI.Debug.VERSION || target.Debug.VERSION;
+    const { name, version, icon } = details;
     DOM.createElement({
         tag: "header",
         id: "wayfuPanel",
         after: "header",
-        html: html.replace(/VERSION/, version).replace(/WA_VERSION/, waVers),
+        html: html
+            .replace(/VERSION/, version)
+            .replace(/WA_VERSION/, target.Debug.VERSION),
     });
 
     DOM.addStyle(style, { id: "wayfuStyle" }).setElement("img.appIco", { src: icon });
