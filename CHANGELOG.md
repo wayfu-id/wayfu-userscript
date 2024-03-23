@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.5.4-alpha.3](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.4-alpha.2...v4.5.4-alpha.3) (2024-03-23)
+
+
+### Bug Fixes
+
+* **WA:** fix loaderType reader ([56e2a7b](https://github.com/wayfu-id/wayfu-userscript/commit/56e2a7ba9cb6043a2468fb7e745e4866a2003a30))
+
 ### [4.5.4-alpha.2](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.4-alpha.1...v4.5.4-alpha.2) (2024-03-23)
 
 ### [4.5.4-alpha.1](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.4-alpha.0...v4.5.4-alpha.1) (2024-03-23)
