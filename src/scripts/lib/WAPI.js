@@ -212,8 +212,9 @@ const webpackFactory = (target) => {
 
     Object.defineProperty(webpackRequire, "m", {
         get: () => {
-            const result = {};
-            Object.keys(target.require("__debug").modulesMap)
+            const result = {},
+                { modulesMap } = target.require("__debug");
+            Object.keys(modulesMap)
                 .filter((e) => e.includes("WA"))
                 .forEach((id) => {
                     result[id] = {
