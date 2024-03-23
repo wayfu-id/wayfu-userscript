@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.5.4-alpha.8](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.4-alpha.7...v4.5.4-alpha.8) (2024-03-23)
+
+
+### Bug Fixes
+
+* **UI:** use target window instead of WAPI window) ([5399153](https://github.com/wayfu-id/wayfu-userscript/commit/539915360a671a4724fc2274702ed3024bbc72c9))
+
 ### [4.5.4-alpha.7](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.4-alpha.6...v4.5.4-alpha.7) (2024-03-23)
 
 ### [4.5.4-alpha.6](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.4-alpha.5...v4.5.4-alpha.6) (2024-03-23)
