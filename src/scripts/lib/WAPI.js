@@ -9,8 +9,9 @@ import { storeObjects, rgx } from "./Constant";
 const waitloaderType = async (target, webpack) => {
     return new Promise((resolve) => {
         const checkObjects = () => {
-            if (target.__debug) {
-                if (target.__debug.modulesMap?.WAWebUserPrefsMeUser) {
+            if (target.require || target.__d) {
+                let webpackRequire = target.require("__debug");
+                if (webpackRequire.modulesMap?.WAWebUserPrefsMeUser) {
                     resolve("meta");
                 } else {
                     setTimeout(checkObjects, 200);
