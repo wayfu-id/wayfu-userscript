@@ -217,10 +217,7 @@ const webpackFactory = (target) => {
             Object.keys(modulesMap)
                 .filter((e) => e.includes("WA"))
                 .forEach((id) => {
-                    result[id] = {
-                        default: modulesMap[id].defaultExport,
-                        factory: modulesMap[id].factory,
-                    };
+                    result[id] = modulesMap[id]?.factory;
                 });
 
             return result;
