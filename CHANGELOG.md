@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.5.4-alpha.1](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.4-alpha.0...v4.5.4-alpha.1) (2024-03-23)
+
+
+### Bug Fixes
+
+* **WA:** fix WAPI for meta loader ([60bc4f0](https://github.com/wayfu-id/wayfu-userscript/commit/60bc4f0e7af04ead423d94b0353020a9999a3fa3))
+
 ### [4.5.4-alpha.0](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.3...v4.5.4-alpha.0) (2024-03-22)
 
 
