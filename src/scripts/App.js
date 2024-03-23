@@ -18,9 +18,9 @@ export default class App extends GM_Library {
         super();
         this.initialize(target);
     }
-    initialize(target) {
+    async initialize(target) {
         // Initialize WAPI Module;
-        loadWapi(target);
+        await loadWapi(target);
         // Create App Panel
         this.registerPanel();
         // Initialize and Register the User

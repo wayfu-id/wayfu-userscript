@@ -1,6 +1,39 @@
 import { storeObjects, rgx } from "./Constant";
 
 /**
+ *
+ * @param {Window & globalThis} target
+ * @param {string} webpack
+ * @returns {Promise<String>}
+ */
+const waitloaderType = async (target, webpack) => {
+    return new Promise((resolve) => {
+        const checkObjects = () => {
+            if (target.__debug) {
+                if (target.__debug.modulesMap?.WAWebUserPrefsMeUser) {
+                    resolve("meta");
+                } else {
+                    setTimeout(checkObjects, 200);
+                }
+            } else {
+                if (
+                    target[webpack] &&
+                    Array.isArray(target[webpack]) &&
+                    target[webpack].every(
+                        (item) => Array.isArray(item) && item.length > 0
+                    )
+                ) {
+                    resolve("webpack");
+                } else {
+                    setTimeout(checkObjects, 200);
+                }
+            }
+        };
+        checkObjects();
+    });
+};
+
+/**
  * Get webpack object/array/function from a window.
  * Return it's name if any, or null if not found.
  * @param {Window} window window target
@@ -168,9 +201,6 @@ function setWAPI(store) {
  *
  */
 const webpackFactory = (target) => {
-    const __debug = () => {
-        return target.require("__debug");
-    };
     const webpackRequire = (id) => {
         try {
             target.ErrorGuard.skipGuardGlobal(true);
@@ -181,13 +211,15 @@ const webpackFactory = (target) => {
 
     Object.defineProperty(webpackRequire, "m", {
         get: () => {
-            const modulesMap = __debug().modulesMap;
-            const ids = Object.keys(modulesMap).filter((id) => /^(?:use)?WA/.test(id));
             const result = {};
-
-            for (const id of ids) {
-                result[id] = modulesMap[id]?.factory;
-            }
+            Object.keys(target.require("__debug").modulesMap)
+                .filter((e) => e.includes("WA"))
+                .forEach((id) => {
+                    result[id] = {
+                        default: modulesMap[id].defaultExport,
+                        factory: modulesMap[id].factory,
+                    };
+                });
 
             return result;
         },
@@ -198,18 +230,9 @@ const webpackFactory = (target) => {
 
 /**
  * Load WAPI needed modules from WhatsApp Web window
- * @param {Window} target window target
+ * @param {Window} target window targetr
  */
-const loadWapi = (target) => {
-    /** @type {"webpack" | "meta"} */
-    let loaderType = ((t) => {
-        let _global = t || self || window;
-        if (!_global.require || !_global.__d) {
-            return "webpack";
-        }
-        return "meta";
-    })(target);
-
+const loadWapi = async (target) => {
     if (!window.WAPI || !window.WAPI.Msg) {
         function getStore(modules) {
             // let foundCount = 0;
@@ -239,6 +262,9 @@ const loadWapi = (target) => {
         }
         const parasite = `parasite${Date.now()}`;
         const webpack = getWebpack(target);
+        /** @type {"webpack" | "meta"} */
+        const loaderType = await waitloaderType(target, webpack);
+        console.log(loaderType);
 
         if (webpack && typeof target[webpack] === "object") {
             target[webpack].push([[parasite], {}, (o) => getStore(o)]);

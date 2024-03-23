@@ -4,8 +4,7 @@ export default class App extends GM_Library {
     constructor(target: Window);
     debug(e: any): App;
     
-    initialize(target: Window);
-
+    initialize(target: Window): Promise<void>;
     // Create App Panel
     registerPanel(): void;
     // Initialize and Register the User
@@ -13,5 +12,5 @@ export default class App extends GM_Library {
     // Initialize and Register the App Options
     registerOptions(): void;
     // Whenever all loaded
-    async onLoadView(): void;
+    onLoadView(): Promise<void>;
 }
