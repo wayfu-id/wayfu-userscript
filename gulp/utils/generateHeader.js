@@ -60,6 +60,7 @@ function generateHeader(package, environment) {
         "match",
         "grant",
         "connect",
+        "require",
         "updateURL",
         "downloadURL",
         "resource",

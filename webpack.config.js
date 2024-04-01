@@ -30,6 +30,12 @@ module.exports = {
             },
         ],
     },
+    externals: {
+        "@wayfu/simple-wapi": "WAPI",
+        "@wayfu/simple-xlsx": "XLSX",
+        "@wayfu/wayfu-dom": "DOM",
+        "@wayfu/waydown": "Waydown",
+    },
     target: ["web", "es5"],
     // plugins: [new WebpackUserscript()],
 };

@@ -58,6 +58,12 @@
     "connect": "wayfu.id",
     "updateURL": "https://wayfu.id/v4/update.meta.js",
     "downloadURL": "https://wayfu.id/v4/wayfu-install.user.js",
+    "require": [
+      "https://unpkg.com/@wayfu/simple-wapi@latest/dist/index.min.js",
+      "https://unpkg.com/@wayfu/simple-xlsx@latest/dist/index.min.js",
+      "https://unpkg.com/@wayfu/wayfu-dom@latest/dist/wayfu-dom.min.js",
+      "https://unpkg.com/@wayfu/waydown@latest/dist/index.min.js"
+    ],
     "resource": [
       {
         "ico": "https://wayfu.id/v4/assets/wayfu-icon.webp"
