@@ -11,4 +11,4 @@ declare function initListener(): void;
 declare function createMenuButton(name: string): void;
 
 /** Create and Construct Panel View */
-export function createView(html: string, style: string, details: appDetails, target: Window): void;
+export function createView(html: string, style: string, details: appDetails): void;
