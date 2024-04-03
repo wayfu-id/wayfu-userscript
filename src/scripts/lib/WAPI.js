@@ -191,7 +191,6 @@ function setWAPI(store) {
             return obj;
         }, {});
 
-    console.log(window.WAPI);
     return window.WAPI;
 }
 
