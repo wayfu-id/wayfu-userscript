@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.5.4](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.4-alpha.8...v4.5.4) (2024-04-03)
+
+
+### Bug Fixes
+
+* **UI:** Going back to WAPI Version instead of Window ([b5a9bc0](https://github.com/wayfu-id/wayfu-userscript/commit/b5a9bc00578d97acaff277a0aa5f604d588f5df1))
+* **WAPI:** Bring back Debug property from window object ([6eea592](https://github.com/wayfu-id/wayfu-userscript/commit/6eea59205f0b9fffa2adf69093cced9ca6b585c0))
+
 ### [4.5.4-alpha.8](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.4-alpha.7...v4.5.4-alpha.8) (2024-03-23)
 
 
