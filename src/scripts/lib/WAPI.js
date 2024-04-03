@@ -41,8 +41,6 @@ const waitloaderType = async (target, webpack) => {
  * @return {String | null}
  */
 const getWebpack = (window) => {
-    // let keys = Object.keys(window),
-    //     val;
     for (let key of Object.keys(window)) {
         if (/[^|]?webpack./g.test(key)) return key;
     }
@@ -234,9 +232,8 @@ const webpackFactory = (target) => {
  */
 const loadWapi = async (target) => {
     if (!window.WAPI || !window.WAPI.Msg) {
-        function getStore(modules) {
+        function getStore(modules, extras = {}) {
             // let foundCount = 0;
-            console.log(modules);
             for (let idx in modules.m) {
                 if (typeof modules(idx) === "object" && modules(idx) !== null) {
                     storeObjects.forEach((needObj) => {
@@ -258,21 +255,19 @@ const loadWapi = async (target) => {
                     windowStore[needObj.id] = needObj.foundedModule;
                 }
             });
-            // console.log(windowStore);
-            return setWAPI(windowStore);
+            return setWAPI(Object.assign({}, windowStore, extras));
         }
-        const parasite = `parasite${Date.now()}`;
         const webpack = getWebpack(target);
         /** @type {"webpack" | "meta"} */
         const loaderType = await waitloaderType(target, webpack);
-        console.log(loaderType);
 
-        if (webpack && typeof target[webpack] === "object") {
+        if (loaderType === "meta") {
+            const webpackStore = webpackFactory(target),
+                { Debug } = target;
+            getStore(webpackStore, { Debug });
+        } else if (loaderType === "weback") {
+            const parasite = `parasite${Date.now()}`;
             target[webpack].push([[parasite], {}, (o) => getStore(o)]);
-        } else if (loaderType === "meta") {
-            let webpackStore = webpackFactory(target);
-            console.log(webpackStore);
-            getStore(webpackStore);
         } else {
             console.error("Failed to load WAPI Module!");
         }
