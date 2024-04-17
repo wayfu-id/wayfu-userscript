@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.5.5](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.4...v4.5.5) (2024-04-17)
+
+
+### Bug Fixes
+
+* **UI:** Fix UI Problem on new WhatsApp Web ([d3e369a](https://github.com/wayfu-id/wayfu-userscript/commit/d3e369accfe8bfe8e24f257bfbf87c813b5d1da4))
+
 ### [4.5.4](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.4-alpha.8...v4.5.4) (2024-04-03)
 
 
