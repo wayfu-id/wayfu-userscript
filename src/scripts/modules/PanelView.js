@@ -17,17 +17,20 @@ import { Debug } from "./Debug";
  *  @param {appDetails} details
  */
 function createView(html, style, details) {
-    const { name, version, icon } = details;
+    const { name, version, icon } = details,
+        { paneOne } = window.WAPI.WebClassesV3;
+
     DOM.createElement({
         tag: "header",
         id: "wayfuPanel",
-        after: "header",
-        html: html
-            .replace(/VERSION/, version)
-            .replace(/WA_VERSION/, window.WAPI.Debug.VERSION),
+        after: "header > header",
+        html: html.replace(/VERSION/, version).replace(/WA_VERSION/, window.WAPI.Debug.VERSION),
     });
 
-    DOM.addStyle(style, { id: "wayfuStyle" }).setElement("img.appIco", { src: icon });
+    DOM.addStyle(style, { id: "wayfuStyle" })
+        .setElement("img.appIco", { src: icon })
+        .setElementStyle(`.${paneOne} header`, { display: "grid" });
+
     createMenuButton(name);
     initListener();
 }

@@ -20,9 +20,7 @@ const waitloaderType = async (target, webpack) => {
                 if (
                     target[webpack] &&
                     Array.isArray(target[webpack]) &&
-                    target[webpack].every(
-                        (item) => Array.isArray(item) && item.length > 0
-                    )
+                    target[webpack].every((item) => Array.isArray(item) && item.length > 0)
                 ) {
                     resolve("webpack");
                 } else {
@@ -53,10 +51,11 @@ const getWebpack = (window) => {
  * @return {Object} WAPI Module
  */
 function setWAPI(store) {
-    let { WebClasses2, WebClasses3, WebClasses4, ...WAPI } = store,
-        WebClassesV2 = Object.assign({}, WebClasses2, WebClasses3, WebClasses4);
+    let { WebClasses2, WebClasses3, WebClasses4, WebClasses5, ...WAPI } = store,
+        WebClassesV2 = Object.assign({}, WebClasses2, WebClasses3, WebClasses4),
+        WebClassesV3 = Object.assign({}, WebClasses5);
 
-    Object.assign(WAPI, { WebClassesV2: WebClassesV2 });
+    Object.assign(WAPI, { WebClassesV2, WebClassesV3 });
 
     Object.defineProperties(WAPI.Chat.constructor.prototype, {
         findImpl: {
@@ -74,10 +73,7 @@ function setWAPI(store) {
 
                 let result = this.get(wid);
                 if (!result) {
-                    [result] = this.add(
-                        { createLocally: true, id: wid },
-                        { merge: true }
-                    );
+                    [result] = this.add({ createLocally: true, id: wid }, { merge: true });
                 }
 
                 return result;
@@ -144,8 +140,7 @@ function setWAPI(store) {
         },
         composeAndSendMsgToChat: {
             value: function composeAndSendMsgToChat(phone, text, getChat = false) {
-                const wait = (time) =>
-                        new Promise((resolve) => setTimeout(resolve, time)),
+                const wait = (time) => new Promise((resolve) => setTimeout(resolve, time)),
                     { ComposeBox } = this;
 
                 return new Promise((done) => {

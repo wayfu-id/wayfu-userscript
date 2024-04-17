@@ -121,14 +121,11 @@ const storeObjects = [
     {
         id: "Store",
         conditions: (module) =>
-            module.default && module.default.Chat && module.default.Msg
-                ? module.default
-                : null,
+            module.default && module.default.Chat && module.default.Msg ? module.default : null,
     },
     {
         id: "ComposeBox",
-        conditions: (module) =>
-            module.ComposeBoxActions ? module.ComposeBoxActions : null,
+        conditions: (module) => (module.ComposeBoxActions ? module.ComposeBoxActions : null),
     },
     {
         id: "WebClasses",
@@ -153,27 +150,31 @@ const storeObjects = [
     {
         id: "WebClasses3",
         conditions: (module) =>
-            module.default &&
-            typeof module.default === "object" &&
-            module.default.chatHeader
+            module.default && typeof module.default === "object" && module.default.chatHeader
                 ? module.default
                 : null,
     },
     {
         id: "WebClasses4",
         conditions: (module) =>
+            module.default && typeof module.default === "object" && module.default.sendButtonContainer
+                ? module.default
+                : null,
+    },
+    {
+        id: "WebClasses5",
+        conditions: (module) =>
             module.default &&
             typeof module.default === "object" &&
-            module.default.sendButtonContainer
+            module.default.app &&
+            module.default.paneTwo
                 ? module.default
                 : null,
     },
     {
         id: "MediaCollection",
         conditions: (module) =>
-            module.default &&
-            module.default.prototype &&
-            module.default.prototype.processAttachments
+            module.default && module.default.prototype && module.default.prototype.processAttachments
                 ? module.default
                 : null,
     },
@@ -184,11 +185,7 @@ const storeObjects = [
     {
         id: "WapQuery",
         conditions: (module) =>
-            module.queryExist
-                ? module
-                : module.default && module.default.queryExist
-                ? module.default
-                : null,
+            module.queryExist ? module : module.default && module.default.queryExist ? module.default : null,
     },
     {
         id: "Cmd",
