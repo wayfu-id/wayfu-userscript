@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.5.6](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.5...v4.5.6) (2024-04-17)
+
+
+### Bug Fixes
+
+* **UI:** Fix UI CSS problem ([6166249](https://github.com/wayfu-id/wayfu-userscript/commit/61662495e0be67e6731ed04b7745a107581e4ac3))
+
 ### [4.5.5](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.4...v4.5.5) (2024-04-17)
 
 
