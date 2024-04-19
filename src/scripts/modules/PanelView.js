@@ -18,18 +18,18 @@ import { Debug } from "./Debug";
  */
 function createView(html, style, details) {
     const { name, version, icon } = details,
+        after = DOM.getElement("header > header") ? "header > header" : "header",
         { paneOne } = window.WAPI.WebClassesV3;
 
     DOM.createElement({
         tag: "header",
         id: "wayfuPanel",
-        after: "header > header",
+        after: after,
         html: html.replace(/VERSION/, version).replace(/WA_VERSION/, window.WAPI.Debug.VERSION),
     });
 
-    DOM.addStyle(style, { id: "wayfuStyle" })
-        .setElement("img.appIco", { src: icon })
-        .setElementStyle(`.${paneOne} header`, { display: "grid" });
+    DOM.addStyle(style, { id: "wayfuStyle" }).setElement("img.appIco", { src: icon });
+    if (after !== "header") DOM.setElementStyle(`.${paneOne} header`, { display: "grid" });
 
     createMenuButton(name);
     initListener();
