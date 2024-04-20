@@ -8,14 +8,14 @@ export namespace rgx {
     const formatedDate: RegExp;
     const forFilename: RegExp;
     const xlsxFileCheck: RegExp;
+    const phone: RegExp;
     // const csvFileCheck: RegExp; // seems no longer needed
 }
 
 export namespace svgData {
-    const downloadBtnSvg: {type: 'path', data: SVGPathElement};
-    const checksSvg: {type: 'polyline', data: SVGPolylineElement};
-    const groupDownloadBtnSvg: Array<{type: 'path', data: SVGPathElement}>;
-    const wayFuSvg: Array<{type:"path", data: SVGPathElement}>;
+    const downloadBtnSvg: { type: "path"; data: SVGPathElement };
+    const checksSvg: { type: "polyline"; data: SVGPolylineElement };
+    const groupDownloadBtnSvg: Array<{ type: "path"; data: SVGPathElement }>;
 }
 
 /** Element's query selector list for some kind of element */

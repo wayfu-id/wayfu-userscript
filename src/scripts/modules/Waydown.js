@@ -27,7 +27,7 @@ class Waydown {
      * @param {import("./../lib/HtmlModifier").elemenOptions} opt
      * @returns
      */
-    #element(tag, content, opt = {}) {
+    element(tag, content, opt = {}) {
         const elm = DOM.createElement(Object.assign({ tag: tag, html: content }, opt));
         return elm.outerHTML;
     }
@@ -37,7 +37,7 @@ class Waydown {
      * @param {string} content
      * @returns
      */
-    #raw(content) {
+    raw(content) {
         return content.replace(this.rgx.escape, "$1");
     }
 
@@ -46,7 +46,7 @@ class Waydown {
      * @param {string} content
      * @returns {string}
      */
-    #highlight(content) {
+    highlight(content) {
         let { format: hg } = this.rgx;
         return !this.plain
             ? content.replace(hg, (all, _, p1, bold, italic, strike, mono, content) => {
@@ -55,17 +55,17 @@ class Waydown {
                   })(bold, italic, strike, mono);
 
                   content = mono ? content.replace(/`/g, "") : content;
-                  return `${_}${this.#element(tag, this.#highlight(content))}`;
+                  return `${_}${this.element(tag, this.highlight(content))}`;
               })
             : content;
     }
 
     /** Chreate link element upon every `link like` string */
-    #link() {
+    link() {
         let { link } = this.rgx;
         this.src = this.src.replace(link, (m, ...g) => {
             let [proc, domain] = g;
-            return this.#element("a", m, {
+            return this.element("a", m, {
                 href: m,
                 title: domain,
                 alt: domain,
@@ -81,7 +81,7 @@ class Waydown {
         let { para } = this.rgx;
         this.src = this.src.replace(para, (all, _, content) => {
             _ = _ ? _.replace(/\n/, "<br/>") : "";
-            return `${_}${this.#element("div", this.#raw(this.#highlight(content)))}`;
+            return `${_}${this.element("div", this.raw(this.highlight(content)))}`;
         });
 
         return this;
@@ -107,7 +107,7 @@ class Waydown {
 
         this.src = this.src.replace(lt, "&lt;").replace(gt, "&gt;");
 
-        return this.#paragraph().#link().#trim();
+        return this.#paragraph().link().#trim();
     }
 }
 

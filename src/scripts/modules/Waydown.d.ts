@@ -19,22 +19,22 @@ export default class Waydown {
     plain: boolean;
 
     /** Create HTML elemenet and return it's `outerHTML` value */
-    #element(tag: string, content: string, opt?: elemenOptions): string;
+    element(tag: string, content: string, opt?: elemenOptions): string;
 
     /** Get `raw` string from input content */
-    #raw(content: string): string;
+    raw(content: string): string;
 
     /** Set HMTL tag highlighter to input content */
-    #highlight(content: string): string;
+    highlight(content: string): string;
 
     /** Chreate link element upon every `link like` string  */
-    #link(): Waydown;
+    link(): Waydown;
 
     /** Create paragraph element upon every paragraph string */
-    #paragraph(): Waydown;
+    paragraph(): Waydown;
 
     /** Trim string source */
-    #trim(): string;
+    trim(): string;
 
     /** Convert formated text to HTML string */
     toHtml(source: string, plain?: boolean): string;

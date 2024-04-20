@@ -11,7 +11,7 @@ body.dark {
 
         button {
             &:hover,
-            .active {
+            &.active {
                 background: $darkbg;
             }
         }

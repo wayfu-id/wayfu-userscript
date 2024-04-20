@@ -70,12 +70,8 @@ export default class App extends ScriptManager {
         options.init();
         // console.info('Options Loaded Successfully.');
     }
-    async onLoadView() {
-        const MIME = [
-            ".txt",
-            ".csv",
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        ];
+    async #onLoadView() {
+        const MIME = [".txt", ".csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"];
         // console.log(settings);
         DOM.setElementStyle("#wayfuPanel", {
             "background-color": options.themeColor,
@@ -94,13 +90,10 @@ export default class App extends ScriptManager {
         e = typeof e === "boolean" ? e : true;
         options.setOption("debug", e);
         if (e) {
-            Object.assign(
-                App.prototype,
-                { options, user, chat, csvFile },
-                window.WAPI_V2
-            );
+            Object.assign(App.prototype, { options, user, chat, csvFile }, window.WAPI);
         } else {
             for (let key of [
+                "message",
                 "options",
                 "user",
                 "chat",

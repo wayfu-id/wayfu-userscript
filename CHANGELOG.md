@@ -2,6 +2,188 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.5.7](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.6...v4.5.7) (2024-04-19)
+
+
+### Bug Fixes
+
+* **UI:** Fix UI Problem on previous WhatsApp Web UI ([54b95e4](https://github.com/wayfu-id/wayfu-userscript/commit/54b95e46356c6a2decbdd314186d36cf5cf6961c))
+
+### [4.5.6](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.5...v4.5.6) (2024-04-17)
+
+
+### Bug Fixes
+
+* **UI:** Fix UI CSS problem ([6166249](https://github.com/wayfu-id/wayfu-userscript/commit/61662495e0be67e6731ed04b7745a107581e4ac3))
+
+### [4.5.5](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.4...v4.5.5) (2024-04-17)
+
+
+### Bug Fixes
+
+* **UI:** Fix UI Problem on new WhatsApp Web ([d3e369a](https://github.com/wayfu-id/wayfu-userscript/commit/d3e369accfe8bfe8e24f257bfbf87c813b5d1da4))
+
+### [4.5.4](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.4-alpha.8...v4.5.4) (2024-04-03)
+
+
+### Bug Fixes
+
+* **UI:** Going back to WAPI Version instead of Window ([b5a9bc0](https://github.com/wayfu-id/wayfu-userscript/commit/b5a9bc00578d97acaff277a0aa5f604d588f5df1))
+* **WAPI:** Bring back Debug property from window object ([6eea592](https://github.com/wayfu-id/wayfu-userscript/commit/6eea59205f0b9fffa2adf69093cced9ca6b585c0))
+
+### [4.5.4-alpha.8](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.4-alpha.7...v4.5.4-alpha.8) (2024-03-23)
+
+
+### Bug Fixes
+
+* **UI:** use target window instead of WAPI window) ([5399153](https://github.com/wayfu-id/wayfu-userscript/commit/539915360a671a4724fc2274702ed3024bbc72c9))
+
+### [4.5.4-alpha.7](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.4-alpha.6...v4.5.4-alpha.7) (2024-03-23)
+
+### [4.5.4-alpha.6](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.4-alpha.5...v4.5.4-alpha.6) (2024-03-23)
+
+
+### Bug Fixes
+
+* **UI:** error reading WA Version on v2.3000 ([ed0ec66](https://github.com/wayfu-id/wayfu-userscript/commit/ed0ec6602ba77a367e5a303326bec49076ffe977))
+
+### [4.5.4-alpha.5](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.4-alpha.4...v4.5.4-alpha.5) (2024-03-23)
+
+
+### Bug Fixes
+
+* **WA:** fix webpackFactory ([2bb669f](https://github.com/wayfu-id/wayfu-userscript/commit/2bb669fa02b506fb9af401430abacdae533ae106))
+
+### [4.5.4-alpha.4](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.4-alpha.3...v4.5.4-alpha.4) (2024-03-23)
+
+
+### Bug Fixes
+
+* **WA:** fix error at webpackFactory ([32ab9f0](https://github.com/wayfu-id/wayfu-userscript/commit/32ab9f00b6f0c00805d9d7c12c75ee42c271814a))
+
+### [4.5.4-alpha.3](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.4-alpha.2...v4.5.4-alpha.3) (2024-03-23)
+
+
+### Bug Fixes
+
+* **WA:** fix loaderType reader ([56e2a7b](https://github.com/wayfu-id/wayfu-userscript/commit/56e2a7ba9cb6043a2468fb7e745e4866a2003a30))
+
+### [4.5.4-alpha.2](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.4-alpha.1...v4.5.4-alpha.2) (2024-03-23)
+
+### [4.5.4-alpha.1](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.4-alpha.0...v4.5.4-alpha.1) (2024-03-23)
+
+
+### Bug Fixes
+
+* **WA:** fix WAPI for meta loader ([60bc4f0](https://github.com/wayfu-id/wayfu-userscript/commit/60bc4f0e7af04ead423d94b0353020a9999a3fa3))
+
+### [4.5.4-alpha.0](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.3...v4.5.4-alpha.0) (2024-03-22)
+
+
+### Bug Fixes
+
+* **WA:** add support to WA v2.3000 ([d56058e](https://github.com/wayfu-id/wayfu-userscript/commit/d56058eefd1abf655523eecbe0102b45dcfc147d))
+
+### [4.5.3](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.2...v4.5.3) (2023-11-16)
+
+
+### Bug Fixes
+
+* **message:** Subtitute DATA with empty value of not setted ([a43c460](https://github.com/wayfu-id/wayfu-userscript/commit/a43c4604a809fc8930666d441634081b8e6de67a))
+
+### [4.5.2](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.1...v4.5.2) (2023-10-21)
+
+
+### Bug Fixes
+
+* **WAPI:** error report when finding chat ([74f6ea2](https://github.com/wayfu-id/wayfu-userscript/commit/74f6ea229d45b66399e57023cb1c75ccf1d77f48))
+
+### [4.5.1](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.0...v4.5.1) (2023-10-21)
+
+
+### Bug Fixes
+
+* **main:** fix text not send when caption to 'pesan' with no image ([4d7fe0e](https://github.com/wayfu-id/wayfu-userscript/commit/4d7fe0e8d9bd87e66c9e949925ee11d872a5c731))
+
+## [4.5.0](https://github.com/wayfu-id/wayfu-userscript/compare/v4.4.9...v4.5.0) (2023-10-18)
+
+
+### Features
+
+* **lib:** add composeBox module, can compose text message direcly ([fa154ca](https://github.com/wayfu-id/wayfu-userscript/commit/fa154caffdff21cab7a41eef1ccbae26e6b725e6))
+* **Message:** add value property and sendText method direcly in message model ([038ea89](https://github.com/wayfu-id/wayfu-userscript/commit/038ea89ec4e7935492bdf5f6c892f5a840ff6ad7))
+
+### [4.4.9](https://github.com/wayfu-id/wayfu-userscript/compare/v4.4.8...v4.4.9) (2023-09-22)
+
+
+### Bug Fixes
+
+* **draft:** Clear message whenever reports are show ([22e7ea4](https://github.com/wayfu-id/wayfu-userscript/commit/22e7ea48c449cffea1614d5eaaa7c8e306aaa5fd))
+* **main:** Fix send image issue ([7200be7](https://github.com/wayfu-id/wayfu-userscript/commit/7200be793357aefc574c4f7483bcfed18c3943d1))
+
+### [4.4.8](https://github.com/wayfu-id/wayfu-userscript/compare/v4.4.7...v4.4.8) (2023-09-13)
+
+
+### Bug Fixes
+
+* **main:** fix incomplete WAPI.openChat function ([49e73f9](https://github.com/wayfu-id/wayfu-userscript/commit/49e73f98651f707611adc0be13907cff5b1fe005))
+
+### [4.4.7](https://github.com/wayfu-id/wayfu-userscript/compare/v4.4.6...v4.4.7) (2023-09-13)
+
+
+### Bug Fixes
+
+* **draft:** clear all draft message every time after login ([1ed52b9](https://github.com/wayfu-id/wayfu-userscript/commit/1ed52b9d664d2ee075c84680424d28580add3ba3))
+* **main:** button not clicked, message not sent ([86bb14b](https://github.com/wayfu-id/wayfu-userscript/commit/86bb14bdb9fb238f0f582e8eafce10777f85a1fc))
+
+### [4.4.6](https://github.com/wayfu-id/wayfu-userscript/compare/v4.4.5...v4.4.6) (2023-08-23)
+
+
+### Bug Fixes
+
+* **WAPI:** error on `openChat` function ([c1e98cc](https://github.com/wayfu-id/wayfu-userscript/commit/c1e98cce69dcc5d9a58386122c142c986fb2dd8f))
+
+### [4.4.5](https://github.com/wayfu-id/wayfu-userscript/compare/v4.4.4...v4.4.5) (2023-08-23)
+
+
+### Bug Fixes
+
+* **UI:** error modal query ([552485a](https://github.com/wayfu-id/wayfu-userscript/commit/552485ae2550555e8338f53e8f192375a52edb6b))
+* **UI:** error modal query ([db98d0b](https://github.com/wayfu-id/wayfu-userscript/commit/db98d0b3eddbb4509e4b97e41b7655c47411fc48))
+* **UI:** improve UI ([3dc76b9](https://github.com/wayfu-id/wayfu-userscript/commit/3dc76b9175cb8d8db5e80377f42277856a6baa7b))
+* **ui:** query for send button ([9c9fe09](https://github.com/wayfu-id/wayfu-userscript/commit/9c9fe092b9e70429bd58e54466ab9d0b4e2bb621))
+* **user:** fix get Me contact on WAPI lib ([dfa16dd](https://github.com/wayfu-id/wayfu-userscript/commit/dfa16dd892ee29c3c22d066406f25c8c58a740c1))
+
+### [4.4.4](https://github.com/wayfu-id/wayfu-userscript/compare/v4.4.3...v4.4.4) (2023-06-07)
+
+
+### Bug Fixes
+
+* **performance:** using built-in method to get user isMe contact ([1f3d5f2](https://github.com/wayfu-id/wayfu-userscript/commit/1f3d5f2cacd376ebcc53142d545c80cd42b0ce71))
+* **UI:** add visibility style to main wayfu panel ([9b7ed3a](https://github.com/wayfu-id/wayfu-userscript/commit/9b7ed3a1b25733deb1e2e46c8f90ec5673b573ba))
+
+### [4.4.3](https://github.com/wayfu-id/wayfu-userscript/compare/v4.4.2...v4.4.3) (2023-06-02)
+
+
+### Bug Fixes
+
+* **message:** fix wrong info for L_DAY data ([cb04cb7](https://github.com/wayfu-id/wayfu-userscript/commit/cb04cb78e299347be0c9edd7cf3ddde35b5462b7))
+* **ui:** delete z-index that causing trouble on some devices ([856ffa8](https://github.com/wayfu-id/wayfu-userscript/commit/856ffa84f5a24a280ce7447abe40ee1bed94cc9f))
+
+### [4.4.2](https://github.com/wayfu-id/wayfu-userscript/compare/v4.4.1...v4.4.2) (2023-05-24)
+
+
+### Bug Fixes
+
+* **app:** wrong query on link element & err modal ([053bbe4](https://github.com/wayfu-id/wayfu-userscript/commit/053bbe41cdafd7b7c4769fbe0172f10a500fc80e))
+
+### [4.4.1](https://github.com/wayfu-id/wayfu-userscript/compare/v4.4.0...v4.4.1) (2023-05-23)
+
+
+### Bug Fixes
+
+* **view:** fix panel menu view on dark mode ([e0118cb](https://github.com/wayfu-id/wayfu-userscript/commit/e0118cb17745143f1e693cbea88ae2536f642099))
+
 ## [4.4.0](https://github.com/wayfu-id/wayfu-userscript/compare/v4.3.3...v4.4.0) (2023-02-02)
 
 

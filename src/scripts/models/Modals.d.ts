@@ -6,16 +6,16 @@ export default class Modals {
     element: HTMLElement;
 
     /** Construct and display the modal (Pivate Function) */
-    #construct(text: string): Promise<void>;
-    #construct(text: HTMLElement): Promise<void>;
+    construct(text: string): Promise<void>;
+    construct(text: HTMLElement): Promise<void>;
     /** Construct and display the modal with custom title (Pivate Function) */
-    #construct(text: string, title?: string): Promise<void>;
+    construct(text: string, title?: string): Promise<void>;
     /** Construct and display the modal with custom title (Pivate Function) */
-    #construct(text: HTMLElement, title?: string): Promise<void>;
+    construct(text: HTMLElement, title?: string): Promise<void>;
     /** Construct and display the confirmation modal with custom title (Pivate Function) */
-    #construct(text: string, title?: string, confirm?: true): Promise<boolean>;
+    construct(text: string, title?: string, confirm?: true): Promise<boolean>;
     /** Construct and display the confirmation modal with custom title (Pivate Function) */
-    #construct(text: HTMLElement, title?: string, confirm?: true): Promise<boolean>;
+    construct(text: HTMLElement, title?: string, confirm?: true): Promise<boolean>;
 
     /** Construct and display the alert modal */
     alert(text: string, title?: string): Promise<void>;

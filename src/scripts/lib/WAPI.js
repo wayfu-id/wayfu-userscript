@@ -1,4 +1,36 @@
-import { storeObjects } from "./Constant";
+import { storeObjects, rgx } from "./Constant";
+
+/**
+ *
+ * @param {Window & globalThis} target
+ * @param {string} webpack
+ * @returns {Promise<String>}
+ */
+const waitloaderType = async (target, webpack) => {
+    return new Promise((resolve) => {
+        const checkObjects = () => {
+            if (target.require || target.__d) {
+                let webpackRequire = target.require("__debug");
+                if (webpackRequire.modulesMap?.WAWebUserPrefsMeUser) {
+                    resolve("meta");
+                } else {
+                    setTimeout(checkObjects, 200);
+                }
+            } else {
+                if (
+                    target[webpack] &&
+                    Array.isArray(target[webpack]) &&
+                    target[webpack].every((item) => Array.isArray(item) && item.length > 0)
+                ) {
+                    resolve("webpack");
+                } else {
+                    setTimeout(checkObjects, 200);
+                }
+            }
+        };
+        checkObjects();
+    });
+};
 
 /**
  * Get webpack object/array/function from a window.
@@ -7,8 +39,6 @@ import { storeObjects } from "./Constant";
  * @return {String | null}
  */
 const getWebpack = (window) => {
-    // let keys = Object.keys(window),
-    //     val;
     for (let key of Object.keys(window)) {
         if (/[^|]?webpack./g.test(key)) return key;
     }
@@ -20,292 +50,218 @@ const getWebpack = (window) => {
  * @param {any} store
  * @return {Object} WAPI Module
  */
-// function setWAPI(store) {
-//     let {
-//             WebClasses2,
-//             WebClasses3,
-//             MediaObject,
-//             MediaPrep,
-//             MediaTypes,
-//             MediaUpload,
-//             MediaCollection,
-//             ...WAPI
-//         } = store,
-//         Medias = {
-//             Object: MediaObject,
-//             Prep: MediaPrep,
-//             Types: MediaTypes,
-//             Upload: MediaUpload,
-//             Collection: WAPI.MediaCollection,
-//         };
+function setWAPI(store) {
+    let { WebClasses2, WebClasses3, WebClasses4, WebClasses5, ...WAPI } = store,
+        WebClassesV2 = Object.assign({}, WebClasses2, WebClasses3, WebClasses4),
+        WebClassesV3 = Object.assign({}, WebClasses5);
 
-//     Object.assign(WAPI, {
-//         Medias,
-//         WebClassesV2: { ...WebClasses2, ...WebClasses3 },
-//     });
+    Object.assign(WAPI, { WebClassesV2, WebClassesV3 });
 
-//     Object.defineProperties(WAPI, {
-//         Me: {
-//             get: function getMe() {
-//                 for (let person of this.Contact.getModelsArray()) {
-//                     if (person.isMe) return person.serialize();
-//                 }
-//                 return {};
-//             },
-//             enumerable: true,
-//         },
-//         SendImgToChat: {
-//             value: function sendImgToChat(
-//                 phone,
-//                 imgFile,
-//                 caption = "",
-//                 getChat = false
-//             ) {
-//                 if (!phone || !imgFile) return false;
-//                 return new Promise((done) => {
-//                     this.Chat.find(`${phone}@c.us`).then((chat) => {
-//                         let mc = new this.MediaCollection(chat);
-//                         mc.processAttachments([{ file: imgFile }, 1], chat, 1)
-//                             .then(() => {
-//                                 let [media] = mc.getModelsArray();
-//                                 media.sendToChat(chat, { caption: caption });
-//                                 done(getChat ? chat : true);
-//                             })
-//                             .catch((err) => (console.log(err), done(false)));
-//                     });
-//                 });
-//             },
-//             enumerable: true,
-//         },
-//         // encryptAndUploadFile: {
-//         //     value: async function e(t, f) {
-//         //         // let bf = await f.arrayBuffer();
-//         //         let filehash = ((e) => {
-//         //             let sha = new jsSHA("SHA-256", "ARRAYBUFFER");
-//         //             return sha.update(e).getHash("B64");
-//         //         })(await f.arrayBuffer());
+    Object.defineProperties(WAPI.Chat.constructor.prototype, {
+        findImpl: {
+            value: async function findImpl(e, n) {
+                let wid = await (async (id) => {
+                    if (typeof id === "string") {
+                        let check = await WAPI.WapQuery.queryPhoneExists(e);
+                        if (!check) return null;
+                        return check.wid;
+                    }
+                    return id;
+                })(e);
 
-//         //         let mediaKey = (l) => {
-//         //             let chars =
-//         //                     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
-//         //                 charsL = chars.length,
-//         //                 res = "";
-//         //             for (let i = 0; i < l; i++) {
-//         //                 res += chars.charAt(Math.floor(Math.random() * charsL));
-//         //             }
-//         //             return res;
-//         //         };
+                if (!wid) return null;
 
-//         //         let signal = new AbortController().signal,
-//         //             encrypted = this.UploadUtils.encryptAndUpload({
-//         //                 blob: f,
-//         //                 type: t,
-//         //                 signal,
-//         //                 mediaKey: mediaKey(32),
-//         //             });
-
-//         //         return {
-//         //             ...encrypted,
-//         //             clientUrl: encrypted.url,
-//         //             filehash,
-//         //             id: filehash,
-//         //             uploadhash: encrypted.encFilehash,
-//         //         };
-//         //     },
-//         //     enumerable: true,
-//         // },
-//     });
-
-//     Object.defineProperties(WAPI.Chat.modelClass.prototype, {
-//         sendMessage: {
-//             value: function o(e) {
-//                 return WAPI.SendTextMsgToChat(this, ...arguments);
-//             },
-//         },
-//         sendImage: {
-//             value: function i(m, c, p) {
-//                 return new Promise((done) => {
-//                     let mc = new WAPI.MediaCollection(this);
-//                     mc.processAttachments([{ file: m }, 1], this, 1)
-//                         .then(() => {
-//                             let [media] = mc.getModelsArray();
-//                             media.sendToChat(this, { caption: c ? c : "" });
-//                             done(p ? this : true);
-//                         })
-//                         .catch((err) => (console.log(err), done(false)));
-//                 });
-//             },
-//         },
-//     });
-
-//     window.WAPI = Object.keys(WAPI)
-//         .sort()
-//         .reduce((obj, key) => {
-//             obj[key] = WAPI[key];
-//             return obj;
-//         }, {});
-
-//     return window.WAPI;
-// }
-
-const createWAPI = (modStore) => {
-    /** @type {(obj: Object) => Object} */
-    const reConstruct = (obj) => {
-        return Object.keys(obj)
-            .sort()
-            .reduce((o, k) => {
-                o[k] = obj[k];
-                return o;
-            }, {});
-    };
-    let { Chat, Contact, WebClasses2, WebClasses3 } = modStore;
-
-    Object.defineProperty(modStore, "WebClassesV2", {
-        value: { ...WebClasses2, ...WebClasses3 },
-        enumerable: true,
-    });
-    Object.defineProperties(Chat.modelClass.prototype, {
-        getChatModel: {
-            value: function getChatModel() {
-                let res = this.serialize();
-                let { isGroup, groupMetadata, formattedTitle } = this;
-
-                if (isGroup && groupMetadata) {
-                    groupMetadata = groupMetadata.serialize();
+                let result = this.get(wid);
+                if (!result) {
+                    [result] = this.add({ createLocally: true, id: wid }, { merge: true });
                 }
 
-                res = Object.assign({}, res, {
-                    isGroup,
-                    groupMetadata,
-                    formattedTitle,
-                });
-
-                delete res.msgs;
-                delete res.msgUnsyncedButtonReplyMsgs;
-                delete res.unsyncedButtonReplies;
-
-                return res;
+                return result;
             },
-            enumerable: true,
         },
+        clearAllDraft: {
+            value: function clearAllDraft() {
+                const hasDraft = (c) => {
+                    if (c.draftMessage !== undefined && c.draftMessage.text !== "") {
+                        return true;
+                    }
+                    return c.hasDraftMessage;
+                };
+                for (let chat of this.getModelsArray()) {
+                    if (hasDraft(chat)) {
+                        chat.clearDraft();
+                    }
+                }
+            },
+        },
+    });
+    Object.defineProperties(WAPI.Chat.modelClass.prototype, {
         open: {
             value: async function open() {
-                await window.WAPI.Cmd.openChatAt(this);
+                let { Cmd } = WAPI;
+                await Cmd.openChatAt(this);
             },
             enumerable: true,
         },
-        close: {
-            value: async function close() {
-                if (this.active) await window.WAPI.Cmd.closeChat(this);
+        clearDraft: {
+            value: function clearDraft() {
+                this.setComposeContents({ text: "", timestamp: Date.now() });
+                return this;
             },
             enumerable: true,
         },
     });
-    Object.defineProperties(Contact.modelClass.prototype, {
-        getChat: {
-            value: function getChat() {
-                return window.WAPI.Chat.get(this.id);
+    Object.defineProperties(WAPI, {
+        Me: {
+            get: function getMe() {
+                return this.Contact.getMeContact();
             },
             enumerable: true,
         },
-        hasChat: {
-            get: function get() {
-                return !!this.getChat();
-            },
-            enumerable: true,
-        },
-        getContactModel: {
-            value: function getContactModel() {
-                let res = this.serialize();
-                let {
-                    isBusiness,
-                    businessProfile,
-                    isMe,
-                    isUser,
-                    isGroup,
-                    isWAContact,
-                    isMyContact,
-                    isContactBlocked,
-                    userid,
-                } = this;
-
-                if (isBusiness && businessProfile) {
-                    res.bussinessProfile = businessProfile.serialize();
-                }
-
-                res = Object.assign({}, res, {
-                    isBusiness,
-                    isMe,
-                    isUser,
-                    isGroup,
-                    isWAContact,
-                    isMyContact,
-                    isBlocked: isContactBlocked,
-                    userid,
+        SendImgToChat: {
+            value: function sendImgToChat(phone, imgFile, caption = "", getChat = false) {
+                if (!phone || !imgFile) return false;
+                return new Promise((done) => {
+                    this.Chat.find(`${phone}@c.us`)
+                        .then((chat) => {
+                            let mc = new this.MediaCollection(chat);
+                            mc.processAttachments([{ file: imgFile }], chat, chat)
+                                .then(() => {
+                                    let [media] = mc.getModelsArray();
+                                    media.sendToChat(chat, { caption: caption });
+                                    done(getChat ? chat : true);
+                                })
+                                .catch((err) => (console.log(err), done(false)));
+                        })
+                        .catch((err) => (console.log(err), done(false)));
                 });
+            },
+            enumerable: true,
+        },
+        composeAndSendMsgToChat: {
+            value: function composeAndSendMsgToChat(phone, text, getChat = false) {
+                const wait = (time) => new Promise((resolve) => setTimeout(resolve, time)),
+                    { ComposeBox } = this;
 
-                return res;
+                return new Promise((done) => {
+                    this.Chat.find(`${phone}@c.us`)
+                        .then(async (chat) => {
+                            if (!chat.active) await chat.open();
+                            await wait(5e2);
+
+                            await ComposeBox.paste(chat, text);
+                            await ComposeBox.send(chat);
+                            done(getChat ? chat : true);
+                        })
+                        .catch((err) => (console.log(err), done(false)));
+                });
             },
             enumerable: true,
         },
         openChat: {
-            value: async function openChat() {
-                return this.hasChat ? await this.getChat().open() : false;
-                // let chat = await window.WAPI.Chat.find(this.id);
-                // if (!chat) return;
-                // await chat.open();
+            value: async function openChat(phone) {
+                const { Chat } = this;
+
+                phone = (({ phone: rgx }, p) => {
+                    return rgx.test(p) ? p : `${p}@c.us`;
+                })(rgx, phone);
+
+                let res;
+                try {
+                    res = await Chat.find(phone);
+                } catch (e) {}
+
+                if (!res) return false;
+
+                return await res.open();
             },
             enumerable: true,
         },
     });
-    Object.defineProperties(Contact, {
-        Me: {
-            get: function get() {
-                return this.getMeContact().getContactModel();
-            },
+
+    window.WAPI = Object.keys(WAPI)
+        .sort()
+        .reduce((obj, key) => {
+            obj[key] = WAPI[key];
+            return obj;
+        }, {});
+
+    return window.WAPI;
+}
+
+/**
+ * Add support to WhatsApp Web v2.3xxx.xx
+ * @param {Window & globalThis} target
+ *
+ */
+const webpackFactory = (target) => {
+    const webpackRequire = (id) => {
+        try {
+            target.ErrorGuard.skipGuardGlobal(true);
+            return target.importNamespace(id);
+        } catch (error) {}
+        return null;
+    };
+
+    Object.defineProperty(webpackRequire, "m", {
+        get: () => {
+            const result = {},
+                { modulesMap } = target.require("__debug");
+            Object.keys(modulesMap)
+                .filter((e) => e.includes("WA"))
+                .forEach((id) => {
+                    result[id] = modulesMap[id]?.factory;
+                });
+
+            return result;
         },
     });
 
-    // modStore.WebClassesV2 = { ...WebClasses2, ...WebClasses3 };
-    delete modStore.WebClasses2;
-    delete modStore.WebClasses3;
-
-    window.WAPI = modStore;
-
-    return window.WAPI;
+    return webpackRequire;
 };
 
 /**
  * Load WAPI needed modules from WhatsApp Web window
- * @param {window} target window target
+ * @param {Window} target window targetr
  */
-const loadWapi = (target) => {
-    let modStore = {};
+const loadWapi = async (target) => {
     if (!window.WAPI || !window.WAPI.Msg) {
-        function getStore(modules) {
+        function getStore(modules, extras = {}) {
+            // let foundCount = 0;
             for (let idx in modules.m) {
                 if (typeof modules(idx) === "object" && modules(idx) !== null) {
-                    storeObjects.forEach(({ id, conditions }) => {
-                        if (!conditions || modStore[id]) return;
-
-                        modStore = ((id, module) => {
-                            let mod = (m) => (id === "Store" ? m : { [id]: m }),
-                                add = (m) => (m !== null ? mod(m) : {});
-
-                            return Object.assign(modStore, add(module));
-                        })(id, conditions(modules(idx)));
+                    storeObjects.forEach((needObj) => {
+                        if (!needObj.conditions || needObj.foundedModule) return;
+                        let neededModule = needObj.conditions(modules(idx));
+                        if (neededModule !== null) {
+                            // foundCount++;
+                            needObj.foundedModule = neededModule;
+                        }
                     });
+                    // if (foundCount == storeObjects.length) break;
                 }
             }
+            let neededStore = storeObjects.find((needObj) => needObj.id === "Store"),
+                windowStore = neededStore.foundedModule ? neededStore.foundedModule : {};
+
+            storeObjects.forEach((needObj) => {
+                if (needObj.id !== "Store" && needObj.foundedModule) {
+                    windowStore[needObj.id] = needObj.foundedModule;
+                }
+            });
+            return setWAPI(Object.assign({}, windowStore, extras));
         }
+        const webpack = getWebpack(target);
+        /** @type {"webpack" | "meta"} */
+        const loaderType = await waitloaderType(target, webpack);
 
-        const mID = `parasite${Date.now()}`,
-            webpack = getWebpack(target);
-
-        if (webpack && typeof target[webpack] === "object") {
-            target[webpack].push([[mID], {}, (o) => getStore(o)]);
-
-            return createWAPI(modStore);
+        if (loaderType === "meta") {
+            const webpackStore = webpackFactory(target),
+                { Debug } = target;
+            getStore(webpackStore, { Debug });
+        } else if (loaderType === "weback") {
+            const parasite = `parasite${Date.now()}`;
+            target[webpack].push([[parasite], {}, (o) => getStore(o)]);
         } else {
             console.error("Failed to load WAPI Module!");
         }

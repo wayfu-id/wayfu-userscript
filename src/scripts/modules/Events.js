@@ -15,13 +15,7 @@ import { DOM } from "../lib/HtmlModifier";
 import CSVFile, { csvFile } from "../models/CSVFile";
 import { dateFormat, isNumeric, titleCase } from "../lib/Util";
 import MyArray from "../models/MyArray";
-import {
-    loadRecipient,
-    resetRecipient,
-    checkStatus,
-    startProcess,
-    exportDataToFile,
-} from "./Main";
+import { loadRecipient, resetRecipient, checkStatus, startProcess, exportDataToFile } from "./Main";
 
 /**
  * A bunch of EventListener
@@ -57,7 +51,7 @@ class AppEvents {
     tabMenu(e) {
         const elm = e.currentTarget || e.target,
             menuName = elm.value,
-            tabs = DOM.getElement("#panelBody .menus", true);
+            tabs = DOM.getElement("#wayfuPanel .menus", true);
 
         DOM.setElements([
             {
@@ -70,7 +64,7 @@ class AppEvents {
             },
         ]).setElementsStyle([
             {
-                elm: "#panelBody .menu-content",
+                elm: "#wayfuPanel .menu-content",
                 props: { display: "none" },
             },
             {
@@ -88,14 +82,13 @@ class AppEvents {
      */
     textPreview(e) {
         let elm = e.currentTarget || e.target,
-            form = DOM.getElement("#panelBody textarea", true),
+            form = DOM.getElement("#wayfuPanel textarea", true),
             chk = elm.checked;
 
         form.forEach((e) => {
             const prevId = e.id === "message" ? "msgPreview" : "captPreview";
             const content = ((chk, { id }) => {
-                let text =
-                    message[`input${id === "message" ? "Message" : "Caption"}`];
+                let text = message[`input${id === "message" ? "Message" : "Caption"}`];
 
                 if (chk) {
                     message.setData(queue.now);
@@ -229,13 +222,21 @@ class AppEvents {
      */
     toggleApp(e) {
         const elm = e.currentTarget || e.target,
-            id = elm.getAttribute("value"),
-            acdBody = DOM.getElement(`#${id}`),
+            { active } = window.WAPI.WebClassesV2,
             a = elm.classList.toggle("active");
 
-        acdBody.style.height = acdBody.style.height
-            ? null
-            : `${acdBody.scrollHeight}px`;
+        const acdBody = ((e) => {
+            let targetId = e.getAttribute("value") || e.dataset.target;
+
+            return DOM.getElement(`#${targetId}`);
+        })(elm);
+
+        acdBody.style.height = acdBody.style.height ? null : `${acdBody.scrollHeight}px`;
+
+        elm.classList.toggle(active);
+
+        let tabVisibility = acdBody.style.height ? "unset" : "collapse";
+        DOM.setElementStyle("#wayfuPanel", { visibility: tabVisibility });
 
         options.setOption("openPanel", a);
     }
@@ -251,10 +252,7 @@ class AppEvents {
             {
                 elm: elm,
                 props: {
-                    max:
-                        id === "maxQueue"
-                            ? options.queueLimit
-                            : options.bpLimit,
+                    max: id === "maxQueue" ? options.queueLimit : options.bpLimit,
                 },
             },
             {
@@ -346,12 +344,9 @@ class AppEvents {
                     if (downloadBtn) {
                         // let el = DOM.getElement("span.wfu-link");
                         let title = (({ title: t }) => {
-                            t = t.replace(
-                                /(.*)\.[^.]+(["]+)$/g,
-                                function (m, g1, g2) {
-                                    return `${g1}.${val + g2}`;
-                                }
-                            );
+                            t = t.replace(/(.*)\.[^.]+(["]+)$/g, function (m, g1, g2) {
+                                return `${g1}.${val + g2}`;
+                            });
                             return t;
                         })(downloadBtn);
                         DOM.setElement(downloadBtn, { title: title });
@@ -363,32 +358,31 @@ class AppEvents {
 
     /**
      * ChangeLog listener
+     * @deprecated
      * @param {Event} e Event
      */
     changeLog(e) {
-        const container = DOM.createElement({
-                tag: "div",
-                classid: "wfu-changelog",
-                style: "overflow-y:scroll",
-            }),
-            changelog = changes.Log.slice(0, 5);
-
-        changelog.forEach((e, i) => {
-            let date = dateFormat(new MyDate(e.date), 1),
-                title = `${i == 0 ? "WayFu" + " - " : ""}Version: ${
-                    e.version
-                } (${date})`,
-                items = DOM.createElement({
-                    tag: "div",
-                    classid: "wfu-changelog-items",
-                    append: container,
-                });
-
-            DOM.createElement({ tag: "span", text: title, append: items });
-            DOM.createListElement(e.content, "ul", { append: items });
-        });
-        // console.log(container);
-        modal.alert(container, "Detail Pembaruan.");
+        // const container = DOM.createElement({
+        //         tag: "div",
+        //         classid: "wfu-changelog",
+        //         style: "overflow-y:scroll",
+        //     }),
+        //     changelog = changes.Log.slice(0, 5);
+        // changelog.forEach((e, i) => {
+        //     let date = dateFormat(new MyDate(e.date), 1),
+        //         title = `${i == 0 ? "WayFu" + " - " : ""}Version: ${
+        //             e.version
+        //         } (${date})`,
+        //         items = DOM.createElement({
+        //             tag: "div",
+        //             classid: "wfu-changelog-items",
+        //             append: container,
+        //         });
+        //     DOM.createElement({ tag: "span", text: title, append: items });
+        //     DOM.createListElement(e.content, "ul", { append: items });
+        // });
+        // // console.log(container);
+        // modal.alert(container, "Detail Pembaruan.");
     }
 
     /**
@@ -396,13 +390,9 @@ class AppEvents {
      * @param {Event} e Event
      */
     async checkChat(e) {
-        const { chatHeader, menu, menuDefault, item, button } =
-                window.WAPI.WebClassesV2,
+        const { chatHeader, menu, menuDefault, item, button } = window.WAPI.WebClassesV2,
             chatMenu = DOM.getElement(`.${chatHeader} .${menu}.${menuDefault}`),
-            downloadMenu = DOM.getElement(
-                "span[data-icon='download-alt']",
-                chatMenu
-            );
+            downloadMenu = DOM.getElement("span[data-icon='download-alt']", chatMenu);
 
         /** @type {(filename: string) => HTMLElement} */
         const createDonwloadBtn = (filename) => {

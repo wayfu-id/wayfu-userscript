@@ -21,7 +21,7 @@ class Modals {
      * @param {boolean?} confirm Is it confirm modal? (Optional)
      * @return {Promise<boolean | void>}
      */
-    #construct(text, title = "", confirm = false) {
+    construct(text, title = "", confirm = false) {
         return new Promise((done) => {
             let id = `wfu-content-${(this.contens += 1)}`,
                 content = DOM.createElement({
@@ -125,7 +125,7 @@ class Modals {
      * @returns {Promise<void>}
      */
     async alert(text, title = "") {
-        return await this.#construct(text, title);
+        return await this.construct(text, title);
     }
 
     /**
@@ -135,7 +135,7 @@ class Modals {
      * @returns {Promise<boolean>}
      */
     async confirm(text, title = "") {
-        return await this.#construct(text, title, true);
+        return await this.construct(text, title, true);
     }
 
     /**

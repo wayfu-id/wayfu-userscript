@@ -29,6 +29,7 @@ class Messages extends BaseModel {
     /**
      * Set message data
      * @param {string[]} data message arguments
+     * @returns
      */
     setData(data) {
         const validPhone = (val) => rgx.phonePattern.test(val);
@@ -42,6 +43,14 @@ class Messages extends BaseModel {
             this.sponsorName,
             ...this.other
         ] = validPhone(data[2]) ? data : ["", ...data];
+        return this;
+    }
+
+    /**
+     * Get message as value
+     */
+    get value() {
+        return this.inputMessage ? this.subtitute(this.inputMessage) : "";
     }
 
     /**
@@ -103,10 +112,10 @@ class Messages extends BaseModel {
                 }
             }
             return column > 2
-                ? message.replace(dataKey(column - 2), `${value}$2`)
+                ? message.replace(dataKey(column - 2), `${value || ""}$2`)
                 : message;
         }
-        return message.replace(dataKey(column + 1), `${value}$2`);
+        return message.replace(dataKey(column + 1), `${value || ""}$2`);
     }
 
     /**
@@ -116,7 +125,9 @@ class Messages extends BaseModel {
      */
     subtitute(message) {
         if (message !== "" && message !== null) {
-            const col = [this.poinValue, this.date, this.sponsorName, ...this.other];
+            const col = [this.poinValue, this.date, this.sponsorName, ...this.other],
+                colTreshold = options.userType === "oriflame" ? 3 : 0;
+
             message = message
                 .replace(/F_NAMA/g, setName(this.name, true))
                 .replace(/NAMA/g, setName(this.name));
@@ -129,7 +140,8 @@ class Messages extends BaseModel {
                       )
                     : message;
             col.forEach((e, i) => {
-                message = e ? this.setMessage(message, i, e) : message;
+                let bypass = i >= colTreshold;
+                message = e || bypass ? this.setMessage(message, i, e) : message;
             });
         }
         return message;
@@ -141,7 +153,7 @@ class Messages extends BaseModel {
      * @param {boolean} isLastDay selector
      * @returns {string} Date String formated
      */
-    lastDay(dateStr, isLastDay = false) {
+    lastDay(dateStr, isLastDay = true) {
         const mIdx_ = options.monthIndex,
             mIdx = options.default.monthIndex;
 
@@ -158,7 +170,6 @@ class Messages extends BaseModel {
 
     /**
      * Send Image attachment
-     * @param {ImageBitmap} imgFile
      * @returns
      */
     async sendImg() {
@@ -170,6 +181,14 @@ class Messages extends BaseModel {
             this.imageFile,
             this.subtitute(caption)
         );
+    }
+
+    /**
+     * Send Text message
+     * @returns
+     */
+    async sendText() {
+        return await window.WAPI.composeAndSendMsgToChat(this.phone, this.value);
     }
 }
 

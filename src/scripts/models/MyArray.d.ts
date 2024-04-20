@@ -9,6 +9,11 @@ export default class MyArray<T extends Object> extends Array<T> {
     /** Create an array by spliting a string with a delimiter */
     static split(string: string, delimiter: string): MyArray<String>;
 
+    /**
+     * Reconstruct `Array.from` to create new MyArray
+     * From `IterableObject`.
+     */
+    static create(arrayLike: Iterable<any> | ArrayLike<any>): MyArray<any>;
 
     constructor(arrayLength?: number);
     constructor(arrayLength: number);

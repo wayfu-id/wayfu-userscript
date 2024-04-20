@@ -1,1 +1,1 @@
-export function loadWapi(target: Window & typeof globalThis): void;
+export function loadWapi(target: Window & typeof globalThis): Promise<void>;
