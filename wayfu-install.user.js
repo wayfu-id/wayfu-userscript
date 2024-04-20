@@ -7,7 +7,7 @@
 // @icon         https://wayfu.id/v4/assets/wayfu-icon.webp
 // @homepage     https://wayfu.id/
 // @supportURL   https://wayfu.id/
-// @version      4.5.7
+// @version      5.0.0
 // @author       Rizal Nurhidayat (https://github.com/rzlnhd)
 // @match        https://web.whatsapp.com/*
 // @grant        GM_addStyle

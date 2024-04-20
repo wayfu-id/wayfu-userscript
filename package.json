@@ -1,6 +1,6 @@
 {
   "name": "wayfu-userscript",
-  "version": "4.5.7",
+  "version": "5.0.0",
   "viewVersion": "1.7.0",
   "homepage": "https://wayfu.id/",
   "bugs": "https://wayfu.id/",
@@ -102,10 +102,10 @@
   "devDependencies": {
     "@babel/preset-env": "^7.16.11",
     "@types/tampermonkey": "^4.0.5",
-    "@wayfu/simple-wapi": "^0.0.7",
+    "@wayfu/simple-wapi": "^0.0.12",
     "@wayfu/simple-xlsx": "^0.0.3",
     "@wayfu/waydown": "^0.0.5",
-    "@wayfu/wayfu-dom": "^0.1.12",
+    "@wayfu/wayfu-dom": "^0.1.13",
     "ansi-colors": "^4.1.1",
     "babel-core": "^6.26.3",
     "babel-loader": "^8.2.3",
