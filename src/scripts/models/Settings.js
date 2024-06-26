@@ -68,7 +68,7 @@ class Settings extends GM_Library {
             isFormat: false,
             alert: true,
             queueLimit: 1000,
-            bpLimit: 300,
+            bpLimit: 500,
             exportType: "csv",
             fileType: "csv",
         };
@@ -92,7 +92,7 @@ class Settings extends GM_Library {
      * @returns
      */
     setOptions(options) {
-        if (options !== {}) {
+        if (options && Object.keys(options) !== 0) {
             options = this.intoObject(options);
             for (let key in options) {
                 this.setOption(key, options[key]);
@@ -131,6 +131,7 @@ class Settings extends GM_Library {
                     elm: elm,
                     props: {
                         max: elm.id == "maxQueue" ? this.queueLimit : this.bpLimit,
+                        step: elm.id == "maxQueue" ? elm.step : 1,
                     },
                 },
                 {
