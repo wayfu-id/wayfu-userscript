@@ -1,6 +1,11 @@
-import MyArray from "../utils/MyArray";
+import { MyArray } from ".";
 
-class Queue {
+export default class Queue {
+    currentIndex: number;
+    items: MyArray<any>;
+    stock: MyArray<any>;
+    offset: number;
+
     constructor() {
         this.currentIndex = 0;
         this.items = new MyArray();
@@ -38,9 +43,8 @@ class Queue {
 
     /**
      * Set queue data
-     * @param {MyArray<Object>} data
      */
-    setData(data) {
+    setData(data: MyArray<any>) {
         this.items = data;
         this.stock = data;
     }
@@ -48,13 +52,12 @@ class Queue {
     /**
      * Get current queue items, increase it's counter.
      * Decrease it's size when it's counter is more or equal to half of the size
-     * @returns {Object} current queue items
      */
     next() {
         if (this.items.isEmpty) return undefined;
         let item = this.items[this.offset];
         if (++this.offset * 2 >= this.items.length) {
-            this.items = this.items.slice(this.offset);
+            this.items = this.items.slice(this.offset) as MyArray<any>;
             this.offset = 0;
         }
         return item;
@@ -83,6 +86,3 @@ class Queue {
         yield* [...this.items];
     }
 }
-
-const Jobs = new Queue();
-export { Queue as default, Jobs };

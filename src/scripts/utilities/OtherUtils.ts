@@ -1,25 +1,35 @@
+import { isNumeric } from ".";
 import { rgx, dateOptDefault } from "../config";
+
+/**
+ * Set and print date based on toLocaleDateString format
+ * @param {String | Number | Date} value Date value
+ * @param {boolean?} [printDays=true] print weekdays?
+ */
+function dateFormat (value: string | number | Date, printDays: boolean = true) {
+    let formatOpt = Object.assign({}, dateOptDefault, {
+        weekday: printDays ? "long" : undefined,
+    }) as Intl.DateTimeFormatOptions;
+
+    return new Date(value).toLocaleDateString("id-ID", formatOpt);
+};
 
 /**
  * Check current app version is up to date or not.
  * @param {String} local local/instaled version
  * @param {String} remote remote/server version
- * @returns {Boolean}
  */
-const isUpToDate = (local, remote) => {
+function isUpToDate (local: string, remote: string) {
     const { forVersion } = rgx;
     if (!local || !remote || local.length === 0 || remote.length === 0) {
         return false;
     }
     if (local == remote) return true;
-    /** @type {(str: String, s: String) => Array.<String | Number>} */
-    const getArr = (str, s) => {
+    const getArr = (str: string, s: string) => {
         return str.split(s).map((x) => (isNumeric(x) ? Number(x) : x));
     };
-    /** @type {(str: String) => Number} */
-    const getDigit = (str) => Number(/\d+/.exec(str));
-    /** @type {(str: String) => RegExpExecArray | null} */
-    const getAlpha = (str) => /[A-Za-z]/.exec(str);
+    const getDigit = (str: string) => Number(/\d+/.exec(str));
+    const getAlpha = (str: string) => /[A-Za-z]/.exec(str);
 
     if (forVersion.test(local) && forVersion.test(remote)) {
         let spliter = local.includes(".") ? "." : "-",
@@ -32,8 +42,8 @@ const isUpToDate = (local, remote) => {
             }
             let [dig, alph] = ((l, r) => {
                 return [
-                    { l: getDigit(l), r: getDigit(r) },
-                    { l: getAlpha(l), r: getAlpha(r) },
+                    { l: getDigit(l as string), r: getDigit(r as string) },
+                    { l: getAlpha(l as string), r: getAlpha(r as string) },
                 ];
             })(v, arrR[i]);
             if (dig.l === dig.r) {
@@ -50,9 +60,8 @@ const isUpToDate = (local, remote) => {
  * Get Name or Full Name and change it to Title Case
  * @param {String} string input name
  * @param {Boolean} full is it full name?
- * @returns {String}
  */
-const setName = (string, full = false) => {
+function setName (string: string, full: boolean = false) {
     const name = string.split(" ").map((s) => titleCase(s));
     return full ? name.join(" ") : name[0];
 };
@@ -60,27 +69,11 @@ const setName = (string, full = false) => {
 /**
  * Conver string to Title Case
  * @param {String} string input string
- * @returns {String}
  */
-const titleCase = (string) => {
+function titleCase (string: string) {
     return ((s) => {
         return s.charAt(0).toUpperCase() + s.slice(1);
     })(string.toLowerCase());
 };
 
-/**
- * Set and print date based on toLocaleDateString format
- * @param {String | Number | Date} value Date value
- * @param {boolean=true} printDays print weekdays?
- * @returns {String}
- */
-const dateFormat = (value, printDays = true) => {
-    return new Date(value).toLocaleDateString(
-        "id-ID",
-        Object.assign({}, dateOptDefault, {
-            weekday: printDays ? "long" : undefined,
-        })
-    );
-};
-
-export { isUpToDate, setName, titleCase, dateFormat };
+export { dateFormat, isUpToDate, setName, titleCase };

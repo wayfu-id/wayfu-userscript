@@ -1,11 +1,13 @@
-class Client {
+export default class Client {
     constructor() {}
 
     get profile() {
         return {};
     }
 
-    get subscription() {}
+    get subscription() {
+        return {}
+    }
 
     initialize() {}
 }

@@ -5,10 +5,8 @@ export default class MyDate extends Date {
     /**
      * Add days from the current date.
      * `Creating new MyDate instance`
-     * @param {number} days how many days
-     * @returns
      */
-    addDays(days) {
+    addDays(days: number) {
         let date = new MyDate(this.valueOf());
         date.setDate(date.getDate() + days);
         return date;
@@ -17,10 +15,8 @@ export default class MyDate extends Date {
     /**
      * Add months from the current date.
      * `Creating new MyDate instance`
-     * @param {number} months how many months
-     * @returns
      */
-    addMonths(months) {
+    addMonths(months: number) {
         let date = new MyDate(this.valueOf());
         date.setMonth(date.getMonth() + Number(months));
         return date;

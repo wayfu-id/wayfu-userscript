@@ -1,19 +1,21 @@
 import { intoObject, findValue } from "../utilities";
+import App from "App";
 
-/** @type {import("../../index").BaseModel} */
 export default class BaseModel {
-    /** @param {import("../../index")} app  */
-    constructor(app) {
+    [k: string | number]: any;
+    app: App;
+
+    constructor(app: App) {
         this.app = app;
     }
 
     /**
      * Set class propreties
      * @param {object} props properties
-     * @param {boolean?} parse
+     * @param {boolean?} [parse=true]
      * @returns
      */
-    _setProp(props, parse = true) {
+    _setProp(props: any, parse: boolean = true) {
         props = intoObject(props, parse);
         for (let key in props) {
             if (this.hasOwnProperty(key)) {
@@ -25,10 +27,9 @@ export default class BaseModel {
 
     /**
      * Serialize to string
-     * @param {typeof Date | string | number | {}} input
-     * @returns {string}
+     * @param {typeof Date | string | number | {[k: string | number]: any}} input
      */
-    _serialize(input) {
+    _serialize(input: typeof Date | string | number | {[k: string | number]: any}) {
         if (typeof input === "object") {
             let arr = [];
             for (let prop in input) {
@@ -45,10 +46,9 @@ export default class BaseModel {
     /**
      * Get value from Object
      * @param {string} key Object key
-     * @param {number | 2} depth dept default is `2`
-     * @returns
+     * @param {number} [depth=2] dept default is `2`
      */
-    _find(key, depth) {
+    _find(key: string, depth: number = 2) {
         return findValue(key, this, depth);
     }
 }

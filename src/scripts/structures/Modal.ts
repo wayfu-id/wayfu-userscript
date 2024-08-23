@@ -1,22 +1,19 @@
-import DOM, { elemenOptions } from "./DOM";
+import DOM from "@wayfu/wayfu-dom";
 
-/**
- * Classes for Modal
- */
 export default class Modal {
+    main: DOM;
+    private _element: DOM;
+
     constructor() {
-        /** @type {DOM} Main */
-        this.main = ((id) => {
+        this.main = ((id: string) => {
             let ele = DOM.get(`#${id}`),
                 props = { id, classid: "wfu-modal", role: "alert" };
 
-            return ele.isEmpty
-                ? DOM.create("div", props).insertTo("body")
-                : ele;
+            return ele.isEmpty ? DOM.create("div", props).insertTo("body") : ele;
         })("wayfu-modal");
 
         /** @type {DOM} Prototype Element*/
-        this.element = ((numb) => {
+        this._element = ((numb: number) => {
             let id = `wfu-content-${numb + 1}`;
             return DOM.create("div", { id, classid: "wfu-modal-container" });
         })(this.contens);
@@ -24,7 +21,7 @@ export default class Modal {
 
     /** @type {Number} */
     get contens() {
-        return this.main.childNodes.length;
+        return this.main.childNodes ? this.main.childNodes.length : 0;
     }
 
     /** @type {DOM} */
@@ -39,23 +36,43 @@ export default class Modal {
     /**
      * Construct and display the modal
      * @param {string | HTMLElement | DOM | elemenOptions} content Modal Content, wether it text or HTML Element
-     * @param {string?} title Modal Title. (Optional)
-     * @param {boolean?} confirm Is it confirm modal? (Optional)
-     * @return {Promise<boolean | void>}
      */
-    addContent(content, title = "", confirm = false) {
+    addContent(content: string | HTMLElement | DOM | DOM.elementOptions): Promise<any>;
+    /**
+     * Construct and display the modal
+     * @param {string | HTMLElement | DOM | elemenOptions} content Modal Content, wether it text or HTML Element
+     * @param {string?} title Modal Title.
+     */
+    addContent(
+        content: string | HTMLElement | DOM | DOM.elementOptions,
+        title: string
+    ): Promise<any>;
+    /**
+     * Construct and display the modal
+     * @param {string | HTMLElement | DOM | elemenOptions} content Modal Content, wether it text or HTML Element
+     * @param {string?} title Modal Title.
+     * @param {boolean?} confirm Is it confirm modal?
+     */
+    addContent(
+        content: string | HTMLElement | DOM | DOM.elementOptions,
+        title: string,
+        confirm: boolean
+    ): Promise<boolean>;
+    addContent(
+        content: string | HTMLElement | DOM | DOM.elementOptions,
+        title: string = "",
+        confirm: boolean = false
+    ): Promise<any> {
         /**
          * Create Modal button
-         * @param {{text?: String, classid: String, event: {[k:string]: EventListener}}} prop
-         * @param {Boolean} confirm
-         * @returns
          */
-        const createButton = (prop = {}, confirm = false) => {
-            let props = !confirm
-                ? Object.assign({ href: "#", html: "&times;" }, prop)
-                : prop;
+        const createButton = (
+            prop: { text?: String; classid?: String; event?: { [k: string]: EventListener } } = {},
+            confirm: boolean = false
+        ) => {
+            let props = !confirm ? Object.assign({ href: "#", html: "&times;" }, prop) : prop;
 
-            return DOM.create("a", props);
+            return DOM.create("a", props as DOM.elementOptions);
         };
 
         return new Promise((done) => {
@@ -106,10 +123,12 @@ export default class Modal {
 
     /**
      * Remove modal item
-     * @param {string | HTMLElement | DOM}
-     * @returns
+     * @param {string | DOM.kindOfNode | DOM} query
      */
-    remove(query) {
+    remove(query: string): Modal;
+    remove(query: HTMLElement): Modal;
+    remove(query: DOM): Modal;
+    remove(query: any) {
         if (this.contens !== 0) {
             this.main.remove(query);
         }
@@ -125,37 +144,58 @@ export default class Modal {
 
     /**
      * Destroy current popup modal
-     * @param {event} e event callback
+     * @param {Event} e event callback
      */
-    closed(e) {
+    closed(e: Event) {
         if (this instanceof Modal) {
             const { element, main } = this,
                 { contens } = this.remove(element);
 
             main.set({ removeClass: !contens ? "is-visible" : "" });
-            // if (contens == 0) main.set({ removeClass: "is-visible" });
-            // let elm = e.target || e.currentTarget;
-            // console.log(this, elm);
         }
     }
 
     /**
      * Construct and display the alert modal
-     * @param {string | HTMLElement | DOM | elemenOptions} content innerText | innerHTML for the modal
-     * @param {string} title modal title
-     * @returns {Promise<void>}
+     * @param {string | HTMLElement | DOM | DOM.elemenOptions} content innerText | innerHTML for the modal
      */
-    static async alert(content, title = "") {
+    static async alert(content: string | HTMLElement | DOM | DOM.elementOptions): Promise<void>;
+    /**
+     * Construct and display the alert modal
+     * @param {string | HTMLElement | DOM | DOM.elemenOptions} content innerText | innerHTML for the modal
+     * @param {string} title modal title
+     */
+    static async alert(
+        content: string | HTMLElement | DOM | DOM.elementOptions,
+        title: string
+    ): Promise<void>;
+    static async alert(
+        content: string | HTMLElement | DOM | DOM.elementOptions,
+        title: string = ""
+    ): Promise<void> {
         return await new Modal().addContent(content, title);
     }
 
     /**
      * Construct and display the alert confirm
      * @param {string | HTMLElement | DOM | elemenOptions} content innerText | innerHTML for the modal
-     * @param {string} title modal title
-     * @returns {Promise<boolean>}
      */
-    static async confirm(content, title = "") {
+    static async confirm(
+        content: string | HTMLElement | DOM | DOM.elementOptions
+    ): Promise<boolean>;
+    /**
+     * Construct and display the alert confirm
+     * @param {string | HTMLElement | DOM | elemenOptions} content innerText | innerHTML for the modal
+     * @param {string} title modal title
+     */
+    static async confirm(
+        content: string | HTMLElement | DOM | DOM.elementOptions,
+        title: string
+    ): Promise<boolean>;
+    static async confirm(
+        content: string | HTMLElement | DOM | DOM.elementOptions,
+        title: string = ""
+    ): Promise<boolean> {
         return await new Modal().addContent(content, title, true);
     }
 
@@ -164,7 +204,7 @@ export default class Modal {
      * @param {boolean} stat blasting or not
      * @param {(e: Event) => void} callback? calback function when panel closed
      */
-    static progressPanel(stat, callback = null) {
+    static progressPanel(stat: boolean, callback: ((e: Event) => void) | null = null) {
         /** @type {(prop: elemenOptions) => DOM} */
         const createButton = (prop = {}) => {
             let props = Object.assign({ href: "#", html: "&times;" }, prop);
@@ -175,9 +215,9 @@ export default class Modal {
             { main, element } = modal;
 
         let hasPanel = (({ childNodes }) => {
-            return DOM.get(childNodes).some((e) =>
-                e.classList.contains("progress-panel")
-            );
+            return childNodes
+                ? DOM.get(childNodes).some((e) => e.classList.contains("progress-panel"))
+                : false;
         })(main);
 
         if (stat && !hasPanel) {
@@ -203,8 +243,13 @@ export default class Modal {
                 DOM.create(tag, props).insertTo(element);
             });
 
+            let cbEvent = callback
+                ? callback
+                : (e: Event) => {
+                      console.log(e);
+                  };
             createButton({ classid: "wfu-btn-close img-replace" })
-                .onEvent("click", callback)
+                .onEvent("click", cbEvent)
                 .insertTo(element);
 
             modal.element = element;

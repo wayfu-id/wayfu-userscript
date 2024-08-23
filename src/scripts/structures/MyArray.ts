@@ -1,10 +1,14 @@
 /**
  * Extended Built-in Array
- * @class MyArray
- * @classdesc An custom array extends built in array
- * @augments {Array}
  */
-export default class MyArray extends Array {
+export default class MyArray<Data extends any> extends Array {
+    constructor(...input: Data[])
+    constructor(input: Data[]) {
+        super(input.length);
+        input.forEach((element, index) => {
+            this[index] = element;
+        })
+    }
     /**
      * Get empty status current array
      */
@@ -36,11 +40,8 @@ export default class MyArray extends Array {
     /**
      * Change index order of an items, and return this array.
      * `Carefull: This function will override old array.`
-     * @param {number} oldIndex
-     * @param {number} newIndex
-     * @returns
      */
-    changeIndex(oldIndex, newIndex) {
+    changeIndex(oldIndex: number, newIndex: number) {
         if (newIndex >= this.length) {
             let i = newIndex - this.length + 1;
             while (i--) {
@@ -53,10 +54,8 @@ export default class MyArray extends Array {
 
     /**
      * Count number of a value in current array;
-     * @param {any} val
-     * @returns {number}
      */
-    countValue(val) {
+    countValue(val: any): number {
         let count = 0;
         this.forEach((e) => {
             count += e === val ? 1 : 0;
@@ -66,20 +65,15 @@ export default class MyArray extends Array {
 
     /**
      * Check given value is on this array or not
-     * @param {any} item
-     * @returns {boolean}
      */
-    isOnArray(item) {
+    isOnArray(item: any) {
         return this.some((elm) => item === elm);
     }
 
     /**
      * Create an array by spliting a string with a delimiter
-     * @param {String} string
-     * @param {String} delimiter
-     * @returns {MyArray}
      */
-    static split(string, delimiter) {
+    static split(string: string, delimiter: string) {
         let arr = string.split(delimiter);
         return new MyArray(...arr);
     }
@@ -87,10 +81,8 @@ export default class MyArray extends Array {
     /**
      * Reconstruct `Array.from` to create new MyArray
      * From `IterableObject`.
-     * @param {Iterable<any> | ArrayLike<any>} arrayLike
-     * @returns {MyArray}
      */
-    static create(arrayLike) {
+    static create<Data>(arrayLike: Iterable<Data> | ArrayLike<Data>) {
         return new MyArray(...Array.from(arrayLike));
     }
 }

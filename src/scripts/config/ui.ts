@@ -68,11 +68,7 @@ const queryElm = {
     chatMessage: "#main div.message-out",
 };
 
-/**
- * @param {string} name
- * @returns
- */
-const mainMenu = (name) => ({
+const mainMenu = (name: string) => ({
     menuItem: {
         id: "wayfuToggle",
         "data-testid": "menu-bar-wayfu-app",
@@ -100,11 +96,7 @@ const mainMenu = (name) => ({
     },
 });
 
-/**
- * @param {string} filename
- * @returns
- */
-const groupDownloadMenu = (filename) => ({
+const groupDownloadMenu = (filename: string) => ({
     menuItem: {},
     menuButton: {
         role: "button",

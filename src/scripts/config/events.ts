@@ -10,16 +10,8 @@ const eventLists = [
     { element: "#imgFile", type: "change", event: "imagePreview" },
     { element: "#_deleteImg", type: "click", event: "imagePreview" },
     { element: "#wayfuToggle", type: "click", event: "toggleApp" },
-    {
-        element: "._input input[type='range']",
-        type: "input",
-        event: "inputRange",
-    },
-    {
-        element: "._input input[type='checkbox']",
-        type: "change",
-        event: "inputChecks",
-    },
+    { element: "._input input[type='range']", type: "input", event: "inputRange" },
+    { element: "._input input[type='checkbox']", type: "change", event: "inputChecks" },
     { element: "._input select", type: "change", event: "inputSelects" },
     { element: "#_blast", type: "click", event: "runTasks" },
     { element: "div#app", type: "click", event: "checkChat" },
