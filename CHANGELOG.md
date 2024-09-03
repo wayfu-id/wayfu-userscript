@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.6.0](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.8...v4.6.0) (2024-09-03)
+
+
+### Features
+
+* **Message:** Add support for PDF attachment ([fcd241e](https://github.com/wayfu-id/wayfu-userscript/commit/fcd241eff7fa8359d904fe4753742553cb8c5346))
+
 ### [4.5.8](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.7...v4.5.8) (2024-06-26)
 
 ### [4.5.7](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.6...v4.5.7) (2024-04-19)
