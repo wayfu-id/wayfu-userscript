@@ -62,6 +62,7 @@ function generateHeader(package, environment) {
         "connect",
         "updateURL",
         "downloadURL",
+        "require",
         "resource",
     ];
 

@@ -28,5 +28,17 @@ export function setName(str: string, full?: boolean): string;
 /** Set and print date based on toLocaleDateString format */
 export function dateFormat(value: string | number | Date, printDays?: boolean): string;
 
+export function check(header: any[]): (buffer: Uint8Array, offset?: number) => boolean;
+
+export function getPDFPageThumb(file: File): Promise<string>;
+
+export function readBuffer(file: File, start?: number, end?: number): Promise<ArrayBuffer>;
+
+export function stringToBytes(string: string): any[];
+
 /** Create an Object from Filtered Object */
-export function createFilteredObject<T extends Object>(obj: ObjectConstructor, filter: T | T[], type?: "key"|"val"): { [k: string]: T };
+export function createFilteredObject<T extends Object>(
+    obj: ObjectConstructor,
+    filter: T | T[],
+    type?: "key" | "val"
+): { [k: string]: T };

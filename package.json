@@ -58,6 +58,10 @@
     "connect": "wayfu.id",
     "updateURL": "https://wayfu.id/v4/update.meta.js",
     "downloadURL": "https://wayfu.id/v4/wayfu-install.user.js",
+    "require": [
+      "https://cdn.jsdelivr.net/npm/pdfjs-dist@2.16.105/build/pdf.min.js",
+      "https://cdn.jsdelivr.net/npm/pdfjs-dist@2.16.105/build/pdf.worker.min.js"
+    ],
     "resource": [
       {
         "ico": "https://wayfu.id/v4/assets/wayfu-icon.webp"
@@ -120,6 +124,7 @@
     "gulp-webp": "^4.0.0",
     "husky": "^7.0.4",
     "minimist": "^1.2.5",
+    "pdfjs-dist": "^2.16.105",
     "pretty-hrtime": "^1.0.3",
     "read-excel-file": "^5.5.3",
     "sass": "^1.49.8",
@@ -131,6 +136,7 @@
     "webpack-stream": "^7.0.0"
   },
   "dependencies": {
+    "fflate": "^0.8.2",
     "global": "^4.4.0",
     "standard-version": "^9.5.0"
   }

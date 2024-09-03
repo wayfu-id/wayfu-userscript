@@ -16,7 +16,11 @@ class Messages extends BaseModel {
         this.apiLink = "api.whatsapp.com/send?phone=";
         this.inputMessage = "";
         this.inputCaption = "";
-        this.imageFile = "";
+        // this.imageFile = "";
+        this.msgAttc = {
+            file: null,
+            type: "",
+        };
         this.idNumber = "";
         this.name = "";
         this.phone = "";
@@ -34,15 +38,8 @@ class Messages extends BaseModel {
     setData(data) {
         const validPhone = (val) => rgx.phonePattern.test(val);
 
-        [
-            this.idNumber,
-            this.name,
-            this.phone,
-            this.poinValue,
-            this.date,
-            this.sponsorName,
-            ...this.other
-        ] = validPhone(data[2]) ? data : ["", ...data];
+        [this.idNumber, this.name, this.phone, this.poinValue, this.date, this.sponsorName, ...this.other] =
+            validPhone(data[2]) ? data : ["", ...data];
         return this;
     }
 
@@ -59,14 +56,10 @@ class Messages extends BaseModel {
     get encodedMsg() {
         const { useImage, hasImage, useCaption } = options;
         const printLink = useImage && hasImage ? useCaption === "caption" : true;
-        const message =
-            this.inputMessage && printLink ? this.subtitute(this.inputMessage) : "";
+        const message = this.inputMessage && printLink ? this.subtitute(this.inputMessage) : "";
 
         return message !== ""
-            ? encodeURIComponent(message)
-                  .replace(/'/g, "%27")
-                  .replace(/\(/g, "%28")
-                  .replace(/\)/g, "%29")
+            ? encodeURIComponent(message).replace(/'/g, "%27").replace(/\(/g, "%28").replace(/\)/g, "%29")
             : message;
     }
 
@@ -98,9 +91,7 @@ class Messages extends BaseModel {
                         const val = options.targetBp - Number(value);
                         return val > 0 ? val : 0;
                     };
-                    message = message
-                        .replace(/P_BP/g, `${value} BP`)
-                        .replace(/K_BP/g, `${toGo(value)} BP`);
+                    message = message.replace(/P_BP/g, `${value} BP`).replace(/K_BP/g, `${toGo(value)} BP`);
                 } else if (i === 1 && isDate) {
                     message = message
                         .replace(/L_DAY/g, this.lastDay(value))
@@ -111,9 +102,7 @@ class Messages extends BaseModel {
                         .replace(/INVS/g, setName(value));
                 }
             }
-            return column > 2
-                ? message.replace(dataKey(column - 2), `${value || ""}$2`)
-                : message;
+            return column > 2 ? message.replace(dataKey(column - 2), `${value || ""}$2`) : message;
         }
         return message.replace(dataKey(column + 1), `${value || ""}$2`);
     }
@@ -134,10 +123,7 @@ class Messages extends BaseModel {
             message = message.replace(/PHONE/g, this.phone);
             message =
                 this.idNumber !== ""
-                    ? message.replace(
-                          options.userType === "oriflame" ? /NO_KONS/g : /DATA_0/g,
-                          this.idNumber
-                      )
+                    ? message.replace(options.userType === "oriflame" ? /NO_KONS/g : /DATA_0/g, this.idNumber)
                     : message;
             col.forEach((e, i) => {
                 let bypass = i >= colTreshold;
@@ -174,13 +160,14 @@ class Messages extends BaseModel {
      */
     async sendImg() {
         const { useCaption } = options,
-            caption = useCaption === "caption" ? this.inputCaption : this.inputMessage;
+            caption =
+                this.msgAttc.type !== "PDF"
+                    ? useCaption === "caption"
+                        ? this.inputCaption
+                        : this.inputMessage
+                    : this.inputCaption;
 
-        return await window.WAPI.SendImgToChat(
-            this.phone,
-            this.imageFile,
-            this.subtitute(caption)
-        );
+        return await window.WAPI.SendImgToChat(this.phone, this.msgAttc, this.subtitute(caption));
     }
 
     /**

@@ -119,13 +119,14 @@ function setWAPI(store) {
             enumerable: true,
         },
         SendImgToChat: {
-            value: function sendImgToChat(phone, imgFile, caption = "", getChat = false) {
-                if (!phone || !imgFile) return false;
+            value: function sendImgToChat(phone, msgAttc, caption = "", getChat = false) {
+                let { file } = msgAttc;
+                if (!phone || !file) return false;
                 return new Promise((done) => {
                     this.Chat.find(`${phone}@c.us`)
                         .then((chat) => {
                             let mc = new this.MediaCollection(chat);
-                            mc.processAttachments([{ file: imgFile }], chat, chat)
+                            mc.processAttachments([{ file: file }], chat, chat)
                                 .then(() => {
                                     let [media] = mc.getModelsArray();
                                     media.sendToChat(chat, { caption: caption });

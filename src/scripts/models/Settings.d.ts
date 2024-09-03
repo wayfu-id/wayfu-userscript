@@ -2,39 +2,46 @@ import GM_Library from "./GM_Library";
 
 type datePaternOpt = "MM/DD/YYYY" | "DD/MM/YYYY" | "YYYY/MM/DD";
 
-interface defaultOpt extends ObjectConstructor{
-    themeColor: string,
+type messageAttachment = {
+    file: File | null;
+    type: string;
+};
+
+interface defaultOpt extends ObjectConstructor {
+    themeColor: string;
     /** @deprecated */
-    autoMode: false,
-    debug: boolean,
-    hasImage: boolean,
-    imageFile: File,
-    useImage: boolean,
-    activeTab: number,
-    targetBp: number,
-    maxQueue: number,
-    dateFormat: "auto" | datePaternOpt,
-    openPanel: boolean,
-    useCaption: "caption" | "pesan",
-    userType: "umum" | "oriflame",
-    splitter: "," | ";",
-    monthIndex: 0 | 1 | 2,
-    isFormat: boolean,
-    alert: boolean,
-    queueLimit: number,
-    bpLimit: number,
-    exportType: "ask" | "csv" | "xlsx",
-    fileType: "csv" | "xlsx",
+    autoMode: false;
+    debug: boolean;
+    // hasImage: boolean;
+    // imageFile: File;
+    useAttc: boolean;
+    hasAttc: boolean;
+    msgAttc: messageAttachment;
+    activeTab: number;
+    targetBp: number;
+    maxQueue: number;
+    dateFormat: "auto" | datePaternOpt;
+    openPanel: boolean;
+    useCaption: "caption" | "pesan";
+    userType: "umum" | "oriflame";
+    splitter: "," | ";";
+    monthIndex: 0 | 1 | 2;
+    isFormat: boolean;
+    alert: boolean;
+    queueLimit: number;
+    bpLimit: number;
+    exportType: "ask" | "csv" | "xlsx";
+    fileType: "csv" | "xlsx";
 }
 
-interface Settings extends GM_Library, defaultOpt{
+interface Settings extends GM_Library, defaultOpt {
     default: defaultOpt;
 
     /** Initialize options */
     init(): Settings;
 
     /** Set options properties */
-    setOptions(options?: {[k: keyof defaultOpt]: any}): Settings;
+    setOptions(options?: { [k: keyof defaultOpt]: any }): Settings;
 
     /** Set option property */
     setOption(key: keyof defaultOpt, val: any): void;

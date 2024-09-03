@@ -51,17 +51,17 @@ export default class App extends GM_Library {
         // console.info('Options Loaded Successfully.');
     }
     async onLoadView() {
-        const MIME = [
-            ".txt",
-            ".csv",
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        ];
+        const MIME = [".txt", ".csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"];
         // console.log(settings);
         DOM.setElementStyle("#wayfuPanel", {
             "background-color": options.themeColor,
-        }).setElement("input#getFile", {
-            accept: MIME.join(","),
-        });
+        })
+            .setElement("input#getFile", {
+                accept: MIME.join(","),
+            })
+            .setElement("input#imgFile", {
+                accept: ["image/*", "application/pdf"].join(","),
+            });
 
         DOM.getElement("#wayfuPanel .menus", true)[options.activeTab || 0].click();
         if (options.openPanel) {
@@ -80,20 +80,9 @@ export default class App extends GM_Library {
         e = typeof e === "boolean" ? e : true;
         options.setOption("debug", e);
         if (e) {
-            Object.assign(
-                App.prototype,
-                { message, options, user, chat, csvFile },
-                window.WAPI
-            );
+            Object.assign(App.prototype, { message, options, user, chat, csvFile }, window.WAPI);
         } else {
-            for (let key of [
-                "message",
-                "options",
-                "user",
-                "chat",
-                "csvFile",
-                ...Object.keys(window.WAPI),
-            ]) {
+            for (let key of ["message", "options", "user", "chat", "csvFile", ...Object.keys(window.WAPI)]) {
                 delete App.prototype[key];
             }
         }

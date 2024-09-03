@@ -30,6 +30,9 @@ module.exports = {
             },
         ],
     },
+    externals: {
+        "pdfjs-dist": "pdfjsLib",
+    },
     target: ["web", "es5"],
     // plugins: [new WebpackUserscript()],
 };

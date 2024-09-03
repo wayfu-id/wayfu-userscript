@@ -13,15 +13,9 @@ import { chat } from "../models/Chatrooms";
 import { message } from "../models/Messages";
 import { DOM } from "../lib/HtmlModifier";
 import CSVFile, { csvFile } from "../models/CSVFile";
-import { dateFormat, isNumeric, titleCase } from "../lib/Util";
+import { check, getPDFPageThumb, isNumeric, titleCase, readBuffer, stringToBytes } from "../lib/Util";
 import MyArray from "../models/MyArray";
-import {
-    loadRecipient,
-    resetRecipient,
-    checkStatus,
-    startProcess,
-    exportDataToFile,
-} from "./Main";
+import { loadRecipient, resetRecipient, checkStatus, startProcess, exportDataToFile } from "./Main";
 
 /**
  * A bunch of EventListener
@@ -37,8 +31,8 @@ import {
         if (!(await user.check())) return;
         if (await checkStatus()) return;
 
-        const { useImage } = options,
-            time = !useImage ? 55e2 : 6e3,
+        const { useAttc, hasAttc } = options,
+            time = !useAttc && !hasAttc ? 55e2 : 6e3,
             fn = () => {
                 return startProcess();
             };
@@ -151,7 +145,7 @@ import {
             { elm: "#useCaption", props: { disabled: !elm.checked } },
         ]);
 
-        options.setOption("useImage", elm.checked);
+        options.setOption("useAttc", elm.checked);
     }
 
     /**
@@ -192,31 +186,59 @@ import {
      * Read and preview an Image File
      * @param {Event} e Event
      */
-    imagePreview(e) {
+    async imagePreview(e) {
         const elm = e.currentTarget || e.target,
-            maxSize = 4 * Math.pow(1024, 2),
-            btn = elm.dataset.value;
+            btn = elm.dataset.value,
+            isPDF = check(stringToBytes("%PDF"));
 
-        let imgFile = null;
+        let imgFile = null,
+            imgSrc = "",
+            type = "";
 
         if (!btn) {
             imgFile = elm.files[0];
+
+            let buffers = await readBuffer(imgFile, 0, 8),
+                uint8array = new Uint8Array(buffers),
+                maxSize = (isPDF(uint8array) ? 100 : 4) * Math.pow(1024, 2);
+
             if (imgFile && imgFile.size > maxSize) {
-                modal.alert("Ukuran gambar tidak boleh lebih dari 4MB");
+                modal.alert(
+                    `Ukuran lampiran: ${type}, tidak boleh lebih dari ${maxSize / Math.pow(1024, 2)}MB`
+                );
                 imgFile = null;
+                elm.files = [];
             }
+
+            type = imgFile ? (isPDF(uint8array) ? "PDF" : "Image") : "";
+            imgSrc = imgFile
+                ? isPDF(uint8array)
+                    ? await getPDFPageThumb(imgFile)
+                    : URL.createObjectURL(imgFile)
+                : "";
         } else {
+            elm.files = [];
             DOM.setElement(`#${btn}`, { value: "" });
         }
 
         DOM.setElement("#_img-output", {
-            src: imgFile ? URL.createObjectURL(imgFile) : "",
+            src: imgSrc,
         }).setElementStyle("#_deleteImg", {
             display: imgFile ? "block" : "none",
         });
 
-        message.setProperties({ imageFile: imgFile });
-        options.setOptions({ hasImage: !!imgFile, imageFile: imgFile });
+        DOM.setElement("#_caption", {
+            disabled: (imgFile && type === "PDF") || options.useCaption === "pesan",
+            title:
+                imgFile && type === "PDF"
+                    ? "Caption tidak tersedia untuk lampiran: PDF"
+                    : options.useCaption === "pesan"
+                    ? "Caption menggunakan pesan"
+                    : "",
+        });
+
+        message.setProperties({ msgAttc: { file: imgFile, type } });
+        options.setOptions({ hasAttc: !!imgFile, msgAtc: { file: imgFile, type } });
     }
 
     /**

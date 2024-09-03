@@ -7,9 +7,7 @@ import { rgx, dateOptDefault } from "./Constant";
  * @returns {Boolean}
  */
 const isNumeric = (str) => {
-    return typeof str === "string"
-        ? !isNaN(str) && !isNaN(parseFloat(str))
-        : typeof str === "number";
+    return typeof str === "string" ? !isNaN(str) && !isNaN(parseFloat(str)) : typeof str === "number";
 };
 
 /**
@@ -86,10 +84,7 @@ const isUpToDate = (local, remote) => {
                     return arrL[i] > arrR[i] ? true : false;
                 }
             } else {
-                let [digL, digR] = [
-                        Number(/\d+/.exec(arrL[i])),
-                        Number(/\d+/.exec(arrR[i])),
-                    ],
+                let [digL, digR] = [Number(/\d+/.exec(arrL[i])), Number(/\d+/.exec(arrR[i]))],
                     [alpL, alpR] = [/[A-Za-z]/.exec(arrL[i]), /[A-Za-z]/.exec(arrR[i])];
                 if (digL == digR) {
                     if (alpL && alpR && alpL[0] == alpR[0]) {
@@ -163,7 +158,45 @@ const createFilteredObject = (obj, filter, type = "key") => {
     );
 };
 
+const check = (headers) => {
+    return (buffers, options = { offset: 0 }) =>
+        headers.every((header, index) => header === buffers[options.offset + index]);
+};
+
+const readBuffer = (file, start = 0, end = 2) => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            resolve(reader.result);
+        };
+        reader.onerror = reject;
+        reader.readAsArrayBuffer(file.slice(start, end));
+    });
+};
+
+const stringToBytes = (string) => {
+    return [...string].map((character) => character.charCodeAt(0));
+};
+
+const getPDFPageThumb = async (file) => {
+    const pdf = await unsafeWindow["pdfjsLib"].getDocument(URL.createObjectURL(file)).promise;
+    const page = await pdf.getPage(1);
+    const viewport = page.getViewport({ scale: 0.8 });
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+    canvas.height = viewport.height;
+    canvas.width = viewport.width;
+    const renderContext = {
+        canvasContext: context,
+        viewport: viewport,
+    };
+    await page.render(renderContext).promise;
+    return canvas.toDataURL();
+};
+
 export {
+    check,
+    getPDFPageThumb,
     isNumeric,
     isDateStr,
     isUpToDate,
@@ -172,5 +205,7 @@ export {
     dateFormat,
     JSONParse,
     parseValue,
+    readBuffer,
+    stringToBytes,
     createFilteredObject,
 };

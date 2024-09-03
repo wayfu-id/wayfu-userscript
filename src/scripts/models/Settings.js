@@ -5,13 +5,14 @@ import MyArray from "./MyArray";
 
 /**
  * @typedef { "MM/DD/YYYY" | "DD/MM/YYYY" | "YYYY/MM/DD" } datePaternOpt
+ * @typedef { {file: File, type: string} } messageAttachment
  *
  * @typedef { ObjectConstructor & {
  *      themeColor: string,
  *      debug: boolean,
- *      hasImage: boolean,
- *      imageFile: File,
- *      useImage: boolean,
+ *      hasAttc: boolean,
+ *      msgAttc: messageAttachment,
+ *      useAttc: boolean,
  *      activeTab: number,
  *      targetBp: number,
  *      maxQueue: number,
@@ -53,9 +54,9 @@ class Settings extends GM_Library {
             themeColor: "var(--butterbar-connection-background)",
             // autoMode: false, @deprecated Mode auto is setted by default
             debug: false,
-            hasImage: false,
-            imageFile: null,
-            useImage: false,
+            hasAttc: false,
+            msgAttc: { file: null, type: "" },
+            useAttc: false,
             activeTab: 0,
             targetBp: 100,
             maxQueue: 500,

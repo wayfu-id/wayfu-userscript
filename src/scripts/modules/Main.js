@@ -17,9 +17,7 @@ import MyArray from "../models/MyArray";
  */
 async function checkStatus() {
     if (queue.currentIndex !== 0 && !!queue.now) {
-        return !(await modal.confirm(
-            `Lanjutkan Proses dari data ke-${queue.currentIndex + 1}?`
-        ))
+        return !(await modal.confirm(`Lanjutkan Proses dari data ke-${queue.currentIndex + 1}?`))
             ? (await modal.confirm("Proses ulang dari awal?"))
                 ? (reloadRecipient(), false)
                 : true
@@ -43,14 +41,10 @@ async function checkStatus() {
  */
 function loadRecipient(csvFile) {
     let mIdx =
-        options.dateFormat !== "auto"
-            ? options.dateFormat
-            : csvFile.options.monthIndex || options.monthIndex;
+        options.dateFormat !== "auto" ? options.dateFormat : csvFile.options.monthIndex || options.monthIndex;
 
     let isFormat = mIdx == 2;
-    options.setOptions(
-        Object.assign({}, csvFile.options, { monthIndex: mIdx, isFormat: isFormat })
-    );
+    options.setOptions(Object.assign({}, csvFile.options, { monthIndex: mIdx, isFormat: isFormat }));
     queue.setData(csvFile.data);
     updateUI();
     // console.info(`Blast!: ${this.queue.size} Data Loaded`);
@@ -98,7 +92,12 @@ async function startProcess() {
     const wait = (time) => new Promise((resolve) => setTimeout(resolve, time));
     if (!loop.isRunning) loop.start(setStatus);
     if (loop.isRunning && !!queue.now) {
-        let { useCaption: c, useImage: i, hasImage: h } = options,
+        let {
+                useCaption: c,
+                useAttc: i,
+                hasAttc: h,
+                msgAttc: { type: t },
+            } = options,
             no = (queue.currentIndex += 1),
             data = queue.run(),
             messej = message.setData(data),
@@ -109,7 +108,7 @@ async function startProcess() {
 
         await wait(5e2);
         stat = await (async (c) =>
-            (c === "caption" || !(i && h)
+            (c === "caption" || !(i && h) || t === "PDF"
                 ? await messej.sendText()
                 : await window.WAPI.openChat(messej.phone)) !== false
                 ? "SUCCESS"
@@ -372,11 +371,4 @@ async function exportDataToFile(data, title) {
     // return;
 }
 
-export {
-    checkStatus,
-    loadRecipient,
-    resetRecipient,
-    reloadRecipient,
-    startProcess,
-    exportDataToFile,
-};
+export { checkStatus, loadRecipient, resetRecipient, reloadRecipient, startProcess, exportDataToFile };

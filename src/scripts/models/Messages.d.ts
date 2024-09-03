@@ -10,7 +10,11 @@ export default class Messages extends BaseModel {
     apiLink: string;
     inputMessage: string;
     inputCaption: string;
-    imageFile: string;
+    // imageFile: string;
+    msgAtc: {
+        file: File | null;
+        type: string;
+    };
     idNumber: string;
     name: string;
     phone: string;
@@ -42,7 +46,7 @@ export default class Messages extends BaseModel {
 
     /** Send Image attachment */
     sendImg(): Promise<any>;
-    
+
     /** Send Text message */
     sendText(): Promise<any>;
 }
