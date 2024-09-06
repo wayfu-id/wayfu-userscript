@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.6.1](https://github.com/wayfu-id/wayfu-userscript/compare/v4.6.0...v4.6.1) (2024-09-06)
+
+
+### Bug Fixes
+
+* **UI:** Change tab information ([b51ca60](https://github.com/wayfu-id/wayfu-userscript/commit/b51ca6013c3f5076f5723aa09a0adaf817d1ee93))
+
 ## [4.6.0](https://github.com/wayfu-id/wayfu-userscript/compare/v4.5.8...v4.6.0) (2024-09-03)
 
 
