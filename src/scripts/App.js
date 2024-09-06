@@ -61,6 +61,10 @@ export default class App extends GM_Library {
             })
             .setElement("input#imgFile", {
                 accept: ["image/*", "application/pdf"].join(","),
+            })
+            .setElement("#wayfuPanel button[value='_image']", {
+                title: "Lampiran Pesan",
+                text: "Lampiran",
             });
 
         DOM.getElement("#wayfuPanel .menus", true)[options.activeTab || 0].click();
