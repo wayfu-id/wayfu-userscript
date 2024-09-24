@@ -98,8 +98,10 @@ function setWAPI(store) {
     Object.defineProperties(WAPI.Chat.modelClass.prototype, {
         open: {
             value: async function open() {
-                let { Cmd } = WAPI;
-                await Cmd.openChatAt(this);
+                let { Cmd, Msg } = WAPI,
+                    msgs = Msg.byChat(this);
+
+                await Cmd.openChatAt({ chat: this, msgs });
             },
             enumerable: true,
         },
