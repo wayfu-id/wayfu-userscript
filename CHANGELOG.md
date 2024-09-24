@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.6.2](https://github.com/wayfu-id/wayfu-userscript/compare/v4.6.1...v4.6.2) (2024-09-24)
+
+
+### Bug Fixes
+
+* **WAPI:** Error when opening Chat ([ba23a5a](https://github.com/wayfu-id/wayfu-userscript/commit/ba23a5a9045f5fe41976b41a5799f4b2f6e84c2b))
+
 ### [4.6.1](https://github.com/wayfu-id/wayfu-userscript/compare/v4.6.0...v4.6.1) (2024-09-06)
 
 
