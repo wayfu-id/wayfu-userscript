@@ -167,7 +167,7 @@ const storeObjects = [
             module.default &&
             typeof module.default === "object" &&
             module.default.app &&
-            module.default.paneTwo
+            module.default.paneOne
                 ? module.default
                 : null,
     },
