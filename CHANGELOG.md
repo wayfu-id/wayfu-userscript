@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.6.3](https://github.com/wayfu-id/wayfu-userscript/compare/v4.6.2...v4.6.3) (2024-10-18)
+
+
+### Bug Fixes
+
+* **UI:** fix broken UI and caused blank space ([ae8fcd9](https://github.com/wayfu-id/wayfu-userscript/commit/ae8fcd98abb9647cd6d0120cb0d98b96aefc7ecc))
+
 ### [4.6.2](https://github.com/wayfu-id/wayfu-userscript/compare/v4.6.1...v4.6.2) (2024-09-24)
 
 
