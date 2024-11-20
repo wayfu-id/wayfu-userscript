@@ -458,6 +458,8 @@ div.two {
     div[data-testid="menu-bar-wayfu-app"] {
         div[role="button"]{
             padding: 8px;
+            text-align: initial;
+            border-radius: 50%;
         }
         svg.wayfu-app-icon {
             fill-rule: evenodd;
@@ -470,6 +472,9 @@ div.two {
         }
 
         &.active {
+            div[role="button"]{
+                background-color: var(--menu-bar-item-background-active);
+            }
             svg {
                 .fill0 {
                     fill: #009a4b !important;
