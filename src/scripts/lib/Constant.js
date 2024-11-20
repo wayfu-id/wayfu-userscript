@@ -140,10 +140,7 @@ const storeObjects = [
     {
         id: "WebClasses2",
         conditions: (module) =>
-            module.default &&
-            typeof module.default === "object" &&
-            module.default.menu &&
-            module.default.active
+            module.default && typeof module.default === "object" && module.default.menu && module.default.item
                 ? module.default
                 : null,
     },
@@ -167,7 +164,7 @@ const storeObjects = [
             module.default &&
             typeof module.default === "object" &&
             module.default.app &&
-            module.default.paneTwo
+            module.default.paneOne
                 ? module.default
                 : null,
     },

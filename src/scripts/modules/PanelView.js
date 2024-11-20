@@ -21,6 +21,7 @@ function createView(html, style, details) {
         after = DOM.getElement("header > header") ? "header > header" : "header",
         { paneOne } = window.WAPI.WebClassesV3;
 
+    // console.log(after, paneOne);
     DOM.createElement({
         tag: "header",
         id: "wayfuPanel",
@@ -55,8 +56,9 @@ function initListener() {
 
 /** Create WayFu Button Menu */
 function createMenuButton(name) {
-    const { menu, menuDefault, item, button } = window.WAPI.WebClassesV2,
-        headMenu = DOM.getElement(`header .${menu}.${menuDefault} span`);
+    const { paneOne } = window.WAPI.WebClassesV3,
+        { menu, item } = window.WAPI.WebClassesV2,
+        headMenu = DOM.getElement(`.${paneOne} header .${menu} span`);
 
     /** @type {(name: string) => HTMLElement} */
     const createBtnMenu = (name) => {
@@ -78,7 +80,6 @@ function createMenuButton(name) {
 
         const btnDiv = DOM.createElement({
             tag: "div",
-            classid: button,
             role: "button",
             "data-tab": "2",
             tabindex: "0",
