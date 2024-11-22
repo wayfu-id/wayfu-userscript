@@ -473,7 +473,7 @@ div.two {
 
         &.active {
             div[role="button"]{
-                background-color: var(--menu-bar-item-background-active);
+                background-color: unquote("var(--menu-bar-item-background-active)");
             }
             svg {
                 .fill0 {
