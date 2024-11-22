@@ -57,8 +57,10 @@ function initListener() {
 /** Create WayFu Button Menu */
 function createMenuButton(name) {
     const { paneOne } = window.WAPI.WebClassesV3,
-        { menu, item } = window.WAPI.WebClassesV2,
-        headMenu = DOM.getElement(`.${paneOne} header .${menu} span`);
+        { item } = window.WAPI.WebClassesV2,
+        menuButton = DOM.getElement(`.${paneOne} header span div[role='button']`),
+        menuItem = item ? DOM.getElement(`.${paneOne} header span .${item} `) : menuButton.parentElement,
+        headMenu = menuItem.parentElement;
 
     /** @type {(name: string) => HTMLElement} */
     const createBtnMenu = (name) => {
@@ -81,6 +83,7 @@ function createMenuButton(name) {
         const btnDiv = DOM.createElement({
             tag: "div",
             role: "button",
+            classid: menuButton.classList.value,
             "data-tab": "2",
             tabindex: "0",
             "aria-disabled": false,
@@ -92,14 +95,14 @@ function createMenuButton(name) {
         return DOM.createElement({
             tag: "div",
             id: "wayfuToggle",
-            classid: item,
+            classid: menuItem.classList.value,
             "data-testid": "menu-bar-wayfu-app",
             "data-target": "wayfuPanel",
             html: btnDiv.outerHTML,
         });
     };
 
-    headMenu.insertBefore(createBtnMenu(name), headMenu.firstChild);
+    headMenu.insertBefore(createBtnMenu(name), menuItem);
 }
 
 export { createView };

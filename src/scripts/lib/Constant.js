@@ -140,8 +140,11 @@ const storeObjects = [
     {
         id: "WebClasses2",
         conditions: (module) =>
-            module.default && typeof module.default === "object" && module.default.menu && module.default.item
-                ? module.default
+            module.default &&
+            typeof module.default === "object" &&
+            module.default.item &&
+            !module.default.action
+                ? (console.log(module), module.default)
                 : null,
     },
     {
