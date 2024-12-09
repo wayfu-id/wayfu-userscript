@@ -451,7 +451,7 @@ import { loadRecipient, resetRecipient, checkStatus, startProcess, exportDataToF
 
         // chat.selectChat();
         if (!!chat.selectChat().room && chat.isGroup) {
-            console.log(chat);
+            // console.log(chat);
             let { groupMetadata } = chat,
                 { subject, participants } = groupMetadata;
 

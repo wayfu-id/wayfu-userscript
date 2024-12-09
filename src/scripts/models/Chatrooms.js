@@ -51,7 +51,7 @@ class Chatroom extends BaseModel {
      * @return {boolean}
      */
     get isGroup() {
-        return this.selected ? this.room.id.isGroup : false;
+        return this.selected ? this.room.id.isGroup() : false;
     }
 
     /**
