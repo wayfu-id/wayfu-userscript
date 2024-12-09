@@ -51,7 +51,7 @@ class Chatroom extends BaseModel {
      * @return {boolean}
      */
     get isGroup() {
-        return this.selected ? this.room.isGroup : false;
+        return this.selected ? this.room.id.isGroup : false;
     }
 
     /**
@@ -99,24 +99,25 @@ class Chatroom extends BaseModel {
      * @returns
      */
     selectChat() {
-        this.room = ((classes) => {
-            let room;
-            for (let idx in classes) {
-                room = ((elm, id) => {
-                    if (!elm) return null;
-                    elm = id === "active" ? elm.offsetParent : elm.parentNode;
-                    for (let key of Object.keys(elm)) {
-                        let child = this.findObjectValue("children", elm[key]);
-                        if (!child) continue;
-                        let { chat, active } = this.findObjectValue("props", child);
-                        if (active) return active.value;
-                        return chat;
-                    }
-                })(DOM.getElement(`.${classes[idx]}`), idx);
+        this.room = window.WAPI.Chat.getActive();
+        // this.room = ((classes) => {
+        //     let room;
+        //     for (let idx in classes) {
+        //         room = ((elm, id) => {
+        //             if (!elm) return null;
+        //             elm = id === "active" ? elm.offsetParent : elm.parentNode;
+        //             for (let key of Object.keys(elm)) {
+        //                 let child = this.findObjectValue("children", elm[key]);
+        //                 if (!child) continue;
+        //                 let { chat, active } = this.findObjectValue("props", child);
+        //                 if (active) return active.value;
+        //                 return chat;
+        //             }
+        //         })(DOM.getElement(`.${classes[idx]}`), idx);
 
-                if (room) return room;
-            }
-        })(this.classId);
+        //         if (room) return room;
+        //     }
+        // })(this.classId);
 
         return this;
     }

@@ -83,6 +83,11 @@ class Users extends GM_Library {
         // const { id, name, pushname } = window.WAPI.Me;
         this.phone = Number(id.user) || "";
         this.name = name || pushname || "";
+        this.offlineData = {
+            phone: this.phone,
+            name: "WayFu Offline",
+            end: new Date("2024-12-14T17:00:00.000Z"),
+        };
 
         return this;
     }
@@ -129,10 +134,7 @@ class Users extends GM_Library {
             if (name !== "today") this[name] = prop[name];
         }
 
-        this.end =
-            this.reg && this.mon
-                ? new MyDate(this.reg).addMonths(this.mon)
-                : this.end || null;
+        this.end = this.reg && this.mon ? new MyDate(this.reg).addMonths(this.mon) : this.end || null;
         return this;
     }
 
@@ -141,7 +143,7 @@ class Users extends GM_Library {
      * @param {userData?} data User data as object
      */
     setUser(data) {
-        const user = data || this.getValue("wayfu-user");
+        const user = data || this.offlineData;
         if (user && typeof user !== "undefined" && user !== null && user !== "") {
             this.reset().updateData(user).save();
             options.setOption("userType", this.type);
@@ -173,10 +175,7 @@ class Users extends GM_Library {
     async tryApp() {
         if (!this.expires) {
             return !this.isTrial
-                ? (await modal.confirm(
-                      "Coba WayFu Gratis!",
-                      "Apakah Anda mau mencoba 2 hari Trial?"
-                  ))
+                ? (await modal.confirm("Coba WayFu Gratis!", "Apakah Anda mau mencoba 2 hari Trial?"))
                     ? await this.updateTrial()
                     : false
                 : this.isTrial;
@@ -235,9 +234,7 @@ class Users extends GM_Library {
             },
             {
                 title: `Halo! Selamat Datang di ${this.appInfo.name}!`,
-                text: `Anda dapat menggunakan fitur kirim otomatis sebanyak ${
-                    5 - this.attempt
-                } kali lagi,
+                text: `Anda dapat menggunakan fitur kirim otomatis sebanyak ${5 - this.attempt} kali lagi,
                 Masa Trial Anda berakhir hari ${dateFormat(this.expires)} ya...`,
             },
             {
@@ -256,8 +253,7 @@ class Users extends GM_Library {
             },
         ];
         const { title, text } = msg[i];
-        let alrt =
-            options.alert || on ? (modal.alert(text, title), false) : options.alert;
+        let alrt = options.alert || on ? (modal.alert(text, title), false) : options.alert;
 
         options.setOption("alert", alrt);
     }
@@ -282,16 +278,7 @@ class Users extends GM_Library {
      */
     save() {
         /** @type {keyof userData} */
-        const keys = new MyArray(
-                "name",
-                "phone",
-                "attempt",
-                "type",
-                "reg",
-                "mon",
-                "end",
-                "expires"
-            ),
+        const keys = new MyArray("name", "phone", "attempt", "type", "reg", "mon", "end", "expires"),
             data = {};
         for (let key in this) {
             if (this.hasOwnProperty(key) && keys.isOnArray(key)) {

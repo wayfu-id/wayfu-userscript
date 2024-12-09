@@ -38,7 +38,7 @@
     ],
     "homepage": "<%= pkg.homepage %>",
     "supportURL": "<%= pkg.bugs %>",
-    "icon": "https://wayfu.id/v4/assets/wayfu-icon.webp",
+    "icon": "https://raw.githubusercontent.com/wayfu-id/wayfu-userscript/offline/assets/wayfu-icon.webp",
     "match": "https://web.whatsapp.com/*",
     "grant": [
       "GM_addStyle",
@@ -55,25 +55,25 @@
       "GM_info",
       "GM_notification"
     ],
-    "connect": "wayfu.id",
-    "updateURL": "https://wayfu.id/v4/update.meta.js",
-    "downloadURL": "https://wayfu.id/v4/wayfu-install.user.js",
+    "connect": ["wayfu.id", "raw.githubusercontent.com"],
+    "updateURL": "https://raw.githubusercontent.com/wayfu-id/wayfu-userscript/offline/update.meta.js",
+    "downloadURL": "https://raw.githubusercontent.com/wayfu-id/wayfu-userscript/offline/wayfu-install.user.js",
     "require": [
       "https://cdn.jsdelivr.net/npm/pdfjs-dist@2.16.105/build/pdf.min.js",
       "https://cdn.jsdelivr.net/npm/pdfjs-dist@2.16.105/build/pdf.worker.min.js"
     ],
     "resource": [
       {
-        "ico": "https://wayfu.id/v4/assets/wayfu-icon.webp"
+        "ico": "https://raw.githubusercontent.com/wayfu-id/wayfu-userscript/offline/assets/wayfu-icon.webp"
       },
       {
-        "pnl": "https://wayfu.id/v4/assets/wayfu-view.html"
+        "pnl": "https://raw.githubusercontent.com/wayfu-id/wayfu-userscript/offline/assets/wayfu-view.html"
       },
       {
-        "clr": "https://wayfu.id/v4/assets/wayfu-colors.json"
+        "clr": "https://raw.githubusercontent.com/wayfu-id/wayfu-userscript/offline/assets/wayfu-colors.json"
       },
       {
-        "css": "https://wayfu.id/v4/assets/wayfu-style.min.css"
+        "css": "https://raw.githubusercontent.com/wayfu-id/wayfu-userscript/offline/assets/wayfu-style.min.css"
       }
     ]
   },

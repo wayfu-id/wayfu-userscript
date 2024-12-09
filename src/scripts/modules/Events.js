@@ -408,9 +408,9 @@ import { loadRecipient, resetRecipient, checkStatus, startProcess, exportDataToF
      * @param {Event} e Event
      */
     async checkChat(e) {
-        const { chatHeader, menu, menuDefault, item, button } = window.WAPI.WebClassesV2,
-            chatMenu = DOM.getElement(`.${chatHeader} .${menu}.${menuDefault}`),
-            downloadMenu = DOM.getElement("span[data-icon='download-alt']", chatMenu);
+        const { chatControls, item } = window.WAPI.WebClassesV2,
+            chatMenu = DOM.getElement(`.${chatControls} .${item}`),
+            menuButton = DOM.getElement(`div[role='button']`, chatMenu);
 
         /** @type {(filename: string) => HTMLElement} */
         const createDonwloadBtn = (filename) => {
@@ -433,7 +433,7 @@ import { loadRecipient, resetRecipient, checkStatus, startProcess, exportDataToF
             return ((downloadBtn) => {
                 let btn = DOM.createElement({
                     tag: "div",
-                    classId: button,
+                    classId: menuButton.classList.value,
                     role: "button",
                     "data-tab": "6",
                     tabindex: "0",
@@ -443,13 +443,15 @@ import { loadRecipient, resetRecipient, checkStatus, startProcess, exportDataToF
 
                 return DOM.createElement({
                     tag: "div",
-                    classId: item,
+                    classId: chatMenu.classList.value,
                     html: btn.outerHTML,
                 });
             })(downloadBtn);
         };
 
-        if (chat.selectChat().room !== null && chat.isGroup) {
+        // chat.selectChat();
+        if (!!chat.selectChat().room && chat.isGroup) {
+            console.log(chat);
             let { groupMetadata } = chat,
                 { subject, participants } = groupMetadata;
 
@@ -466,9 +468,9 @@ import { loadRecipient, resetRecipient, checkStatus, startProcess, exportDataToF
             // let { fileUrl, fileName } = CSVFile.createFile(subject, contacts),
             //     fname = exportType === "csv" ? `${fileName}.csv` : `${subject}.xlsx`;
             let btn = createDonwloadBtn(subject);
-
+            const downloadMenu = DOM.getElement("span[data-icon='download-alt']", chatMenu.parentElement);
             if (!downloadMenu) {
-                chatMenu.insertBefore(btn, chatMenu.firstChild);
+                chatMenu.parentElement.insertBefore(btn, chatMenu);
             } else if (downloadMenu && e.target === downloadMenu) {
                 if (await user.check()) {
                     return exportDataToFile(contacts, subject);

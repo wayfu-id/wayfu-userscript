@@ -144,7 +144,7 @@ const storeObjects = [
             typeof module.default === "object" &&
             module.default.item &&
             !module.default.action
-                ? (console.log(module), module.default)
+                ? module.default
                 : null,
     },
     {
