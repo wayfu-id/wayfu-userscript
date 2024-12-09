@@ -87,6 +87,7 @@ class Users extends GM_Library {
             phone: this.phone,
             name: "WayFu Offline",
             end: new Date("2024-12-14T17:00:00.000Z"),
+            type: "oriflame",
         };
 
         return this;
