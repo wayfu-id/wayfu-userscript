@@ -83,12 +83,12 @@ class Users extends GM_Library {
         // const { id, name, pushname } = window.WAPI.Me;
         this.phone = Number(id.user) || "";
         this.name = name || pushname || "";
-        this.offlineData = {
-            phone: this.phone,
-            name: "WayFu Offline",
-            end: new Date("2024-12-14T17:00:00.000Z"),
-            type: "oriflame",
-        };
+        // this.offlineData = {
+        //     phone: this.phone,
+        //     name: "WayFu Offline",
+        //     end: new Date("2024-12-14T17:00:00.000Z"),
+        //     type: "oriflame",
+        // };
 
         return this;
     }
@@ -144,7 +144,7 @@ class Users extends GM_Library {
      * @param {userData?} data User data as object
      */
     setUser(data) {
-        const user = data || this.offlineData;
+        const user = data || this.getValue("wayfu-user");
         if (user && typeof user !== "undefined" && user !== null && user !== "") {
             this.reset().updateData(user).save();
             options.setOption("userType", this.type);
