@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.6.6](https://github.com/wayfu-id/wayfu-userscript/compare/v4.6.5...v4.6.6) (2024-12-12)
+
+
+### Bug Fixes
+
+* **user:** add oriflame as type default ([c9414b5](https://github.com/wayfu-id/wayfu-userscript/commit/c9414b567a5979322271de5e75ce1513acc1e64d))
+
 ### [4.6.5](https://github.com/wayfu-id/wayfu-userscript/compare/v4.6.4...v4.6.5) (2024-11-22)
 
 
