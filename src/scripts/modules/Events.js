@@ -410,7 +410,7 @@ import { loadRecipient, resetRecipient, checkStatus, startProcess, exportDataToF
     async checkChat(e) {
         const { chatControls, item } = window.WAPI.WebClassesV2,
             chatMenu = DOM.getElement(`.${chatControls} .${item}`),
-            menuButton = DOM.getElement(`div[role='button']`, chatMenu);
+            menuButton = DOM.getElement(`[role='button']`, chatMenu);
 
         /** @type {(filename: string) => HTMLElement} */
         const createDonwloadBtn = (filename) => {
@@ -432,7 +432,7 @@ import { loadRecipient, resetRecipient, checkStatus, startProcess, exportDataToF
 
             return ((downloadBtn) => {
                 let btn = DOM.createElement({
-                    tag: "div",
+                    tag: menuButton.tagName.toLocaleLowerCase(),
                     classId: menuButton.classList.value,
                     role: "button",
                     "data-tab": "6",

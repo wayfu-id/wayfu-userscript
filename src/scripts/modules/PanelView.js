@@ -58,7 +58,7 @@ function initListener() {
 function createMenuButton(name) {
     const { paneOne } = window.WAPI.WebClassesV3,
         { item } = window.WAPI.WebClassesV2,
-        menuButton = DOM.getElement(`.${paneOne} header span div[role='button']`),
+        menuButton = DOM.getElement(`.${paneOne} header span [role='button']`),
         menuItem = item ? DOM.getElement(`.${paneOne} header span .${item} `) : menuButton.parentElement,
         headMenu = menuItem.parentElement;
 
@@ -81,7 +81,7 @@ function createMenuButton(name) {
         })();
 
         const btnDiv = DOM.createElement({
-            tag: "div",
+            tag: menuButton.tagName.toLocaleLowerCase(),
             role: "button",
             classid: menuButton.classList.value,
             "data-tab": "2",

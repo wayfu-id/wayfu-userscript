@@ -456,7 +456,7 @@
 
 div.two {
     div[data-testid="menu-bar-wayfu-app"] {
-        div[role="button"]{
+        [role="button"]{
             padding: 8px;
             text-align: initial;
             border-radius: 50%;
@@ -472,7 +472,7 @@ div.two {
         }
 
         &.active {
-            div[role="button"]{
+            [role="button"]{
                 background-color: unquote("var(--menu-bar-item-background-active)");
             }
             svg {
