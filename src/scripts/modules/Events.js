@@ -408,8 +408,8 @@ import { loadRecipient, resetRecipient, checkStatus, startProcess, exportDataToF
      * @param {Event} e Event
      */
     async checkChat(e) {
-        const { chatControls, item } = window.WAPI.WebClassesV2,
-            chatMenu = DOM.getElement(`.${chatControls} .${item}`),
+        const { item } = window.WAPI.WebClassesV2,
+            chatMenu = DOM.getElement(`#main .${item}`),
             menuButton = DOM.getElement(`[role='button']`, chatMenu);
 
         /** @type {(filename: string) => HTMLElement} */
