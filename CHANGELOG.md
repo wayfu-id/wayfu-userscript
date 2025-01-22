@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.6.8](https://github.com/wayfu-id/wayfu-userscript/compare/v4.6.7...v4.6.8) (2025-01-22)
+
+
+### Bug Fixes
+
+* **group:** Get group participants contact problem ([059f0da](https://github.com/wayfu-id/wayfu-userscript/commit/059f0da7d4c02e52536bec2ffab6cd1bce4d5468))
+
 ### [4.6.7](https://github.com/wayfu-id/wayfu-userscript/compare/v4.6.6...v4.6.7) (2025-01-04)
 
 
