@@ -8,6 +8,6 @@ mixin createSvg(dPath, viewBox, size, alpha, fill)
         path(d=dPath)&attributes(opt)
 
 mixin social-btn(data)
-    a(href=data.href target='_blank' id='sc-'+data.name data-icon=data.name title=data.title class='img icon credit-icon icon-'+data.name)
+    a(href=data.href target='_blank' rel="noopener" id='sc-'+data.name data-icon=data.name title=data.title class='img icon credit-icon icon-'+data.name)
         +createSvg(data.path, data.viewBox, '16', '.4', 'currentColor')
     //- span(id='sc-'+data.name data-icon=data.name title=data.title class='img icon credit-icon icon-'+data.name)

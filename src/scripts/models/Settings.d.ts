@@ -32,6 +32,7 @@ interface defaultOpt extends ObjectConstructor {
     bpLimit: number;
     exportType: "ask" | "csv" | "xlsx";
     fileType: "csv" | "xlsx";
+    imageQuality: "hd" | "standard";
 }
 
 interface Settings extends GM_Library, defaultOpt {

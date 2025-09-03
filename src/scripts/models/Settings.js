@@ -5,7 +5,7 @@ import MyArray from "./MyArray";
 
 /**
  * @typedef { "MM/DD/YYYY" | "DD/MM/YYYY" | "YYYY/MM/DD" } datePaternOpt
- * @typedef { {file: File, type: string} } messageAttachment
+ * @typedef { {file: File, type: string, sendAsHD: boolean} } messageAttachment
  *
  * @typedef { ObjectConstructor & {
  *      themeColor: string,
@@ -28,6 +28,7 @@ import MyArray from "./MyArray";
  *      bpLimit: number,
  *      exportType: "ask" | "csv" | "xlsx",
  *      fileType: "csv" | "xlsx",
+ *      imageQuality: "standard" | "hd",
  * }} defaultOpt
  *
  * @typedef { GM_Library & defaultOpt & {
@@ -55,7 +56,7 @@ class Settings extends GM_Library {
             // autoMode: false, @deprecated Mode auto is setted by default
             debug: false,
             hasAttc: false,
-            msgAttc: { file: null, type: "" },
+            msgAttc: { file: null, type: "", sendAsHD: false },
             useAttc: false,
             activeTab: 0,
             targetBp: 100,
@@ -72,6 +73,7 @@ class Settings extends GM_Library {
             bpLimit: 500,
             exportType: "csv",
             fileType: "csv",
+            imageQuality: "standard",
         };
     }
 
@@ -189,6 +191,7 @@ class Settings extends GM_Library {
                 "queueLimit",
                 "debug",
                 "default"
+                // "imageQuality"
             ),
             data = {};
         for (let prop in this) {

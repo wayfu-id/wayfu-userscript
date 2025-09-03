@@ -237,8 +237,11 @@ import { loadRecipient, resetRecipient, checkStatus, startProcess, exportDataToF
                     : "",
         });
 
-        message.setProperties({ msgAttc: { file: imgFile, type } });
-        options.setOptions({ hasAttc: !!imgFile, msgAtc: { file: imgFile, type } });
+        message.setProperties({ msgAttc: { file: imgFile, type, sendAsHD: options.imageQuality == "hd" } });
+        options.setOptions({
+            hasAttc: !!imgFile,
+            msgAtc: { file: imgFile, type, sendAsHD: options.imageQuality == "hd" },
+        });
     }
 
     /**
@@ -369,6 +372,13 @@ import { loadRecipient, resetRecipient, checkStatus, startProcess, exportDataToF
                         })(downloadBtn);
                         DOM.setElement(downloadBtn, { title: title });
                     }
+                })(id, value);
+                break;
+            case "imageQuality":
+                (async function (id, val) {
+                    // console.log(id, val);
+                    options.setOption(id, val);
+                    // console.log(options);
                 })(id, value);
                 break;
         }

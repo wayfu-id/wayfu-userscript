@@ -14,6 +14,7 @@ export default class Messages extends BaseModel {
     msgAtc: {
         file: File | null;
         type: string;
+        sendAsHD: boolean;
     };
     idNumber: string;
     name: string;

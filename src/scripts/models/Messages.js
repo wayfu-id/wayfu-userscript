@@ -20,6 +20,7 @@ class Messages extends BaseModel {
         this.msgAttc = {
             file: null,
             type: "",
+            sendAsHD: false,
         };
         this.idNumber = "";
         this.name = "";
@@ -166,6 +167,8 @@ class Messages extends BaseModel {
                         ? this.inputCaption
                         : this.inputMessage
                     : this.inputCaption;
+
+        this.msgAttc.sendAsHD = options.imageQuality == "hd";
 
         return await window.WAPI.SendImgToChat(this.phone, this.msgAttc, this.subtitute(caption));
     }

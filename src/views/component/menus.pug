@@ -15,7 +15,7 @@ each menu in menus
             when "_image"
                 div#_img-container
                     input#useImage(type='checkbox' class='checks trig premium' name='useImage' value='imgFile' data-capt-id='_caption' title='Attach Image?')
-                    input#imgFile(type='file' accept='image/*'  name='images' style='width:200px;cursor:pointer;' aria-label='Select Image' disabled)
+                    input#imgFile(type='file' accept='image/*' name='images' style='width:200px;cursor:pointer;' aria-label='Select Image' disabled)
                     div#_deleteImg(data-icon='close' class='img icon icon-del' data-value='imgFile' title='Delete Image')
                         - var ePath = 'M1490 1322q0 40-28 68l-136 136q-28 28-68 28t-68-28l-294-294-294 294q-28 28-68 28t-68-28l-136-136q-28-28-28-68t28-68l294-294-294-294q-28-28-28-68t28-68l136-136q28-28 68-28t68 28l294 294 294-294q28-28 68-28t68 28l136 136q28 28 28 68t-28 68l-294 294 294 294q28 28 28 68z';
                         +createSvg(ePath, '0 0 1792 1792', '20', '.4')
