@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.7.0](https://github.com/wayfu-id/wayfu-userscript/compare/v4.6.8...v4.7.0) (2025-09-03)
+
+
+### Features
+
+* **image:** add image quality support (hd or standard) ([c16b8bb](https://github.com/wayfu-id/wayfu-userscript/commit/c16b8bbe3652a84add75d5d558023c21e0a4df40))
+
+
+### Bug Fixes
+
+* **chat:** error for sending media ([0175014](https://github.com/wayfu-id/wayfu-userscript/commit/017501458ed98631194a1193e985325861591083))
+
 ### [4.6.8](https://github.com/wayfu-id/wayfu-userscript/compare/v4.6.7...v4.6.8) (2025-01-22)
 
 
