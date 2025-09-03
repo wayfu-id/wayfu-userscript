@@ -128,6 +128,17 @@ const storeObjects = [
         conditions: (module) => (module.ComposeBoxActions ? module.ComposeBoxActions : null),
     },
     {
+        id: "OpaqueData",
+        conditions: (module) =>
+            module.default && module.default.prototype && module.default.prototype.formData
+                ? module.default
+                : null,
+    },
+    {
+        id: "MediaPrep",
+        conditions: (module) => (module.prepRawMedia ? module : null),
+    },
+    {
         id: "WebClasses",
         conditions: (module) =>
             module.default &&

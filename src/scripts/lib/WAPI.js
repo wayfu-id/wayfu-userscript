@@ -122,19 +122,32 @@ function setWAPI(store) {
         },
         SendImgToChat: {
             value: function sendImgToChat(phone, msgAttc, caption = "", getChat = false) {
-                let { file } = msgAttc;
+                let { file, type, sendAsHD } = msgAttc;
                 if (!phone || !file) return false;
                 return new Promise((done) => {
                     this.Chat.find(`${phone}@c.us`)
-                        .then((chat) => {
-                            let mc = new this.MediaCollection(chat);
-                            mc.processAttachments([{ file: file }], chat, chat)
-                                .then(() => {
-                                    let [media] = mc.getModelsArray();
-                                    media.sendToChat(chat, { caption: caption });
-                                    done(getChat ? chat : true);
-                                })
-                                .catch((err) => (console.log(err), done(false)));
+                        .then(async (chat) => {
+                            let mData = await this.OpaqueData.createFromData(file, file.type),
+                                mOpt = {
+                                    asDocument: type && type === "PDF",
+                                    asGif: false,
+                                    maxDimension: sendAsHD ? 2560 : 1600,
+                                },
+                                media = await this.MediaPrep.prepRawMedia(mData, mOpt);
+
+                            await media.sendToChat(chat, { caption: caption });
+                            done(getChat ? chat : true);
+                            // let mc = new this.MediaCollection(chat);
+                            // mc.processAttachments([{ file: file }], chat, chat)
+                            //     .then(() => {
+                            //         let [media] = mc.getModelsArray();
+                            //         console.log(media);
+                            //         console.log(media.processAttachment(media.originalAttachment));
+                            //         console.log(media);
+                            //         media.sendToChat(chat, { caption: caption });
+                            //         done(getChat ? chat : true);
+                            //     })
+                            //     .catch((err) => (console.log(err), done(false)));
                         })
                         .catch((err) => (console.log(err), done(false)));
                 });
