@@ -57,10 +57,11 @@ function initListener() {
 /** Create WayFu Button Menu */
 function createMenuButton(name) {
     const { paneOne } = window.WAPI.WebClassesV3,
-        { item } = window.WAPI.WebClassesV2,
         menuButton = DOM.getElement(`.${paneOne} header span [role='button']`),
-        menuItem = item ? DOM.getElement(`.${paneOne} header span .${item} `) : menuButton.parentElement,
-        headMenu = menuItem.parentElement;
+        menuDiv = menuButton.parentElement, // stle: --xtransform
+        menuItem = menuDiv.parentElement, // span
+        headMenu = menuItem.parentElement, // tab-index
+        headMenuContainer = headMenu.parentElement;
 
     /** @type {(name: string) => HTMLElement} */
     const createBtnMenu = (name) => {
@@ -84,25 +85,38 @@ function createMenuButton(name) {
             tag: menuButton.tagName.toLocaleLowerCase(),
             role: "button",
             classid: menuButton.classList.value,
-            "data-tab": "2",
             tabindex: "0",
+            "data-tab": "2",
             "aria-disabled": false,
             title: `${name}`,
             "aria-label": `${name}`,
             html: btnSpan.outerHTML,
         });
 
-        return DOM.createElement({
-            tag: "div",
+        const btnWarp = DOM.createElement({
+            tag: menuDiv.tagName.toLocaleLowerCase(),
+            classid: menuDiv.classList.value,
             id: "wayfuToggle",
-            classid: menuItem.classList.value,
             "data-testid": "menu-bar-wayfu-app",
             "data-target": "wayfuPanel",
             html: btnDiv.outerHTML,
         });
+
+        const warpMenu = DOM.createElement({
+            tag: menuItem.tagName.toLocaleLowerCase(),
+            classid: menuItem.classList.value,
+            html: btnWarp.outerHTML,
+        });
+
+        return DOM.createElement({
+            tag: headMenu.tagName.toLocaleLowerCase(),
+            "data-tab": "2",
+            tabindex: "0",
+            html: warpMenu.outerHTML,
+        });
     };
 
-    headMenu.insertBefore(createBtnMenu(name), menuItem);
+    headMenuContainer.insertBefore(createBtnMenu(name), headMenu);
 }
 
 export { createView };
