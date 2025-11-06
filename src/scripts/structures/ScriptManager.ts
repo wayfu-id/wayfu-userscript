@@ -1,6 +1,7 @@
 import BaseModel from "./BaseModel";
-import { findValue } from "../utilities";
+import { findValue } from "../utilities/index";
 import App from "../App";
+
 /**
  * ScriptManager Model Class
  * @class ScriptManager
@@ -23,11 +24,11 @@ export default class ScriptManager extends BaseModel {
      */
     get managerName() {
         if (typeof GM_info === "object") {
-             // Tampermonkey (Chrome/Opera/Firefox)
+            // Tampermonkey (Chrome/Opera/Firefox)
             if (typeof GM_info.scriptHandler !== "undefined") {
                 return "Tampermonkey";
             }
-             // Greasemonkey (Firefox) 
+            // Greasemonkey (Firefox)
             else {
                 return "Greasemonkey";
             }
@@ -89,15 +90,14 @@ export default class ScriptManager extends BaseModel {
      *
      * @overload
      * @param {{ [k: string]: any }} props propertie(s) as object
-     *
      */
     setValue(name: { [k: string]: any }): void;
     /**
-    * Set and save some value to local storage
-    * @overload
-    * @param {string} name what name
-    * @param {any} value what value
-    */
+     * Set and save some value to local storage
+     * @overload
+     * @param {string} name what name
+     * @param {any} value what value
+     */
     setValue(name: string, value: any): void;
     setValue(name: string | { [k: string]: any }, value?: any): void {
         if (typeof GM_setValue === "undefined") return;
@@ -141,7 +141,7 @@ export default class ScriptManager extends BaseModel {
         options.timeout = options.timeout || 2e4; // 20s
         if (options.data || options.method == "POST") {
             options.method = "POST";
-            options.data = this.serialize(options.data || {});
+            options.data = this._serialize(options.data || {}).toString();
             options.headers = Object.assign({}, options.headers, {
                 "X-Requested-With": "XMLHttpRequest",
                 "Content-Type": "application/x-www-form-urlencoded",

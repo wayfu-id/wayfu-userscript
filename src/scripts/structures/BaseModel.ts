@@ -1,8 +1,9 @@
-import { intoObject, findValue } from "../utilities";
-import App from "App";
+import { intoObject, findValue, parseValue } from "../utilities/index";
+import App from "../App";
 
 export default class BaseModel {
     [k: string | number]: any;
+    defaultProp: { [k: string]: any } = {};
     app: App;
 
     constructor(app: App) {
@@ -10,26 +11,19 @@ export default class BaseModel {
     }
 
     /**
-     * Set class propreties
-     * @param {object} props properties
-     * @param {boolean?} [parse=true]
-     * @returns
+     * Get value from Object
+     * @param {string} key Object key
+     * @param {number} [depth=2] dept default is `2`
      */
-    _setProp(props: any, parse: boolean = true) {
-        props = intoObject(props, parse);
-        for (let key in props) {
-            if (this.hasOwnProperty(key)) {
-                this[key] = props[key];
-            }
-        }
-        return this;
+    _find(key: string, depth: number = 2) {
+        return findValue(key, this, depth);
     }
 
     /**
      * Serialize to string
      * @param {typeof Date | string | number | {[k: string | number]: any}} input
      */
-    _serialize(input: typeof Date | string | number | {[k: string | number]: any}) {
+    _serialize(input: typeof Date | string | number | { [k: string | number]: any }) {
         if (typeof input === "object") {
             let arr = [];
             for (let prop in input) {
@@ -44,11 +38,29 @@ export default class BaseModel {
     }
 
     /**
-     * Get value from Object
-     * @param {string} key Object key
-     * @param {number} [depth=2] dept default is `2`
+     * Set class propreties
+     * @param {object} props properties
+     * @param {boolean?} [parse=true]
+     * @returns
      */
-    _find(key: string, depth: number = 2) {
-        return findValue(key, this, depth);
+    _setProps(props: any, parse: boolean = true) {
+        props = intoObject(props, parse);
+        for (let key in props) {
+            this._setProp(key, props[key]);
+        }
+        return this;
+    }
+
+    /**
+     * Set single property
+     * @param {string | number} key property name
+     * @param {any} value property value
+     */
+    _setProp(key: string | number, value: any) {
+        value = parseValue(value);
+        if (this.hasOwnProperty(key) || this.defaultProp.hasOwnProperty(key)) {
+            this[key] = value;
+        }
+        return this;
     }
 }

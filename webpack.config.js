@@ -1,4 +1,7 @@
+const path = require("path");
+
 module.exports = {
+    entry: "./index.ts",
     devtool: false,
     output: {
         clean: true,
@@ -17,16 +20,19 @@ module.exports = {
             templateLiteral: true,
         },
     },
+    context: path.resolve(__dirname, "src"),
+    resolve: {
+        extensions: [".ts", ".tsx", ".js"],
+    },
     module: {
         rules: [
             {
-                test: /\.js$/,
-                exclude: /(node_modules)/,
+                test: /\.(ts|tsx)$/,
                 loader: "babel-loader",
-                // options: {
-                //     presets: ["latest", { modules: false, plugins: true }],
-                //     //     presets: ["@babel/preset-env"],
-                // },
+                exclude: /(node_modules)/,
+                options: {
+                    presets: ["@babel/preset-env", "@babel/preset-typescript"],
+                },
             },
         ],
     },
@@ -35,7 +41,8 @@ module.exports = {
         "@wayfu/simple-xlsx": "XLSX",
         "@wayfu/wayfu-dom": "DOM",
         "@wayfu/waydown": "Waydown",
+        react: "React",
+        "react-dom": "ReactDOM",
     },
     target: ["web", "es5"],
-    // plugins: [new WebpackUserscript()],
 };

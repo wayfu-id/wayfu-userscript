@@ -6,7 +6,7 @@ import { parseValue } from ".";
  * @param {any | Array<any>} filter What value of the filter
  * @param {string} [type="key"] Type filter `"key" | "val"`
  */
-function createFilteredObject (obj: any, filter: any | Array<any>, type: string = "key") {
+function createFilteredObject(obj: any, filter: any | Array<any>, type: string = "key") {
     let useFilter = Array.isArray(filter) ? filter : [filter];
     return Object.fromEntries(
         Object.entries(obj).filter(([k, v]) => {
@@ -14,7 +14,7 @@ function createFilteredObject (obj: any, filter: any | Array<any>, type: string 
             return useFilter.some((e) => val === e);
         })
     );
-};
+}
 
 /**
  * Get value from Object
@@ -22,7 +22,7 @@ function createFilteredObject (obj: any, filter: any | Array<any>, type: string 
  * @param {Object} object Object target, default is `this` class
  * @param {number} [depth=2] dept default is `2`
  */
-function findValue (key: string, object: any, depth: number = 2) {
+function findValue(key: string, object: any, depth: number = 2) {
     if (!depth) return null;
 
     object = object || {};
@@ -37,16 +37,16 @@ function findValue (key: string, object: any, depth: number = 2) {
     }
 
     return value;
-};
+}
 
 /**
  * Parse data into Object. Also parse the value of object items
  * @param {any | Array<any>} data input data
  * @param {boolean} [parse=true] is it parsed value? default `true`
  */
-function intoObject (data: any | Array<any>, parse: boolean = true) {
-    let obj: {[k: string | number]: any} = {};
-    if (!data) return obj;
+function intoObject<T extends Object>(data: T | Array<any>, parse: boolean = true): T {
+    let obj: { [k: string | number]: any } = {};
+    if (!data) return obj as T;
 
     if (typeof data === "string") {
         obj = JSON.parse(data);
@@ -62,8 +62,8 @@ function intoObject (data: any | Array<any>, parse: boolean = true) {
         }
     }
 
-    return obj;
-};
+    return obj as T;
+}
 
 /**
  * Check and detect the string is JSON valid or not.
@@ -71,14 +71,14 @@ function intoObject (data: any | Array<any>, parse: boolean = true) {
  * If it isn't valid, then return it as null.
  * @param {string} str JSON string
  */
-function JSONParse (str: string) {
+function JSONParse<T extends Object>(str: string) {
     return new Promise((done) => {
         try {
             done(JSON.parse(str));
         } catch (e) {
             done(null);
         }
-    }) as Promise<JSON | null>;
-}; 
+    }) as Promise<T | null>;
+}
 
-export { createFilteredObject, findValue, intoObject, JSONParse,  };
+export { createFilteredObject, findValue, intoObject, JSONParse };

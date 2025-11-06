@@ -1,26 +1,31 @@
 type callbackFunction = (stat: boolean) => any;
 
+/**
+ * Worker class to handle interval functions
+ */
 export default class Worker {
+    private static instance: Worker;
+
     timer: number | undefined;
     time: number;
     fn: TimerHandler;
 
-    constructor() {
+    private constructor() {
         this.time = 0;
         this.fn = "";
     }
 
     /**
-     * Get is running interval status
+     * Get current running status
      */
     get isRunning() {
         return !!this.timer;
     }
 
     /**
-     * Set looping function for some interval
-     * @param {number} t interval uint | miliseconds
-     * @param {Function} fn function to loop
+     * Set interval time and function
+     * @param {number} t time in milliseconds
+     * @param {Function} fn function to be executed
      */
     set(t: number, fn: Function) {
         this.time = t;
@@ -32,7 +37,7 @@ export default class Worker {
      */
     start(): void;
     /**
-     * Start the interval interval
+     * Start the interval
      * @param {callbackFunction} callback will be execute when interval started
      */
     start(callback: callbackFunction): void;
@@ -51,7 +56,7 @@ export default class Worker {
     break(): void;
     /**
      * Break the interval
-     * @param {callbackFunction} callback will be execute when interval broke
+     * @param {callbackFunction} callback will be execute when interval breaked
      */
     break(callback: callbackFunction): void;
     break(callback?: callbackFunction): void {
@@ -77,5 +82,12 @@ export default class Worker {
         this.fn = "";
         this.time = 0;
         return callback ? this.break(callback) : this.break();
+    }
+
+    static getOrCreate() {
+        if (!Worker.instance) {
+            Worker.instance = new Worker();
+        }
+        return Worker.instance;
     }
 }

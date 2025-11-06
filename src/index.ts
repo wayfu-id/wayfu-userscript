@@ -1,3 +1,3 @@
 import App from "./scripts/App";
 
-await App.init();
+App.init(unsafeWindow);

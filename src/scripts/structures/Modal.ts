@@ -43,10 +43,7 @@ export default class Modal {
      * @param {string | HTMLElement | DOM | elemenOptions} content Modal Content, wether it text or HTML Element
      * @param {string?} title Modal Title.
      */
-    addContent(
-        content: string | HTMLElement | DOM | DOM.elementOptions,
-        title: string
-    ): Promise<any>;
+    addContent(content: string | HTMLElement | DOM | DOM.elementOptions, title: string): Promise<any>;
     /**
      * Construct and display the modal
      * @param {string | HTMLElement | DOM | elemenOptions} content Modal Content, wether it text or HTML Element
@@ -99,7 +96,7 @@ export default class Modal {
                 let wrap = DOM.create("ul", { classid: "wfu-buttons" }),
                     btnYes = { classid: "wfu-btn-ok", text: "Ya" },
                     btnNo = { classid: "wfu-modal-close", text: "Tidak" },
-                    props = { y: btnYes, n: btnNo };
+                    props: { [k: string]: any } = { y: btnYes, n: btnNo };
 
                 for (let stat in props) {
                     let item = DOM.create("li").insertTo(wrap),
@@ -180,9 +177,7 @@ export default class Modal {
      * Construct and display the alert confirm
      * @param {string | HTMLElement | DOM | elemenOptions} content innerText | innerHTML for the modal
      */
-    static async confirm(
-        content: string | HTMLElement | DOM | DOM.elementOptions
-    ): Promise<boolean>;
+    static async confirm(content: string | HTMLElement | DOM | DOM.elementOptions): Promise<boolean>;
     /**
      * Construct and display the alert confirm
      * @param {string | HTMLElement | DOM | elemenOptions} content innerText | innerHTML for the modal

@@ -1,23 +1,26 @@
 /**
  * Extended Built-in Array
  */
-export default class MyArray<Data extends any> extends Array {
-    constructor(...input: Data[])
-    constructor(input: Data[]) {
-        super(input.length);
-        input.forEach((element, index) => {
-            this[index] = element;
-        })
+export default class MyArray<T> extends Array<T | undefined> {
+    constructor(...items: T[]) {
+        super(...items);
+        // Object.setPrototypeOf(this, Array.prototype);
+        // input.forEach((element, index) => {
+        //     this[index] = element;
+        // });
     }
+
     /**
-     * Get empty status current array
+     * Check current array is empty or not
+     * @return true if array is empty, false otherwise
      */
     get isEmpty() {
         return this.length <= 0;
     }
 
     /**
-     * Get all non epmty array items
+     * Get array with non empty values
+     * @return new MyArray instance with non empty values
      */
     get nonEmptyValue() {
         return this.filter((val) => !!val);
@@ -25,6 +28,7 @@ export default class MyArray<Data extends any> extends Array {
 
     /**
      * Get first array item
+     * @return first item or undefined if array is empty
      */
     get first() {
         return !this.isEmpty ? this.at(0) : undefined;
@@ -32,14 +36,18 @@ export default class MyArray<Data extends any> extends Array {
 
     /**
      * Get last array item
+     * @return last item or undefined if array is empty
      */
     get last() {
         return !this.isEmpty ? this.at(this.length - 1) : undefined;
     }
 
     /**
-     * Change index order of an items, and return this array.
-     * `Carefull: This function will override old array.`
+     * Change index of an item
+     * `Modifies current array`
+     * @param {number} oldIndex current index of the item
+     * @param {number} newIndex new index of the item
+     * @return modified current array
      */
     changeIndex(oldIndex: number, newIndex: number) {
         if (newIndex >= this.length) {
@@ -53,7 +61,9 @@ export default class MyArray<Data extends any> extends Array {
     }
 
     /**
-     * Count number of a value in current array;
+     * Count occurrences of a value in the array
+     * @param val value to count
+     * @return number of occurrences
      */
     countValue(val: any): number {
         let count = 0;
@@ -64,14 +74,20 @@ export default class MyArray<Data extends any> extends Array {
     }
 
     /**
-     * Check given value is on this array or not
+     * Check if an item is in the array
+     * @param item item to check
+     * @return true if item is in the array, false otherwise
      */
     isOnArray(item: any) {
         return this.some((elm) => item === elm);
     }
 
     /**
-     * Create an array by spliting a string with a delimiter
+     * Reconstruct `String.split` to create new MyArray
+     * From `string`.
+     * @param {string} string string to split
+     * @param {string} delimiter delimiter to split the string
+     * @return new MyArray instance with splitted values
      */
     static split(string: string, delimiter: string) {
         let arr = string.split(delimiter);
@@ -79,10 +95,11 @@ export default class MyArray<Data extends any> extends Array {
     }
 
     /**
-     * Reconstruct `Array.from` to create new MyArray
-     * From `IterableObject`.
+     * Create MyArray from iterable or array-like object
+     * @param {Iterable<Data> | ArrayLike<Data>} arrayLike iterable or array-like object to convert
+     * @return new MyArray instance with converted values
      */
-    static create<Data>(arrayLike: Iterable<Data> | ArrayLike<Data>) {
+    static create<T>(arrayLike: Iterable<T> | ArrayLike<T>) {
         return new MyArray(...Array.from(arrayLike));
     }
 }

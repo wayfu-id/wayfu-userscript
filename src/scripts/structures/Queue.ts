@@ -1,12 +1,17 @@
-import { MyArray } from ".";
+import MyArray from "./MyArray";
 
+/**
+ * A simple Queue class with stock and reload feature
+ */
 export default class Queue {
+    private static instance: Queue;
+
     currentIndex: number;
     items: MyArray<any>;
     stock: MyArray<any>;
     offset: number;
 
-    constructor() {
+    private constructor() {
         this.currentIndex = 0;
         this.items = new MyArray();
         this.stock = new MyArray();
@@ -14,14 +19,16 @@ export default class Queue {
     }
 
     /**
-     * get current empty status
+     * Check if current queue is empty
+     * @returns boolean
      */
     get isEmpty() {
         return this.items.isEmpty;
     }
 
     /**
-     * get current queue items
+     * get current queue item without increasing it's counter
+     * @return current item or undefined if empty
      */
     get now() {
         return !this.items.isEmpty ? this.items[this.offset] : undefined;
@@ -29,20 +36,23 @@ export default class Queue {
 
     /**
      * get current queue size
+     * @returns number
      */
     get size() {
         return this.items.length - this.offset;
     }
 
     /**
-     * get first queue size
+     * get current queue long (total items)
+     * @returns number
      */
     get long() {
         return this.stock.length;
     }
 
     /**
-     * Set queue data
+     * Set data to current queue, and stock it for later use
+     * @param data MyArray<any>
      */
     setData(data: MyArray<any>) {
         this.items = data;
@@ -50,21 +60,21 @@ export default class Queue {
     }
 
     /**
-     * Get current queue items, increase it's counter.
-     * Decrease it's size when it's counter is more or equal to half of the size
+     * Get next item in queue, and increase it's counter
+     * @returns next item or undefined if empty
      */
     next() {
         if (this.items.isEmpty) return undefined;
         let item = this.items[this.offset];
         if (++this.offset * 2 >= this.items.length) {
-            this.items = this.items.slice(this.offset) as MyArray<any>;
+            this.items = MyArray.create(this.items.slice(this.offset));
             this.offset = 0;
         }
         return item;
     }
 
     /**
-     * Reset queue
+     * Reset queue to empty state
      */
     reset() {
         this.items = new MyArray();
@@ -74,7 +84,7 @@ export default class Queue {
     }
 
     /**
-     * Reload queue with last setted data
+     * Reload queue from stock, and reset counter
      */
     reload() {
         this.items = this.stock;
@@ -82,7 +92,14 @@ export default class Queue {
         this.offset = 0;
     }
 
-    *[Symbol.iterator]() {
-        yield* [...this.items];
+    static getOrCreate() {
+        if (!Queue.instance) {
+            Queue.instance = new Queue();
+        }
+        return Queue.instance;
+    }
+
+    [Symbol.iterator]() {
+        return this.next();
     }
 }

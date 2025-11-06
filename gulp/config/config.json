@@ -1,7 +1,7 @@
 {
     "env": "development",
     "globs": {
-        "app": "src/index.js"
+        "app": "src/index.ts"
     },
     "path": {
         "production": {
