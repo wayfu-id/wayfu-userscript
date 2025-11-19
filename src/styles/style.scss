@@ -455,11 +455,29 @@
 }
 
 div.two {
-    div[data-testid="menu-bar-wayfu-app"] {
-        [role="button"]{
+    [data-testid="menu-bar-wayfu-app"] {
+        [role="button"],
+        [type="button"] {
             padding: 8px;
             text-align: initial;
             border-radius: 50%;
+            margin-right: 5px;
+
+            &.active {
+                background-color: unquote("var(--menu-bar-item-background-active)");
+
+                svg {
+                    .fill0 {
+                        fill: #009a4b !important;
+                    }
+                    .fill1 {
+                        fill: #1c7da6 !important;
+                    }
+                    .fill2 {
+                        fill: #1c8ebd !important;
+                    }
+                }
+            }
         }
         svg.wayfu-app-icon {
             fill-rule: evenodd;
@@ -472,7 +490,7 @@ div.two {
         }
 
         &.active {
-            [role="button"]{
+            [role="button"] {
                 background-color: unquote("var(--menu-bar-item-background-active)");
             }
             svg {

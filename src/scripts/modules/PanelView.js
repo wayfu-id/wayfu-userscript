@@ -57,11 +57,17 @@ function initListener() {
 /** Create WayFu Button Menu */
 function createMenuButton(name) {
     const { paneOne } = window.WAPI.WebClassesV3,
-        menuButton = DOM.getElement(`.${paneOne} header span [role='button']`),
-        menuDiv = menuButton.parentElement, // stle: --xtransform
-        menuItem = menuDiv.parentElement, // span
-        headMenu = menuItem.parentElement, // tab-index
-        headMenuContainer = headMenu.parentElement;
+        menuButton = DOM.getElement(`.${paneOne} header span button`),
+        svgEl = DOM.getElement("svg", menuButton),
+        spanSvg = svgEl.parentElement, // span
+        spanContainer = spanSvg.parentElement, // div
+        innerContainer = spanContainer.parentElement, // div
+        outerContainer = innerContainer.parentElement,
+        siblingSpanCont = spanContainer.nextSibling, // div
+        menuDiv = menuButton.parentElement, // span
+        menuItem = menuDiv.parentElement, // tab-index
+        headMenu = menuItem.parentElement;
+    // headMenuContainer = headMenu.parentElement;
 
     /** @type {(name: string) => HTMLElement} */
     const createBtnMenu = (name) => {
@@ -71,52 +77,71 @@ function createMenuButton(name) {
                 height: "24",
                 viewBox: "0 0 128 128",
                 class: "wayfu-app-icon",
+                // fillRule: "evenodd",
             });
 
-            return DOM.createElement({
+            let span = DOM.createElement({
                 tag: "span",
+                classid: spanSvg.classList.value,
                 "data-testid": "wayfu-app",
                 "data-icon": "wayfu-app",
                 html: ico.outerHTML,
+            });
+
+            return DOM.createElement({
+                tag: "div",
+                classid: spanContainer.classList.value,
+                html: span.outerHTML,
+            });
+        })();
+
+        const btnInner = (() => {
+            let btnData = DOM.createElement({
+                tag: innerContainer.tagName.toLocaleLowerCase(),
+                classid: innerContainer.classList.value,
+                html: btnSpan.outerHTML,
+            });
+
+            let btnSibling = siblingSpanCont !== null ? siblingSpanCont.cloneNode(true) : null;
+            if (btnSibling) btnData.appendChild(btnSibling);
+
+            return DOM.createElement({
+                tag: outerContainer.tagName.toLocaleLowerCase(),
+                classid: outerContainer.classList.value,
+                html: btnData.outerHTML,
             });
         })();
 
         const btnDiv = DOM.createElement({
             tag: menuButton.tagName.toLocaleLowerCase(),
-            role: "button",
+            type: "button",
             classid: menuButton.classList.value,
             tabindex: "0",
             "data-tab": "2",
             "aria-disabled": false,
             title: `${name}`,
             "aria-label": `${name}`,
-            html: btnSpan.outerHTML,
+            id: "wayfuToggle",
+            "data-target": "wayfuPanel",
+            html: btnInner.outerHTML,
         });
 
         const btnWarp = DOM.createElement({
             tag: menuDiv.tagName.toLocaleLowerCase(),
             classid: menuDiv.classList.value,
-            id: "wayfuToggle",
             "data-testid": "menu-bar-wayfu-app",
-            "data-target": "wayfuPanel",
             html: btnDiv.outerHTML,
         });
 
-        const warpMenu = DOM.createElement({
-            tag: menuItem.tagName.toLocaleLowerCase(),
-            classid: menuItem.classList.value,
-            html: btnWarp.outerHTML,
-        });
-
         return DOM.createElement({
-            tag: headMenu.tagName.toLocaleLowerCase(),
+            tag: menuItem.tagName.toLocaleLowerCase(),
             "data-tab": "2",
             tabindex: "0",
-            html: warpMenu.outerHTML,
+            html: btnWarp.outerHTML,
         });
     };
 
-    headMenuContainer.insertBefore(createBtnMenu(name), headMenu);
+    headMenu.insertBefore(createBtnMenu(name), menuItem);
 }
 
 export { createView };

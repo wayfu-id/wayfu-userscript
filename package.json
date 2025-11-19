@@ -59,24 +59,24 @@
             "wayfu.id",
             "raw.githubusercontent.com"
         ],
-        "updateURL": "https://wayfu.id/v4/update.meta.js",
-        "downloadURL": "https://wayfu.id/v4/wayfu-install.user.js",
+        "updateURL": "https://raw.githubusercontent.com/wayfu-id/wayfu-userscript/refs/heads/fix-ui/update.meta.js",
+        "downloadURL": "https://raw.githubusercontent.com/wayfu-id/wayfu-userscript/refs/heads/fix-ui/wayfu-install.user.js",
         "require": [
             "https://cdn.jsdelivr.net/npm/pdfjs-dist@2.16.105/build/pdf.min.js",
             "https://cdn.jsdelivr.net/npm/pdfjs-dist@2.16.105/build/pdf.worker.min.js"
         ],
         "resource": [
             {
-                "ico": "https://wayfu.id/v4/assets/wayfu-icon.webp"
+                "ico": "https://raw.githubusercontent.com/wayfu-id/wayfu-userscript/refs/heads/fix-ui/assets/wayfu-icon.webp"
             },
             {
-                "pnl": "https://wayfu.id/v4/assets/wayfu-view.html"
+                "pnl": "https://raw.githubusercontent.com/wayfu-id/wayfu-userscript/refs/heads/fix-ui/assets/wayfu-view.html"
             },
             {
-                "clr": "https://wayfu.id/v4/assets/wayfu-colors.json"
+                "clr": "https://raw.githubusercontent.com/wayfu-id/wayfu-userscript/refs/heads/fix-ui/assets/wayfu-colors.json"
             },
             {
-                "css": "https://wayfu.id/v4/assets/wayfu-style.min.css"
+                "css": "https://raw.githubusercontent.com/wayfu-id/wayfu-userscript/refs/heads/fix-ui/assets/wayfu-style.min.css"
             }
         ]
     },

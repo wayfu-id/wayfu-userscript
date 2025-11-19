@@ -250,7 +250,7 @@ import { loadRecipient, resetRecipient, checkStatus, startProcess, exportDataToF
      */
     toggleApp(e) {
         const elm = e.currentTarget || e.target,
-            { active } = window.WAPI.WebClassesV2,
+            // { active } = window.WAPI.WebClassesV2,
             a = elm.classList.toggle("active");
 
         const acdBody = ((e) => {
@@ -261,7 +261,7 @@ import { loadRecipient, resetRecipient, checkStatus, startProcess, exportDataToF
 
         acdBody.style.height = acdBody.style.height ? null : `${acdBody.scrollHeight}px`;
 
-        elm.classList.toggle(active);
+        // elm.classList.toggle(active);
 
         let tabVisibility = acdBody.style.height ? "unset" : "collapse";
         DOM.setElementStyle("#wayfuPanel", { visibility: tabVisibility });
