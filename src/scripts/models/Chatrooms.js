@@ -87,8 +87,8 @@ class Chatroom extends BaseModel {
      * @returns
      */
     init() {
-        const { active } = window.WAPI.WebClasses,
-            { chatHeader } = window.WAPI.WebClassesV2;
+        const { active } = window.WAPI.WebClasses.CellFrame,
+            { chatHeader } = window.WAPI.WebClasses.Header;
 
         this.classId = { active: active, header: chatHeader };
         return this;

@@ -127,6 +127,11 @@ const storeObjects = [
         id: "ComposeBox",
         conditions: (module) => (module.ComposeBoxActions ? module.ComposeBoxActions : null),
     },
+    { id: "HistorySync", conditions: (module) => (module.sendPeerDataOperationRequest ? module : null) },
+    {
+        id: "MsgUtils",
+        conditions: (module) => (module.addAndSendTextMsg || module.addAndSendMsgToChat ? module : null),
+    },
     {
         id: "OpaqueData",
         conditions: (module) =>

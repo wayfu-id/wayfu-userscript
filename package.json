@@ -63,7 +63,8 @@
         "downloadURL": "https://raw.githubusercontent.com/wayfu-id/wayfu-userscript/refs/heads/fix-ui/wayfu-install.user.js",
         "require": [
             "https://cdn.jsdelivr.net/npm/pdfjs-dist@2.16.105/build/pdf.min.js",
-            "https://cdn.jsdelivr.net/npm/pdfjs-dist@2.16.105/build/pdf.worker.min.js"
+            "https://cdn.jsdelivr.net/npm/pdfjs-dist@2.16.105/build/pdf.worker.min.js",
+            "https://unpkg.com/@wayfu/simple-wapi@latest/dist/index.min.js"
         ],
         "resource": [
             {
@@ -139,6 +140,7 @@
         "webpack-stream": "^7.0.0"
     },
     "dependencies": {
+        "@wayfu/simple-wapi": "^0.1.13",
         "fflate": "^0.8.2",
         "global": "^4.4.0",
         "standard-version": "^9.5.0"

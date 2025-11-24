@@ -7,6 +7,7 @@ import { csvFile } from "./models/CSVFile";
 import { createView } from "./modules/PanelView";
 import { changes } from "./models/Changeslog";
 import { DOM } from "./lib/HtmlModifier";
+import WAPI from "@wayfu/simple-wapi";
 import { loadWapi } from "./lib/WAPI";
 
 export default class App extends GM_Library {
@@ -20,7 +21,8 @@ export default class App extends GM_Library {
     }
     async initialize(target) {
         // Initialize WAPI Module;
-        await loadWapi(target);
+        window.WAPI = WAPI.init(target, true);
+        // await loadWapi(target);
         // Create App Panel
         this.registerPanel();
         // Initialize and Register the User

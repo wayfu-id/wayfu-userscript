@@ -2,6 +2,7 @@ import { DOM } from "../lib/HtmlModifier";
 import { eventLists, svgData } from "../lib/Constant";
 import { listeners } from "./Events";
 import { Debug } from "./Debug";
+import win from "global";
 
 /**
  * @typedef {{
@@ -17,16 +18,18 @@ import { Debug } from "./Debug";
  *  @param {appDetails} details
  */
 function createView(html, style, details) {
+    console.log(window.WAPI);
     const { name, version, icon } = details,
         after = DOM.getElement("header > header") ? "header > header" : "header",
-        { paneOne } = window.WAPI.WebClassesV3;
+        { paneOne } = window.WAPI.WebClasses.Main;
+
 
     // console.log(after, paneOne);
     DOM.createElement({
         tag: "header",
         id: "wayfuPanel",
         after: after,
-        html: html.replace(/VERSION/, version).replace(/WA_VERSION/, window.WAPI.Debug.VERSION),
+        html: html.replace(/VERSION/, version).replace(/WA_VERSION/, window.WAPI.WA_VERSION),
     });
 
     DOM.addStyle(style, { id: "wayfuStyle" }).setElement("img.appIco", { src: icon });
@@ -56,7 +59,7 @@ function initListener() {
 
 /** Create WayFu Button Menu */
 function createMenuButton(name) {
-    const { paneOne } = window.WAPI.WebClassesV3,
+    const { paneOne } = window.WAPI.WebClasses.Main,
         menuButton = DOM.getElement(`.${paneOne} header span button`),
         svgEl = DOM.getElement("svg", menuButton),
         spanSvg = svgEl.parentElement, // span

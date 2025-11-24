@@ -237,10 +237,10 @@ import { loadRecipient, resetRecipient, checkStatus, startProcess, exportDataToF
                     : "",
         });
 
-        message.setProperties({ msgAttc: { file: imgFile, type, sendAsHD: options.imageQuality == "hd" } });
+        message.setProperties({ msgAttc: { media: imgFile, type, sendAsHD: options.imageQuality == "hd" } });
         options.setOptions({
             hasAttc: !!imgFile,
-            msgAtc: { file: imgFile, type, sendAsHD: options.imageQuality == "hd" },
+            msgAttc: { media: imgFile, type, sendAsHD: options.imageQuality == "hd" },
         });
     }
 
@@ -418,7 +418,7 @@ import { loadRecipient, resetRecipient, checkStatus, startProcess, exportDataToF
      * @param {Event} e Event
      */
     async checkChat(e) {
-        const { item } = window.WAPI.WebClassesV2,
+        const { item } = window.WAPI.WebClasses.MenuBar,
             chatMenu = DOM.getElement(`#main .${item}`),
             menuButton = DOM.getElement(`[role='button']`, chatMenu);
 
@@ -459,26 +459,26 @@ import { loadRecipient, resetRecipient, checkStatus, startProcess, exportDataToF
             })(downloadBtn);
         };
 
-        // chat.selectChat();
-        if (!!chat.selectChat().room && chat.isGroup) {
-            // console.log(chat);
+        let chat = window.WAPI.Chat.getActive();
+        console.log(chat, chat.groupMetadata);
+        if (!!chat && !!chat.groupMetadata) {
             let { groupMetadata } = chat,
-                { subject, participants } = groupMetadata;
+                {subject, participants} = groupMetadata;
 
             let contacts = new MyArray();
-            for (const { contact } of participants.getModelsArray()) {
-                let {
-                    id: { user },
-                    name,
-                    pushname,
-                } = contact.serialize();
-                contacts.push([pushname || name || user, user]);
+            for (let { contact } of participants.getModelsArray()) {
+                const useContact = contact.getModel()._serialized;
+                let phone = useContact.phoneNumber ?? useContact.id.user,
+                    name = useContact.pushname || useContact.name || phone;
+
+                contacts.push([name, phone]);
             }
 
             // let { fileUrl, fileName } = CSVFile.createFile(subject, contacts),
             //     fname = exportType === "csv" ? `${fileName}.csv` : `${subject}.xlsx`;
             let btn = createDonwloadBtn(subject);
             const downloadMenu = DOM.getElement("span[data-icon='download-alt']", chatMenu.parentElement);
+            console.log(e.target === downloadMenu);
             if (!downloadMenu) {
                 chatMenu.parentElement.insertBefore(btn, chatMenu);
             } else if (downloadMenu && e.target === downloadMenu) {

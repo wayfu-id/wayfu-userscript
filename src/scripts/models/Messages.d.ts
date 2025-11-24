@@ -11,10 +11,10 @@ export default class Messages extends BaseModel {
     inputMessage: string;
     inputCaption: string;
     // imageFile: string;
-    msgAtc: {
-        file: File | null;
+    msgAttc: {
+        media: File | null;
         type: string;
-        sendAsHD: boolean;
+        forceHD: boolean;
     };
     idNumber: string;
     name: string;

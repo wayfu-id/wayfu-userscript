@@ -5,7 +5,7 @@ import MyArray from "./MyArray";
 
 /**
  * @typedef { "MM/DD/YYYY" | "DD/MM/YYYY" | "YYYY/MM/DD" } datePaternOpt
- * @typedef { {file: File, type: string, sendAsHD: boolean} } messageAttachment
+ * @typedef { {media: File | null, type: string, sendAsHD: boolean} } messageAttachment
  *
  * @typedef { ObjectConstructor & {
  *      themeColor: string,
@@ -56,7 +56,7 @@ class Settings extends GM_Library {
             // autoMode: false, @deprecated Mode auto is setted by default
             debug: false,
             hasAttc: false,
-            msgAttc: { file: null, type: "", sendAsHD: false },
+            msgAttc: { media: null, type: "", sendAsHD: false },
             useAttc: false,
             activeTab: 0,
             targetBp: 100,

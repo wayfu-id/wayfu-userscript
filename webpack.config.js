@@ -31,7 +31,8 @@ module.exports = {
         ],
     },
     externals: {
-        "pdfjs-dist": "pdfjsLib",
+        "pdfjs-dist": "pdfjsLib", 
+        "@wayfu/simple-wapi": "WAPI",
     },
     target: ["web", "es5"],
     // plugins: [new WebpackUserscript()],

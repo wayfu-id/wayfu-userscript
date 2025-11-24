@@ -18,9 +18,9 @@ class Messages extends BaseModel {
         this.inputCaption = "";
         // this.imageFile = "";
         this.msgAttc = {
-            file: null,
+            media: null,
             type: "",
-            sendAsHD: false,
+            forceHD: false,
         };
         this.idNumber = "";
         this.name = "";
@@ -168,9 +168,9 @@ class Messages extends BaseModel {
                         : this.inputMessage
                     : this.inputCaption;
 
-        this.msgAttc.sendAsHD = options.imageQuality == "hd";
+        this.msgAttc.forceHD = options.imageQuality == "hd";
 
-        return await window.WAPI.SendImgToChat(this.phone, this.msgAttc, this.subtitute(caption));
+        return await window.WAPI.sendMessage(this.phone, this.subtitute(caption), {...this.msgAttc});
     }
 
     /**
@@ -178,7 +178,7 @@ class Messages extends BaseModel {
      * @returns
      */
     async sendText() {
-        return await window.WAPI.composeAndSendMsgToChat(this.phone, this.value);
+        return await window.WAPI.sendMessage(this.phone, this.value);
     }
 }
 

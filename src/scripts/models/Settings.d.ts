@@ -3,7 +3,7 @@ import GM_Library from "./GM_Library";
 type datePaternOpt = "MM/DD/YYYY" | "DD/MM/YYYY" | "YYYY/MM/DD";
 
 type messageAttachment = {
-    file: File | null;
+    media: File | null;
     type: string;
 };
 
@@ -42,7 +42,7 @@ interface Settings extends GM_Library, defaultOpt {
     init(): Settings;
 
     /** Set options properties */
-    setOptions(options?: { [k: keyof defaultOpt]: any }): Settings;
+    setOptions(options?: Partial<defaultOpt>): Settings;
 
     /** Set option property */
     setOption(key: keyof defaultOpt, val: any): void;

@@ -120,34 +120,47 @@ function setWAPI(store) {
             },
             enumerable: true,
         },
+        SendTextMsgToChat: {
+            value: function SendTextMsgToChat(phone, message, getChat = false) {
+                const { MsgUtils: f, HistorySync } = this;
+
+                return new Promise((done) => {
+                    this.Chat.find(`${phone}@c.us`).then(async (chat) => {
+                        if (!chat.active) await chat.open();
+
+                        let msg = await f.createTextMsgData(chat, message),
+                            res = await f.addAndSendMsgToChat(chat, msg);
+
+                        if (chat.endOfHistoryTransferType === 0) {
+                            await HistorySync.sendPeerDataOperationRequest(3, { chatId: chat.id });
+                        }
+                        done(getChat ? chat : res);
+                    });
+                });
+            },
+            enumerable: true,
+        },
         SendImgToChat: {
             value: function sendImgToChat(phone, msgAttc, caption = "", getChat = false) {
+                const { HistorySync, MediaPrep, OpaqueData } = this;
                 let { file, type, sendAsHD } = msgAttc;
                 if (!phone || !file) return false;
                 return new Promise((done) => {
                     this.Chat.find(`${phone}@c.us`)
                         .then(async (chat) => {
-                            let mData = await this.OpaqueData.createFromData(file, file.type),
+                            let mData = await OpaqueData.createFromData(file, file.type),
                                 mOpt = {
                                     asDocument: type && type === "PDF",
                                     asGif: false,
                                     maxDimension: sendAsHD ? 2560 : 1600,
                                 },
-                                media = await this.MediaPrep.prepRawMedia(mData, mOpt);
-
+                                media = await MediaPrep.prepRawMedia(mData, mOpt);
+                            console.log(media);
                             await media.sendToChat(chat, { caption: caption });
+                            if (chat.endOfHistoryTransferType === 0) {
+                                HistorySync.sendPeerDataOperationRequest(3, { chatId: chat.id });
+                            }
                             done(getChat ? chat : true);
-                            // let mc = new this.MediaCollection(chat);
-                            // mc.processAttachments([{ file: file }], chat, chat)
-                            //     .then(() => {
-                            //         let [media] = mc.getModelsArray();
-                            //         console.log(media);
-                            //         console.log(media.processAttachment(media.originalAttachment));
-                            //         console.log(media);
-                            //         media.sendToChat(chat, { caption: caption });
-                            //         done(getChat ? chat : true);
-                            //     })
-                            //     .catch((err) => (console.log(err), done(false)));
                         })
                         .catch((err) => (console.log(err), done(false)));
                 });
@@ -157,7 +170,7 @@ function setWAPI(store) {
         composeAndSendMsgToChat: {
             value: function composeAndSendMsgToChat(phone, text, getChat = false) {
                 const wait = (time) => new Promise((resolve) => setTimeout(resolve, time)),
-                    { ComposeBox } = this;
+                    { ComposeBox, HistorySync } = this;
 
                 return new Promise((done) => {
                     this.Chat.find(`${phone}@c.us`)
@@ -167,6 +180,9 @@ function setWAPI(store) {
 
                             await ComposeBox.paste(chat, text);
                             await ComposeBox.send(chat);
+                            if (chat.endOfHistoryTransferType === 0) {
+                                HistorySync.sendPeerDataOperationRequest(3, { chatId: chat.id });
+                            }
                             done(getChat ? chat : true);
                         })
                         .catch((err) => (console.log(err), done(false)));
@@ -247,11 +263,14 @@ const loadWapi = async (target) => {
             for (let idx in modules.m) {
                 if (typeof modules(idx) === "object" && modules(idx) !== null) {
                     storeObjects.forEach((needObj) => {
-                        if (!needObj.conditions || needObj.foundedModule) return;
-                        let neededModule = needObj.conditions(modules(idx));
+                        if (!needObj.conditions) return;
+                        let neededModule = needObj.conditions(modules(idx)),
+                            existingModule = needObj.foundedModule ?? null;
                         if (neededModule !== null) {
                             // foundCount++;
-                            needObj.foundedModule = neededModule;
+                            needObj.foundedModule = existingModule
+                                ? Object.assign({}, existingModule, neededModule)
+                                : neededModule;
                         }
                     });
                     // if (foundCount == storeObjects.length) break;
