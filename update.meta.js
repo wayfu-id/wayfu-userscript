@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WayFu Dev
 // @description  WhatsApp Easy Follow Up.
-// @date         2025-11-19
+// @date         2025-11-24
 // @copyright    2018, Rizal Nurhidayat (https://github.com/rzlnhd)
 // @license      CC BY-NC-ND 4.0; https://creativecommons.org/licenses/by-nc-nd/4.0/
 // @icon         https://wayfu.id/v4/assets/wayfu-icon.webp
@@ -29,6 +29,7 @@
 // @downloadURL  https://raw.githubusercontent.com/wayfu-id/wayfu-userscript/refs/heads/fix-ui/wayfu-install.user.js
 // @require      https://cdn.jsdelivr.net/npm/pdfjs-dist@2.16.105/build/pdf.min.js
 // @require      https://cdn.jsdelivr.net/npm/pdfjs-dist@2.16.105/build/pdf.worker.min.js
+// @require      https://unpkg.com/@wayfu/simple-wapi@latest/dist/index.min.js
 // @resource ico https://raw.githubusercontent.com/wayfu-id/wayfu-userscript/refs/heads/fix-ui/assets/wayfu-icon.webp
 // @resource pnl https://raw.githubusercontent.com/wayfu-id/wayfu-userscript/refs/heads/fix-ui/assets/wayfu-view.html
 // @resource clr https://raw.githubusercontent.com/wayfu-id/wayfu-userscript/refs/heads/fix-ui/assets/wayfu-colors.json
