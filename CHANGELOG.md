@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.7.2](https://github.com/wayfu-id/wayfu-userscript/compare/v4.7.1...v4.7.2) (2025-12-15)
+
+
+### Bug Fixes
+
+* **package:** Restore to main source ([d12e5e9](https://github.com/wayfu-id/wayfu-userscript/commit/d12e5e904d35161ed47773b4198aa682c886ec10))
+* **ui:** Toggle button gone ([1bb6cc0](https://github.com/wayfu-id/wayfu-userscript/commit/1bb6cc0babee1b3d80fda90ff87d45b51194c178))
+* **wapi:** Fix latest WhatsApp patch ([d9592e8](https://github.com/wayfu-id/wayfu-userscript/commit/d9592e8b3e8bd493577ddf264a05f09e00ff8f51))
+
 ### [4.7.1](https://github.com/wayfu-id/wayfu-userscript/compare/v4.7.0...v4.7.1) (2025-09-10)
 
 
