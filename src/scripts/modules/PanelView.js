@@ -2,7 +2,6 @@ import { DOM } from "../lib/HtmlModifier";
 import { eventLists, svgData } from "../lib/Constant";
 import { listeners } from "./Events";
 import { Debug } from "./Debug";
-import win from "global";
 
 /**
  * @typedef {{
@@ -18,11 +17,10 @@ import win from "global";
  *  @param {appDetails} details
  */
 function createView(html, style, details) {
-    console.log(window.WAPI);
+    // console.log(window.WAPI);
     const { name, version, icon } = details,
-        after = DOM.getElement("header > header") ? "header > header" : "header",
-        { paneOne } = window.WAPI.WebClasses.Main;
-
+        after = DOM.getElement("header > header") ? "header > header" : "header";
+    // { paneOne } = window.WAPI.WebClasses.Main;
 
     // console.log(after, paneOne);
     DOM.createElement({
@@ -33,9 +31,8 @@ function createView(html, style, details) {
     });
 
     DOM.addStyle(style, { id: "wayfuStyle" }).setElement("img.appIco", { src: icon });
-    if (after !== "header") DOM.setElementStyle(`.${paneOne} header`, { display: "grid" });
-
-    createMenuButton(name);
+    if (after !== "header") DOM.setElementStyle(`._aigw header`, { display: "grid" });
+    DOM.getElement("header > header ._ajv7") ? createOldMenuButton(name): createMenuButton(name);
     initListener();
 }
 
@@ -59,8 +56,8 @@ function initListener() {
 
 /** Create WayFu Button Menu */
 function createMenuButton(name) {
-    const { paneOne } = window.WAPI.WebClasses.Main,
-        menuButton = DOM.getElement(`.${paneOne} header span button`),
+    const header = DOM.getElement("header > header") ?? DOM.getElement("header"),
+        menuButton = DOM.getElement(`span.html-span button`, header),
         svgEl = DOM.getElement("svg", menuButton),
         spanSvg = svgEl.parentElement, // span
         spanContainer = spanSvg.parentElement, // div
@@ -138,13 +135,64 @@ function createMenuButton(name) {
 
         return DOM.createElement({
             tag: menuItem.tagName.toLocaleLowerCase(),
-            "data-tab": "2",
-            tabindex: "0",
             html: btnWarp.outerHTML,
         });
     };
 
     headMenu.insertBefore(createBtnMenu(name), menuItem);
 }
+
+function createOldMenuButton (name) {
+    const header = DOM.getElement("header > header") ?? DOM.getElement("header"),
+        menuButton = DOM.getElement(`div [role='button']`, header),
+        svgEl = DOM.getElement("svg", menuButton),
+        spanSvg = svgEl.parentElement, // span
+        menuDiv = menuButton.parentElement, 
+        headMenuContainer = menuDiv.parentElement;
+
+    /** @type {(name: string) => HTMLElement} */
+    const createBtnMenu = (name) => {
+        const btnSpan = (() => {
+            let ico = DOM.createSVGElement(svgData.wayFuSvg, {
+                width: "24",
+                height: "24",
+                viewBox: "0 0 128 128",
+                class: "wayfu-app-icon",
+                // fillRule: "evenodd",
+            });
+
+            return DOM.createElement({
+                tag: "span",
+                classid: spanSvg.classList.value,
+                "data-testid": "wayfu-app",
+                "data-icon": "wayfu-app",
+                html: ico.outerHTML,
+            });
+        })();
+
+        const btnDiv = DOM.createElement({
+            tag: menuButton.tagName.toLocaleLowerCase(),
+            role: "button",
+            classid: menuButton.classList.value,
+            tabindex: "0",
+            "data-tab": "2",
+            "aria-disabled": false,
+            title: `${name}`,
+            "aria-label": `${name}`,
+            html: btnSpan.outerHTML,
+        });
+
+        return DOM.createElement({
+            tag: menuDiv.tagName.toLocaleLowerCase(),
+            classid: menuDiv.classList.value,
+            id: "wayfuToggle",
+            "data-testid": "menu-bar-wayfu-app",
+            "data-target": "wayfuPanel",
+            html: btnDiv.outerHTML,
+        });
+    };
+
+    headMenuContainer.insertBefore(createBtnMenu(name), menuDiv);
+};
 
 export { createView };

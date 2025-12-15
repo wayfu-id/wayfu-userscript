@@ -418,8 +418,8 @@ import { loadRecipient, resetRecipient, checkStatus, startProcess, exportDataToF
      * @param {Event} e Event
      */
     async checkChat(e) {
-        const { item } = window.WAPI.WebClasses.MenuBar,
-            chatMenu = DOM.getElement(`#main .${item}`),
+        const //{ item } = window.WAPI.WebClasses.MenuBar,
+            chatMenu = DOM.getElement(`#main ._ajv7`),
             menuButton = DOM.getElement(`[role='button']`, chatMenu);
 
         /** @type {(filename: string) => HTMLElement} */
@@ -460,10 +460,10 @@ import { loadRecipient, resetRecipient, checkStatus, startProcess, exportDataToF
         };
 
         let chat = window.WAPI.Chat.getActive();
-        console.log(chat, chat.groupMetadata);
+        // console.log(chat, chat.groupMetadata);
         if (!!chat && !!chat.groupMetadata) {
             let { groupMetadata } = chat,
-                {subject, participants} = groupMetadata;
+                { subject, participants } = groupMetadata;
 
             let contacts = new MyArray();
             for (let { contact } of participants.getModelsArray()) {
@@ -478,7 +478,7 @@ import { loadRecipient, resetRecipient, checkStatus, startProcess, exportDataToF
             //     fname = exportType === "csv" ? `${fileName}.csv` : `${subject}.xlsx`;
             let btn = createDonwloadBtn(subject);
             const downloadMenu = DOM.getElement("span[data-icon='download-alt']", chatMenu.parentElement);
-            console.log(e.target === downloadMenu);
+            // console.log(e.target === downloadMenu);
             if (!downloadMenu) {
                 chatMenu.parentElement.insertBefore(btn, chatMenu);
             } else if (downloadMenu && e.target === downloadMenu) {

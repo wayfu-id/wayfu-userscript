@@ -169,8 +169,9 @@ class Messages extends BaseModel {
                     : this.inputCaption;
 
         this.msgAttc.forceHD = options.imageQuality == "hd";
+        this.msgAttc.quality = options.imageQuality == "hd" ? "HD" : "Standard";
 
-        return await window.WAPI.sendMessage(this.phone, this.subtitute(caption), {...this.msgAttc});
+        return await window.WAPI.sendAdvMessage(this.phone, this.subtitute(caption), { ...this.msgAttc });
     }
 
     /**
@@ -178,7 +179,7 @@ class Messages extends BaseModel {
      * @returns
      */
     async sendText() {
-        return await window.WAPI.sendMessage(this.phone, this.value);
+        return await window.WAPI.inputAndSendTextMsg(this.phone, this.value);
     }
 }
 

@@ -8,7 +8,6 @@ import { createView } from "./modules/PanelView";
 import { changes } from "./models/Changeslog";
 import { DOM } from "./lib/HtmlModifier";
 import WAPI from "@wayfu/simple-wapi";
-import { loadWapi } from "./lib/WAPI";
 
 export default class App extends GM_Library {
     /**
@@ -22,6 +21,7 @@ export default class App extends GM_Library {
     async initialize(target) {
         // Initialize WAPI Module;
         window.WAPI = WAPI.init(target, true);
+        target.WAPI = window.WAPI;
         // await loadWapi(target);
         // Create App Panel
         this.registerPanel();
