@@ -1,4 +1,4 @@
-import { Queue, Settings, Message, Client, Worker } from "./structures/index";
+import { Queue, Settings, Message, Client, Worker, EventBus } from "./structures/index";
 import WAPI from "@wayfu/simple-wapi";
 import DOM from "@wayfu/wayfu-dom";
 import XLSX from "@wayfu/simple-xlsx";
@@ -21,8 +21,9 @@ declare global {
     }
 }
 
-class App implements App {
+class App extends EventBus implements App {
     private constructor(wapi: WAPI) {
+        super();
         return this._init(wapi);
     }
 
@@ -45,17 +46,18 @@ class App implements App {
         target = target ?? unsafeWindow;
         let loopTimer = setTimeout(() => {
             DOM.has("div.two").then(() => {
-                let _wapi = WAPI.init(target);
-                if (_wapi) {
-                    target.WayFu = new App(_wapi);
-                }
                 clearTimeout(loopTimer);
+                let _wapi = WAPI.init(target);
+                if (!_wapi) {
+                    throw new Error("WAPI failed to initialize.");
+                }
+                target.WayFu = new App(_wapi);
             });
         }, 5000);
     }
 }
 
-interface App {
+interface App extends EventBus {
     WAPI: WAPI;
     DOM: typeof DOM;
     XLSX: typeof XLSX;

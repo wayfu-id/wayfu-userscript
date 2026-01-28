@@ -1,13 +1,9 @@
 /**
  * Extended Built-in Array
  */
-export default class MyArray<T> extends Array<T | undefined> {
+export default class MyArray<T> extends Array<T> {
     constructor(...items: T[]) {
         super(...items);
-        // Object.setPrototypeOf(this, Array.prototype);
-        // input.forEach((element, index) => {
-        //     this[index] = element;
-        // });
     }
 
     /**
@@ -23,7 +19,7 @@ export default class MyArray<T> extends Array<T | undefined> {
      * @return new MyArray instance with non empty values
      */
     get nonEmptyValue() {
-        return this.filter((val) => !!val);
+        return new MyArray(this.filter((val) => !!val));
     }
 
     /**
@@ -47,16 +43,21 @@ export default class MyArray<T> extends Array<T | undefined> {
      * `Modifies current array`
      * @param {number} oldIndex current index of the item
      * @param {number} newIndex new index of the item
+     * @param {T} filler value to fill the array with if needed
      * @return modified current array
      */
-    changeIndex(oldIndex: number, newIndex: number) {
+    changeIndex(oldIndex: number, newIndex: number, filler?: T) {
+        filler = filler === undefined ? (null as unknown as T) : filler;
         if (newIndex >= this.length) {
             let i = newIndex - this.length + 1;
             while (i--) {
-                this.push(undefined);
+                this.push(filler);
             }
         }
-        this.splice(newIndex, 0, this.splice(oldIndex, 1)[0]);
+        const [item] = this.splice(oldIndex, 1);
+        if (item !== undefined) {
+            this.splice(newIndex, 0, item);
+        }
         return this;
     }
 
@@ -89,9 +90,8 @@ export default class MyArray<T> extends Array<T | undefined> {
      * @param {string} delimiter delimiter to split the string
      * @return new MyArray instance with splitted values
      */
-    static split(string: string, delimiter: string) {
-        let arr = string.split(delimiter);
-        return new MyArray(...arr);
+    static split(string: string, delimiter: string): MyArray<string> {
+        return new MyArray(...string.split(delimiter));
     }
 
     /**

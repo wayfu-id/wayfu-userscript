@@ -23,7 +23,6 @@ type Subscription = {
 export default class Client extends ScriptManager {
     private static Instance: Client;
 
-    Profile: WAPI.Contact;
     defaultProp: Tampermonkey.Request;
     UserData?: UserData = undefined;
     Today: MyDate = new MyDate();
@@ -39,11 +38,14 @@ export default class Client extends ScriptManager {
             method: "POST",
             url: `${this.appInfo.homepage}user/api`,
         };
-        this.Profile = (({ WAPI }) => {
-            return WAPI.ME ?? WAPI.Contact.getMeContact().getModel();
-        })(this.app);
 
         this.gettingData();
+    }
+
+    get Profile() {
+        const { WAPI } = this.app;
+
+        return WAPI.ME ?? WAPI.Contact.getMeContact().getModel();
     }
 
     gettingData() {
@@ -73,18 +75,17 @@ export default class Client extends ScriptManager {
 
     subscriptionStatus() {
         const { isPremium, isTrial } = this.Subscription;
-
         return isPremium || isTrial;
     }
 
     setUserData(user: UserData) {
         this.UserData = user;
 
-        const { end, expires, attempt } = user,
-            { Settings } = this.app;
+        const { end, expires, attempt } = user;
         let { isPremium, isTrial } = this.Subscription;
 
-        Settings.setOption("userType", user.type);
+        // { Settings } = this.app;
+        // Settings.setOption("userType", user.type);
 
         isPremium = end !== null ? end > this.Today : isPremium;
         isTrial = expires !== null && !!attempt ? attempt < 5 && expires < this.Today : isTrial;

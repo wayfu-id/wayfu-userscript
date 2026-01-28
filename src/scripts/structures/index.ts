@@ -1,6 +1,7 @@
 // Import the default classes
 import BaseModel from "./BaseModel";
 import Client from "./Client";
+import EventBus from "./EventBus";
 import Message from "./Message";
 import MyArray from "./MyArray";
 import MyDate from "./MyDate";
@@ -11,6 +12,7 @@ import Worker from "./Worker";
 
 export {
     // Exports the default classes
+    EventBus,
     BaseModel,
     Client,
     Message,
