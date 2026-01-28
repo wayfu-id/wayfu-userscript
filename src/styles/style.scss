@@ -455,13 +455,16 @@
 }
 
 div.two {
+    #wayfuToggle {
+        margin-right: 5px;
+    }
     [data-testid="menu-bar-wayfu-app"] {
         [role="button"],
         [type="button"] {
             padding: 8px;
             text-align: initial;
             border-radius: 50%;
-            margin-right: 5px;
+            // margin-right: 5px;
 
             &.active {
                 background-color: unquote("var(--menu-bar-item-background-active)");
