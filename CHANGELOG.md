@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.7.3](https://github.com/wayfu-id/wayfu-userscript/compare/v4.7.2...v4.7.3) (2026-03-12)
+
+
+### Bug Fixes
+
+* **UI:** Margin right at the wrong element ([41ba2ce](https://github.com/wayfu-id/wayfu-userscript/commit/41ba2ce9acbfa52d739e0599cedcb8cc95e41632))
+* **User:** Wrong phone number identification ([962b157](https://github.com/wayfu-id/wayfu-userscript/commit/962b157368333d96f5c99b30499dedea62cb230e))
+
 ### [4.7.2](https://github.com/wayfu-id/wayfu-userscript/compare/v4.7.1...v4.7.2) (2025-12-15)
 
 
