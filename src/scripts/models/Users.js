@@ -79,9 +79,10 @@ class Users extends GM_Library {
      * @returns
      */
     init() {
-        const { id, name, pushname } = window.WAPI.Contact.getMeContact();
+        const { id, name, pushname } = window.WAPI.Contact.getMeContact(),
+            phoneNumber = window.WAPI.LidUtils.getPhoneNumber(id);
         // const { id, name, pushname } = window.WAPI.Me;
-        this.phone = Number(id.user) || "";
+        this.phone = Number(phoneNumber.user) || "";
         this.name = name || pushname || "";
         // this.offlineData = {
         //     phone: this.phone,

@@ -140,7 +140,7 @@
         "webpack-stream": "^7.0.0"
     },
     "dependencies": {
-        "@wayfu/simple-wapi": "^0.1.13",
+        "@wayfu/simple-wapi": "^0.1.22",
         "fflate": "^0.8.2",
         "global": "^4.4.0",
         "standard-version": "^9.5.0"
