@@ -106,7 +106,7 @@
         "@types/react": "^19.2.0",
         "@types/react-dom": "^19.2.0",
         "@types/tampermonkey": "^4.0.5",
-        "@wayfu/simple-wapi": "^0.1.19",
+        "@wayfu/simple-wapi": "^0.1.22",
         "@wayfu/simple-xlsx": "^0.0.3",
         "@wayfu/waydown": "^0.0.7",
         "@wayfu/wayfu-dom": "^0.2.1",

@@ -4,6 +4,7 @@ import BaseModel from "./BaseModel";
 import MyDate from "./MyDate";
 import MyArray from "./MyArray";
 import { rgx } from "../config";
+// import { Structures } from "@wayfu/simple-wapi";
 
 /**
  * Message Interface
@@ -15,6 +16,7 @@ interface Message {
     idNumber: string;
     name: string;
     phone: string;
+    product: WAPI.Product | undefined;
     poinValue: number | string;
     date: Date | string;
     sponsorName: string;
@@ -37,6 +39,7 @@ class Message extends BaseModel {
         name: "",
         phone: "",
         poinValue: "",
+        product: undefined,
         date: "",
         sponsorName: "",
         other: [],
@@ -69,6 +72,31 @@ class Message extends BaseModel {
 
         this.other = data.length > 6 ? data.slice(6) : [];
         return this;
+    }
+
+    async setAttachment(attachment: File | WA.ProductModel | WAPI.Product) {
+        if (!attachment) return;
+        if (attachment instanceof File) {
+            this.imageFile = attachment;
+            return;
+        }
+        try {
+            const { WAPI } = this.app,
+                { ModelClass: { Product } } = WAPI;
+            console.log(attachment instanceof Product);
+            let { id } = attachment;
+            if (!WAPI.BusinessUtils.ProductModel.isIdType(id)) {
+                throw new Error("Attachment is not a valid product model.");
+            }
+            const product = (await WAPI.findProduct(id));
+            if (!product) {
+                throw new Error("Product not found for the given attachment ID.");
+            }
+            this.product = product;
+            return;
+        } catch (err) {
+            console.log("Error processing product attachment:", err);
+        }
     }
 
     /**
@@ -166,7 +194,7 @@ class Message extends BaseModel {
         let date: MyDate = new MyDate(
             !isFormat && mIdx_ !== mIdx
                 ? MyArray.split(dateStr, "/").changeIndex(mIdx_, mIdx).join("/")
-                : dateStr
+                : dateStr,
         );
 
         date = isLastDay ? date.addDays(30) : date;
@@ -184,11 +212,12 @@ class Message extends BaseModel {
             caption = useCaption === "caption" ? this.caption : this.value;
 
         if (!this.imageFile) return;
-        return await WAPI.sendMessage(this.phone, "", {
+        const [_, result] = await WAPI.sendAdvMessage(this.phone, "", {
             media: this.imageFile,
             quality: imageQuality,
             caption,
         });
+        return result;
     }
 
     /**
