@@ -113,8 +113,8 @@ async function startProcess() {
         await wait(5e2);
         stat = await (async (c) =>
             (c === "caption" || !(i && h) || t === "PDF"
-                ? await messej.sendText()
-                : await window.WAPI.openChat(messej.phone)) !== false
+                ? (await messej.sendText()) != null
+                : await window.WAPI.openChat(messej.phone)) !== null
                 ? "SUCCESS"
                 : "ERROR")(c);
 
@@ -163,6 +163,24 @@ function stopProcess() {
     }
     loop.stop(setStatus);
     showReport();
+}
+
+/**
+ * Generate random number with step interval
+ *
+ * @param {number} min min number
+ * @param {number} max maximum number
+ * @param {number} step interval number
+ * @returns
+ */
+function getRandomWithStep(min, max, step) {
+    step = step ?? 1; // Set Step to 1 by default if step is null or undefined
+    // 1. Calculate how many steps exist in the range
+    const range = Math.floor((max - min) / step);
+    // 2. Pick a random step count (0 to range)
+    const randomStep = Math.floor(Math.random() * (range + 1));
+    // 3. Multiply by step and add back the minimum
+    return min + randomStep * step;
 }
 
 /**
