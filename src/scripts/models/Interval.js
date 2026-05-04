@@ -54,6 +54,19 @@ class Interval {
     }
 
     /**
+     * Readjust time interval
+     * @param {Number} time new interval
+     */
+    setTime(time) {
+        if (time && this.isRunning) {
+            clearInterval(this.timer);
+            this.timer = false;
+            this.time = time;
+            this.start();
+        }
+    }
+
+    /**
      * Stop the interval
      * @param {callbackFunction} callback will be execute when interval stoped
      */

@@ -17,6 +17,8 @@ export default class Interval {
     /** Break the interval */
     break(callback?: callbackFunction): void;
 
+    /** Readjust time interval */
+    setTime(time: number): void;
 
     /** Stop the interval */
     stop(callback?: callbackFunction): void;

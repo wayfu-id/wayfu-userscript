@@ -92,6 +92,10 @@ async function startProcess() {
     const wait = (time) => new Promise((resolve) => setTimeout(resolve, time));
     if (!loop.isRunning) loop.start(setStatus);
     if (loop.isRunning && !!queue.now) {
+        const { useAttc, hasAttc } = options,
+            minusDelay = !useAttc && !hasAttc ? 5e2 : 0;
+        let newTime = getRandomWithStep(70e2, 150e2, 5e2) - minusDelay;
+        loop.setTime(newTime);
         let {
                 useCaption: c,
                 useAttc: i,
