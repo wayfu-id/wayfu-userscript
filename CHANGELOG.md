@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.7.4](https://github.com/wayfu-id/wayfu-userscript/compare/v4.7.3...v4.7.4) (2026-05-04)
+
+
+### Bug Fixes
+
+* **Report:** Wrap send message result inside try-catch for better reporting ([296e46a](https://github.com/wayfu-id/wayfu-userscript/commit/296e46a3c634ba044df298eaf82aa3ff2fa258c4))
+
 ### [4.7.3](https://github.com/wayfu-id/wayfu-userscript/compare/v4.7.2...v4.7.3) (2026-03-12)
 
 
