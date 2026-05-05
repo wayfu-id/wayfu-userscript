@@ -36,4 +36,4 @@ export function resetRecipient(): void;
 export function startProcess(): void;
 
 /** Export data */
-export function exportDataToFile(data: MyArray<any>, title: string): void
+export function exportDataToFile(data: MyArray<any>, title: string): Promise<void>;

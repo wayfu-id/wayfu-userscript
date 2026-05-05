@@ -16,11 +16,13 @@ import CSVFile, { csvFile } from "../models/CSVFile";
 import { check, getPDFPageThumb, isNumeric, titleCase, readBuffer, stringToBytes } from "../lib/Util";
 import MyArray from "../models/MyArray";
 import { loadRecipient, resetRecipient, checkStatus, startProcess, exportDataToFile } from "./Main";
+import { hidden } from "ansi-colors";
 
 /**
  * A bunch of EventListener
  * @class AppEvents
- */ class AppEvents {
+ */
+class AppEvents {
     constructor() {}
     /**
      * Run blast tasks
@@ -204,7 +206,7 @@ import { loadRecipient, resetRecipient, checkStatus, startProcess, exportDataToF
 
             if (imgFile && imgFile.size > maxSize) {
                 modal.alert(
-                    `Ukuran lampiran: ${type}, tidak boleh lebih dari ${maxSize / Math.pow(1024, 2)}MB`
+                    `Ukuran lampiran: ${type}, tidak boleh lebih dari ${maxSize / Math.pow(1024, 2)}MB`,
                 );
                 imgFile = null;
                 elm.files = [];
@@ -233,8 +235,8 @@ import { loadRecipient, resetRecipient, checkStatus, startProcess, exportDataToF
                 imgFile && type === "PDF"
                     ? "Caption tidak tersedia untuk lampiran: PDF"
                     : options.useCaption === "pesan"
-                    ? "Caption menggunakan pesan"
-                    : "",
+                      ? "Caption menggunakan pesan"
+                      : "",
         });
 
         message.setProperties({ msgAttc: { media: imgFile, type, sendAsHD: options.imageQuality == "hd" } });
@@ -329,7 +331,7 @@ import { loadRecipient, resetRecipient, checkStatus, startProcess, exportDataToF
                             DOM.setElement(files, { value: "" });
                             modal.alert(
                                 "Untuk opsi <strong>Deteksi Otomatis</strong>, Silahkan masukkan ulang file penerima pesan.",
-                                "[WARNING] Masukkan ulang CSV"
+                                "[WARNING] Masukkan ulang CSV",
                             );
                             resetRecipient();
                         }
@@ -342,7 +344,7 @@ import { loadRecipient, resetRecipient, checkStatus, startProcess, exportDataToF
 
                     if (useCaption) {
                         val = (await modal.confirm(
-                            "Mengubah Pesan menjadi Caption akan menaikan potensi Banned dari WhatsApp. Apa Anda Yakin?"
+                            "Mengubah Pesan menjadi Caption akan menaikan potensi Banned dari WhatsApp. Apa Anda Yakin?",
                         ))
                             ? val
                             : "caption";
@@ -389,106 +391,120 @@ import { loadRecipient, resetRecipient, checkStatus, startProcess, exportDataToF
      * @deprecated
      * @param {Event} e Event
      */
-    changeLog(e) {
-        // const container = DOM.createElement({
-        //         tag: "div",
-        //         classid: "wfu-changelog",
-        //         style: "overflow-y:scroll",
-        //     }),
-        //     changelog = changes.Log.slice(0, 5);
-        // changelog.forEach((e, i) => {
-        //     let date = dateFormat(new MyDate(e.date), 1),
-        //         title = `${i == 0 ? "WayFu" + " - " : ""}Version: ${
-        //             e.version
-        //         } (${date})`,
-        //         items = DOM.createElement({
-        //             tag: "div",
-        //             classid: "wfu-changelog-items",
-        //             append: container,
-        //         });
-        //     DOM.createElement({ tag: "span", text: title, append: items });
-        //     DOM.createListElement(e.content, "ul", { append: items });
-        // });
-        // // console.log(container);
-        // modal.alert(container, "Detail Pembaruan.");
-    }
+    changeLog(e) {}
 
     /**
      * Checing current chat active
      * @param {Event} e Event
      */
     async checkChat(e) {
-        const //{ item } = window.WAPI.WebClasses.MenuBar,
-            chatMenu = DOM.getElement(`#main ._ajv7`),
-            menuButton = DOM.getElement(`[role='button']`, chatMenu);
-
-        /** @type {(filename: string) => HTMLElement} */
-        const createDonwloadBtn = (filename) => {
-            const downloadBtn = ((name) => {
-                let ico = DOM.createSVGElement(svgData.groupDownloadBtnSvg, {
-                    width: "24",
-                    height: "24",
-                });
-
-                return DOM.createElement({
-                    tag: "span",
-                    title: `Download "${name}"`,
-                    "data-testid": "download-alt",
-                    "data-icon": "download-alt",
-                    classid: "wfu-link",
-                    html: ico.outerHTML,
-                });
-            })(filename);
-
-            return ((downloadBtn) => {
-                let btn = DOM.createElement({
-                    tag: menuButton.tagName.toLocaleLowerCase(),
-                    classId: menuButton.classList.value,
-                    role: "button",
-                    "data-tab": "6",
-                    tabindex: "0",
-                    "aria-disabled": false,
-                    html: downloadBtn.outerHTML,
-                });
-
-                return DOM.createElement({
-                    tag: "div",
-                    classId: chatMenu.classList.value,
-                    html: btn.outerHTML,
-                });
-            })(downloadBtn);
-        };
+        const menuButton = await DOM.hasElement(`#main header .html-span button.html-button`);
+        const chatMenu = menuButton.parentElement,
+            outerMenu = chatMenu.parentElement;
 
         let chat = window.WAPI.Chat.getActive();
-        // console.log(chat, chat.groupMetadata);
-        if (!!chat && !!chat.groupMetadata) {
-            let { groupMetadata } = chat,
-                { subject, participants } = groupMetadata;
+        if (!chat) {
+            return;
+        }
+        chat = chat.getModel();
+        if (!chat.isGroup) {
+            return;
+        }
 
-            let contacts = new MyArray();
-            for (let { contact } of participants.getModelsArray()) {
-                const useContact = contact.getModel()._serialized;
-                let phone = useContact.phoneNumber ?? useContact.id.user,
-                    name = useContact.pushname || useContact.name || phone;
+        let { name, id, participants } = chat,
+            contacts = new MyArray();
 
-                contacts.push([name, phone]);
-            }
+        participants.forEach(({ contact }) => {
+            const { id, phoneNumber } = contact;
+            let phone =
+                phoneNumber ??
+                ((id) => {
+                    return ((id?.isLid?.() ? window.WAPI?.LidUtils?.getPhoneNumber?.(id) : id) || id).user;
+                })(id);
 
-            // let { fileUrl, fileName } = CSVFile.createFile(subject, contacts),
-            //     fname = exportType === "csv" ? `${fileName}.csv` : `${subject}.xlsx`;
-            let btn = createDonwloadBtn(subject);
-            const downloadMenu = DOM.getElement("span[data-icon='download-alt']", chatMenu.parentElement);
-            // console.log(e.target === downloadMenu);
-            if (!downloadMenu) {
-                chatMenu.parentElement.insertBefore(btn, chatMenu);
-            } else if (downloadMenu && e.target === downloadMenu) {
-                if (await user.check()) {
-                    return exportDataToFile(contacts, subject);
-                }
+            contacts.push([contact.pushname || contact.name || phone, phone]);
+        });
+
+        let btn = createDonwloadBtn(name);
+        const downloadMenu = DOM.getElement("button[data-icon='download-alt']", outerMenu.parentElement);
+        if (!downloadMenu) {
+            outerMenu.parentElement.insertBefore(btn, outerMenu);
+        } else if (downloadMenu && e.target === downloadMenu) {
+            if (await user.check()) {
+                return await exportDataToFile(contacts, name);
             }
         }
     }
 }
+
+/** @type {(filename: string) => HTMLElement} */
+const createDonwloadBtn = (filename) => {
+    const menuButton = DOM.getElement(`#main header .html-span button.html-button`),
+        chatMenu = menuButton.parentElement,
+        outerMenu = chatMenu.parentElement,
+        svgElm = DOM.getElement("svg", menuButton);
+
+    const createButtonEl = ((name) => {
+        const outerSvg = svgElm.parentElement;
+        const svgContainer = outerSvg.parentElement;
+        const outContainer = svgContainer.parentElement;
+        const innerButton = outContainer.parentElement;
+
+        const svgBtn = DOM.createSVGElement(svgData.groupDownloadBtnSvg, {
+            classid: svgElm.classList.value,
+            height: "24",
+            width: "24",
+        });
+        const svgOuter = DOM.createElement({
+            tag: outerSvg.tagName.toLocaleLowerCase(),
+            classid: outerSvg.classList.value,
+            html: svgBtn.outerHTML,
+        });
+        const innerContainer = DOM.createElement({
+            tag: svgContainer.tagName.toLocaleLowerCase(),
+            classid: svgContainer.classList.value,
+            html: svgOuter.outerHTML,
+        });
+        const outerContainer = DOM.createElement({
+            tag: outContainer.tagName.toLocaleLowerCase(),
+            classid: outContainer.classList.value,
+            html: innerContainer.outerHTML,
+        });
+        const innerBtn = DOM.createElement({
+            tag: innerButton.tagName.toLocaleLowerCase(),
+            classid: innerButton.classList.value,
+            html: outerContainer.outerHTML,
+        });
+        return DOM.createElement({
+            tag: menuButton.tagName.toLocaleLowerCase(),
+            classid: `${menuButton.classList.value}`,
+            "data-testid": "download-alt",
+            "data-icon": "download-alt",
+            tabindex: "0",
+            "data-tab": "6",
+            "aria-disabled": false,
+            title: `Download "${name}"`,
+            "aria-label": `Download "${name}"`,
+            "aria-expanded": "false",
+            type: "button",
+            html: innerBtn.outerHTML,
+        });
+    })(filename);
+
+    return ((createButtonEl) => {
+        let btn = DOM.createElement({
+            tag: chatMenu.tagName.toLocaleLowerCase(),
+            classid: `${chatMenu.classList.value} wfu-link`,
+            html: createButtonEl.outerHTML,
+        });
+
+        return DOM.createElement({
+            tag: outerMenu.tagName.toLocaleLowerCase(),
+            classid: outerMenu.classList.value,
+            html: btn.outerHTML,
+        });
+    })(createButtonEl);
+};
 
 const listeners = new AppEvents();
 export { AppEvents as default, listeners };

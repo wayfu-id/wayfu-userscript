@@ -220,7 +220,7 @@ async function showReport() {
             `ERROR   = ${btnDownload("error")}`,
         ],
         "ul",
-        { classid: "wfu-reports" }
+        { classid: "wfu-reports" },
     );
     modal.alert(text, title);
     if (await DOM.hasElement(".wfu-reports a[data-report-type]")) {
@@ -285,9 +285,25 @@ function showProgress(queue, index) {
 /**
  * @param {MyArray} data
  * @param {string} title
- * @return {void}
+ * @return {Promise<void>}
  */
 async function exportDataToFile(data, title) {
+    // console.log(data, title);
+    let { fileUrl, fileName } = CSVFile.createFile(title, data),
+        { exportType } = options;
+
+    // console.log(fileUrl, fileName, exportType);
+    if (exportType === "ask") {
+        if (!(await modal.confirm(innerModal("fileType"), `Download "${title}"`))) return;
+        exportType = options.fileType;
+    }
+
+    return exportType === "xlsx"
+        ? CSVFile.exportToXlsx(title, data)
+        : DOM.createElement({ tag: "a", href: fileUrl, download: `${fileName}` }).click();
+}
+
+function innerModal(id) {
     /** @type {(classid: string | string[]) => HTMLElement} */
     const container = (classid) => {
         return DOM.createElement({ tag: "div", classid: classid });
@@ -307,10 +323,8 @@ async function exportDataToFile(data, title) {
         options.setOption("exportType", checked ? fileType : "ask");
     }
 
-    /** @type {(id: string) => HTMLElement} */
-    let innerModal = (id) => {
+    return ((id) => {
         const outer = container("wfu-options");
-
         const selectEl = ((id, { fileType }, { checksSvg }) => {
             const opt = ["csv", "xlsx"];
             const outer = container("row");
@@ -340,7 +354,7 @@ async function exportDataToFile(data, title) {
             const outer = container("row right");
             const check = DOM.createCheckElement(
                 { id: `set_${id}`, classid: "_input checks" },
-                { change: saveType }
+                { change: saveType },
             );
             const label = DOM.createLabelElement({
                 id: `set_${id}`,
@@ -353,44 +367,8 @@ async function exportDataToFile(data, title) {
         })(id);
         // console.log(outer, checksEl);
         outer.append(selectEl, checksEl);
-
         return outer;
-    };
-
-    let { fileUrl, fileName } = CSVFile.createFile(title, data),
-        { exportType } = options;
-
-    if (exportType === "ask") {
-        if (!(await modal.confirm(innerModal("fileType"), `Download "${title}"`))) return;
-        exportType = options.fileType;
-    }
-
-    return exportType === "xlsx"
-        ? CSVFile.exportToXlsx(title, data)
-        : DOM.createElement({ tag: "a", href: fileUrl, download: `${fileName}` }).click();
-    //     return DOM.createElement({
-    //         tag: "a",
-    //         href: fileUrl,
-    //         download: `${fileName}`,
-    //     }).click();
-    // } else {
-    //     return CSVFile.exportToXlsx(title, data);
-    // }
-    // if (await modal.confirm(innerModal("fileType"), `Download "${title}"`)) {
-    //     const { fileUrl, fileName } = CSVFile.createFile(title, data),
-    //         { exportType } = options;
-    //     if (exportType === "csv") {
-    //         DOM.createElement({
-    //             tag: "a",
-    //             href: fileUrl,
-    //             download: `${fileName}`,
-    //         }).click();
-    //     } else {
-    //         CSVFile.exportToXlsx(title, data);
-    //     }
-    // }
-
-    // return;
+    })(id);
 }
 
 export { checkStatus, loadRecipient, resetRecipient, reloadRecipient, startProcess, exportDataToFile };
