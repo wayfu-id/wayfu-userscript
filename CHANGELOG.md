@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.7.5](https://github.com/wayfu-id/wayfu-userscript/compare/v4.7.4...v4.7.5) (2026-05-05)
+
+
+### Bug Fixes
+
+* **export:** Fix group participant contact export feature ([cbd917e](https://github.com/wayfu-id/wayfu-userscript/commit/cbd917e68949a8e2421cb34c1249c9a8c7b58ea1))
+
 ### [4.7.4](https://github.com/wayfu-id/wayfu-userscript/compare/v4.7.3...v4.7.4) (2026-05-04)
 
 
