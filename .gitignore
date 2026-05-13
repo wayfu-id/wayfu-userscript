@@ -1,11 +1,11 @@
 package-lock.json
 
-
 assets/*-dev.*
 release
 build/
 .husky/_
 dev/
+src/stories
 node_modules
 *storybook.log
 storybook-static
