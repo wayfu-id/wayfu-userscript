@@ -22,12 +22,12 @@ module.exports = {
     },
     context: path.resolve(__dirname, "src"),
     resolve: {
-        extensions: [".ts", ".tsx", ".js"],
+        extensions: [".ts", ".tsx", ".js", ".jsx"],
     },
     module: {
         rules: [
             {
-                test: /\.(ts|tsx)$/,
+                test: /\.(js|jsx|ts|tsx)$/,
                 loader: "babel-loader",
                 exclude: /(node_modules)/,
                 options: {
@@ -42,7 +42,18 @@ module.exports = {
         "@wayfu/wayfu-dom": "DOM",
         "@wayfu/waydown": "Waydown",
         react: "React",
-        "react-dom": "ReactDOM",
+        "react-dom/client": "ReactDOM",
+        // Change these from string to factory
+        // react: {
+        //     commonjs: "react",
+        //     commonjs2: "react",
+        //     // This tells webpack: grab it from window.React at runtime
+        //     root: ["React"],
+        // },
+        // "react-dom/client": {
+        //     // This tells webpack: grab it from window.ReactDOM at runtime
+        //     root: ["ReactDOM"],
+        // },
     },
     target: ["web", "es5"],
 };

@@ -1,0 +1,63 @@
+@use "../tokens.scss";
+
+.wf-main {
+  .wf-panel-footer {
+    padding: 10px 14px;
+    border-top: 1px solid var(--wf-border);
+    background: var(--wf-surface);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .wf-footer-info {
+      font-size: 10px;
+      color: var(--wf-text-muted);
+      line-height: 1.4;
+
+      @keyframes pulse-dot {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.4;
+        }
+      }
+
+      .wf-status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--wf-green);
+        animation: pulse-dot 2s ease-in-out infinite;
+        flex-shrink: 0;
+      }
+    }
+
+    .wf-footer-socials {
+      display: flex;
+      gap: 6px;
+
+      .wf-social-btn {
+        width: 26px;
+        height: 26px;
+        border-radius: 8px;
+        background: var(--wf-surface2);
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--wf-text-muted);
+        transition:
+          background 0.15s,
+          color 0.15s;
+
+        &:hover {
+          color: var(--wf-text);
+          background: var(--wf-border);
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,110 @@
+// Attachment Tab
+@use "../tokens.scss";
+
+.wf-tab-pane {
+  .wf-attach-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-radius: 12px;
+    background: var(--wf-surface2);
+    border: 1px solid var(--wf-border);
+
+    .wf-attach-toggle-label {
+      font-size: 13px;
+      color: var(--wf-text-muted);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  }
+
+  .wf-attach-upload {
+    padding: 32px 16px;
+    border: 2px dashed var(--wf-border);
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition:
+      border-color 0.15s,
+      background 0.15s;
+    background: var(--wf-surface2);
+
+    &:hover {
+      border-color: var(--wf-blue1);
+      background: rgba(28, 141, 189, 0.04);
+    }
+
+    svg {
+      width: 28px;
+      height: 28px;
+      color: var(--wf-text-muted);
+    }
+
+    p {
+      font-size: 12px;
+      color: var(--wf-text-sub);
+      text-align: center;
+    }
+
+    strong {
+      color: var(--wf-blue1);
+    }
+  }
+
+  .wf-attach-preview {
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--wf-surface2);
+    position: relative;
+
+    img {
+      width: 100%;
+      display: block;
+      max-height: 120px;
+      object-fit: cover;
+    }
+
+    .wf-attach-preview-del {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.5);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+  }
+  .wf-caption-input {
+    // width: stretch;
+    width: -webkit-fill-available;
+    padding: 8px 12px;
+    background: var(--wf-input-bg);
+    border: 1px solid var(--wf-border);
+    border-radius: 10px;
+    font-family: "DM Sans";
+    font-size: 12px;
+    color: var(--wf-text);
+    outline: none;
+    transition: border-color 0.15s;
+
+    &::placeholder {
+      color: var(--wf-text-muted);
+
+      &:focus {
+        border-color: var(--wf-blue1);
+      }
+    }
+  }
+}

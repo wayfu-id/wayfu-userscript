@@ -1,0 +1,81 @@
+// Panel Header
+@use "../tokens.scss";
+
+.wf-main {
+  .wf-panel-header {
+    padding: 16px 18px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(
+      135deg,
+      rgba(0, 154, 75, 0.08) 0%,
+      rgba(28, 141, 189, 0.08) 100%
+    );
+    border-bottom: 1px solid var(--wf-border);
+    padding-bottom: 12px;
+
+    .wf-panel-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      .wf-panel-logo-wrap {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        padding: 2px;
+        // background: var(--wf-logo-bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        // box-shadow: var(--wf-logo-shadow);
+      }
+
+      .wf-panel-title {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 15px;
+        color: var(--wf-text);
+        letter-spacing: -0.3px;
+      }
+
+      .wf-panel-version {
+        font-size: 10px;
+        color: var(--wf-text-muted);
+        margin-top: 5px;
+      }
+    }
+
+    .wf-panel-actions {
+      display: flex;
+      gap: 8px;
+
+      .wf-panel-action-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--wf-surface2);
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--wf-text-sub);
+        transition:
+          background 0.15s,
+          color 0.15s;
+
+        &:hover {
+          background: var(--wf-border);
+          color: var(--wf-text);
+        }
+
+        &.active {
+          background: rgba(0, 154, 75, 0.12);
+          color: var(--wf-green);
+        }
+      }
+    }
+  }
+}

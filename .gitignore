@@ -7,3 +7,5 @@ build/
 .husky/_
 dev/
 node_modules
+*storybook.log
+storybook-static

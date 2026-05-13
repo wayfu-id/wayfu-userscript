@@ -1,8 +1,8 @@
 // Import node modules
 const { src, dest, task, series, parallel } = require("gulp");
-const dartSass = require("sass");
-const gulpSass = require("gulp-sass");
-const autoPrefixer = require("gulp-autoprefixer");
+// const dartSass = require("sass");
+// const gulpSass = require("gulp-sass");
+// const autoPrefixer = require("gulp-autoprefixer");
 const pug = require("gulp-pug");
 const webp = require("gulp-webp");
 const rename = require("gulp-rename");
@@ -19,7 +19,9 @@ const { readJSON, createFile, cleanDir } = require("./utils/fileUtils");
 const { scriptHeader, styleHeader } = require("./utils/generateHeader");
 const { handleErrors } = require("./utils/handleErrors");
 
-const sass = gulpSass(dartSass);
+// const sass = gulpSass(dartSass);
+const postcss = require("gulp-postcss");
+const sass = require("gulp-sass")(require("sass"));
 const _dest = dest;
 
 var argv = minimist(process.argv.slice(2));
@@ -95,20 +97,37 @@ function compilePug() {
                     author: rgx.exec(pkg.author)[0],
                     version: pkg.viewVersion,
                 },
-            })
+            }),
         )
         .pipe(rename(name))
         .pipe(_dest(`./assets`));
 }
 
 function compileScss() {
-    const isDev = environment === "development",
-        name = Object.assign({ suffix: `-style${isDev ? "-dev" : ".min"}` }, base);
-    return src("./src/styles/style.scss")
-        .pipe(sass(isDev ? {} : { outputStyle: "compressed" }).on("error", sass.logError))
-        .pipe(autoPrefixer({ cascade: false }))
-        .pipe(rename(name))
-        .pipe(_dest(`./assets`));
+    const isDev = environment === "development";
+    const name = Object.assign({ suffix: `-style${isDev ? "-dev" : ".min"}` }, base);
+
+    return (
+        src("./src/styles/style.scss")
+            .pipe(sass(isDev ? {} : { outputStyle: "compressed" }).on("error", sass.logError))
+            // Replace autoprefixer with postcss pipeline
+            .pipe(
+                postcss([
+                    require("@tailwindcss/postcss"),
+                    require("autoprefixer"),
+                    ...(!isDev ? [require("cssnano")({ preset: "default" })] : []),
+                ]),
+            )
+            .pipe(rename(name))
+            .pipe(_dest("./assets"))
+    );
+    // const isDev = environment === "development",
+    //     name = Object.assign({ suffix: `-style${isDev ? "-dev" : ".min"}` }, base);
+    // return src("./src/styles/style.scss")
+    //     .pipe(sass(isDev ? {} : { outputStyle: "compressed" }).on("error", sass.logError))
+    //     .pipe(autoPrefixer({ cascade: false }))
+    //     .pipe(rename(name))
+    //     .pipe(_dest(`./assets`));
 }
 
 function inserHeader() {
@@ -147,8 +166,8 @@ task(
         parallel(clean, cleanAssets),
         parallel("bundleStyle", "bundleScript"),
         "createView",
-        createMetaUpdate
-    )
+        createMetaUpdate,
+    ),
 );
 
 task("imageAssets", function imageAssets() {

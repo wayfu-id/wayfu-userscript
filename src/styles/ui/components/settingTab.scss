@@ -1,0 +1,97 @@
+// Setting Tab
+@use "../tokens.scss";
+
+.wf-tab-pane {
+  .wf-setting-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    .wf-settings-section-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--wf-text-muted);
+      padding: 2px 0 4px;
+    }
+
+    .wf-setting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 12px;
+      border-radius: 12px;
+      background: var(--wf-surface2);
+      border: 1px solid var(--wf-border);
+      gap: 10px;
+
+      .wf-setting-label {
+        font-size: 12px;
+        color: var(--wf-text-muted);
+        font-weight: 500;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        svg {
+          width: 14px;
+          height: 14px;
+          color: var(--wf-text-muted);
+        }
+
+        .wf-beta-badge {
+          padding: 1px 5px;
+          border-radius: 4px;
+          font-size: 9px;
+          font-weight: 700;
+          background: rgba(28, 141, 189, 0.15);
+          color: var(--wf-blue1);
+          text-transform: uppercase;
+        }
+      }
+
+      .wf-setting-select {
+        background: var(--wf-surface);
+        border: 1px solid var(--wf-border);
+        border-radius: 8px;
+        padding: 4px 8px;
+        font-family: "DM Sans";
+        font-size: 11px;
+        color: var(--wf-text-muted);
+        outline: none;
+        cursor: pointer;
+        min-width: 90px;
+        -webkit-appearance: none;
+      }
+
+      .wf-setting-output {
+        font-size: 11px;
+        color: var(--wf-text-sub);
+        background: var(--wf-surface);
+        border: 1px solid var(--wf-border);
+        border-radius: 8px;
+        padding: 4px 10px;
+      }
+      .wf-setting-slider {
+        -webkit-appearance: none;
+        width: 80px;
+        height: 4px;
+        border-radius: 2px;
+        background: var(--wf-toggle-bg);
+        outline: none;
+
+        &::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          width: 14px;
+          height: 14px;
+          border-radius: 50%;
+          background: var(--wf-green);
+          cursor: pointer;
+          box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+        }
+      }
+    }
+  }
+}

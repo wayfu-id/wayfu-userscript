@@ -1,0 +1,40 @@
+// src/styles/ui/tokens.scss
+:root {
+  --wf-green: #009a4b;
+  --wf-blue1: #1c8ebd;
+  --wf-blue2: #1c7da6;
+  --wf-orange: #ffd279;
+  --wf-radius: 20px;
+
+  --wf-logo-bg: none;
+  --wf-logo-shadow: none;
+
+  --wf-bg: #f6f8fa;
+  --wf-surface: #ffffff;
+  --wf-surface2: #f0f4f8;
+  --wf-border: rgba(0, 0, 0, 0.08);
+  --wf-text: #1a1e27;
+  --wf-text-sub: #6b7280;
+  --wf-text-muted: #9ca3af;
+  --wf-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+  --wf-shadow-fab: 0 4px 20px rgba(0, 154, 75, 0.35);
+  --wf-input-bg: #f0f4f8;
+  --wf-toggle-bg: #e5e7eb;
+}
+
+[data-theme="dark"] {
+  --wf-bg: #0f1117;
+  --wf-surface: #1a1e27;
+  --wf-surface2: #252c3a;
+  --wf-border: rgba(255, 255, 255, 0.07);
+  --wf-text: #f1f5f9;
+  --wf-text-sub: #94a3b8;
+  --wf-text-muted: #64748b;
+  --wf-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3);
+  --wf-shadow-fab: 0 4px 20px rgba(0, 154, 75, 0.4);
+  --wf-input-bg: #252c3a;
+  --wf-toggle-bg: #374151;
+
+  --wf-logo-bg: linear-gradient(135deg, var(--wf-green), var(--wf-blue1));
+  --wf-logo-shadow: 0 2px 8px rgba(0, 154, 75, 0.3);
+}
