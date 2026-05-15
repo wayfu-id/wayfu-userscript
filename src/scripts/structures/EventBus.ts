@@ -1,4 +1,6 @@
-export default class EventBus {
+import ScriptManager from "./ScriptManager";
+
+export default class EventBus extends ScriptManager {
     private listeners: Record<string, Function[]> = {};
 
     on(event: string, fn: Function) {

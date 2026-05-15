@@ -44,9 +44,11 @@ class Message extends BaseModel {
         sponsorName: "",
         other: [],
     };
+    app: App;
 
-    private constructor(App: App) {
-        super(App);
+    private constructor(app: App) {
+        super();
+        this.app = app;
         this._init();
     }
 
@@ -82,13 +84,15 @@ class Message extends BaseModel {
         }
         try {
             const { WAPI } = this.app,
-                { ModelClass: { Product } } = WAPI;
+                {
+                    ModelClass: { Product },
+                } = WAPI;
             console.log(attachment instanceof Product);
             let { id } = attachment;
             if (!WAPI.BusinessUtils.ProductModel.isIdType(id)) {
                 throw new Error("Attachment is not a valid product model.");
             }
-            const product = (await WAPI.findProduct(id));
+            const product = await WAPI.findProduct(id);
             if (!product) {
                 throw new Error("Product not found for the given attachment ID.");
             }

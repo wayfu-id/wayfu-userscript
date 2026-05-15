@@ -8,7 +8,7 @@ import ScriptManager from "./ScriptManager";
  */
 interface Settings {
     monthIdx: 0 | 1 | 2;
-    themeColor: string;
+    theme: "dark" | "light";
     debugMode: boolean;
     hasImage: boolean;
     imageFile: File | null;
@@ -44,7 +44,7 @@ class Settings extends ScriptManager {
      * You can add new property here
      */
     defaultProp = {
-        themeColor: "var(--butterbar-connection-background)",
+        theme: "dark",
         debugMode: false,
         hasImage: false,
         imageFile: null,
@@ -65,9 +65,11 @@ class Settings extends ScriptManager {
         exportType: "ask",
         fileType: "csv",
     };
+    app: App;
 
     private constructor(app: App) {
-        super(app);
+        super();
+        this.app = app;
         this._init();
     }
 
@@ -130,7 +132,7 @@ class Settings extends ScriptManager {
             "debugMode",
             "queueLimit",
             "bpLimit",
-            "defaultProp"
+            "defaultProp",
         );
         let data: { [k: string]: any } = {};
 

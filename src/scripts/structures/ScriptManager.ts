@@ -1,6 +1,5 @@
 import BaseModel from "./BaseModel";
 import { findValue } from "../utilities/index";
-import App from "../App";
 
 /**
  * ScriptManager Model Class
@@ -8,8 +7,8 @@ import App from "../App";
  * @classdesc Contains Greasemonkey or Tampermonkey UserScript API
  */
 export default class ScriptManager extends BaseModel {
-    constructor(app: App) {
-        super(app);
+    constructor() {
+        super();
     }
 
     /**
@@ -65,11 +64,13 @@ export default class ScriptManager extends BaseModel {
      * @returns
      */
     getResource(key: string, mode: string = "text") {
+        let result: string = "";
         if (typeof GM_getResourceText !== "undefined" && mode === "text") {
-            return GM_getResourceText(key);
+            result = GM_getResourceText(key);
         } else if (typeof GM_getResourceURL !== "undefined" && mode === "url") {
-            return GM_getResourceURL(key);
+            result = GM_getResourceURL(key);
         }
+        return result;
     }
 
     /**

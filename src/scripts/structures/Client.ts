@@ -30,13 +30,15 @@ export default class Client extends ScriptManager {
         isPremium: false,
         isTrial: false,
     };
+    app: App;
 
     private constructor(app: App) {
-        super(app);
+        super();
 
+        this.app = app;
         this.defaultProp = {
             method: "POST",
-            url: `${this.appInfo.homepage}user/api`,
+            url: `${this.app.appInfo.homepage}user/api`,
         };
 
         this.gettingData();
@@ -54,7 +56,7 @@ export default class Client extends ScriptManager {
             const opt = Object.assign({}, this.defaultProp, {
                 data: JSON.stringify({
                     phone: Profile.phoneNumber,
-                    version: this.appInfo.version,
+                    version: this.app.version,
                 }),
                 onload: async (res: Tampermonkey.Response<object>) => {
                     const { status, responseText } = res;
@@ -132,7 +134,7 @@ export default class Client extends ScriptManager {
             "reg",
             "mon",
             "end",
-            "expires"
+            "expires",
         );
         let data: { [k: string]: any } = {};
 

@@ -4,11 +4,8 @@ import App from "../App";
 export default class BaseModel {
     [k: string | number]: any;
     defaultProp: { [k: string]: any } = {};
-    app: App;
 
-    constructor(app: App) {
-        this.app = app;
-    }
+    constructor() {}
 
     /**
      * Get value from Object
