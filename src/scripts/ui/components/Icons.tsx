@@ -1,12 +1,15 @@
+import React from "react";
 interface LogoProps {
     theme: "light" | "dark";
 }
 
 interface IconProps {
-    size: number;
-    stroke: string;
-    strokeWidth: string;
+    size?: number;
+    stroke?: string;
+    strokeWidth?: string;
 }
+
+// const React = unsafeWindow.require("React");
 
 const Icons = {
     LogoBW: () => (

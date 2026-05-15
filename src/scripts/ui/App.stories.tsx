@@ -1,9 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import WayFuUI from "./App";
+import Main from "./Main";
 
 const meta: Meta<typeof WayFuUI> = {
     title: "WayFu/Panel",
-    component: WayFuUI,
+    component: Main,
     parameters: {
         // Override background per story
         backgrounds: { default: "wa-dark" },

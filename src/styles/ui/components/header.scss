@@ -55,13 +55,13 @@
         width: 32px;
         height: 32px;
         border-radius: 50%;
-        background: var(--wf-surface2);
+        background: var(--wf-btn-bg);
         border: none;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: var(--wf-text-sub);
+        color: var(--wf-btn-color);
         transition:
           background 0.15s,
           color 0.15s;
@@ -71,9 +71,9 @@
           color: var(--wf-text);
         }
 
-        &.active {
-          background: rgba(0, 154, 75, 0.12);
-          color: var(--wf-green);
+        svg {
+          height: 16px;
+          width: 16px;
         }
       }
     }

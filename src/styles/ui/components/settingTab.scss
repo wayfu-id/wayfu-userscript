@@ -62,7 +62,8 @@
         color: var(--wf-text-muted);
         outline: none;
         cursor: pointer;
-        min-width: 90px;
+        width: 170px;
+        text-align: right;
         -webkit-appearance: none;
       }
 
@@ -72,11 +73,14 @@
         background: var(--wf-surface);
         border: 1px solid var(--wf-border);
         border-radius: 8px;
-        padding: 4px 10px;
+        padding: 4px;
+        text-align: center;
+        margin-left: 4px;
+        min-width: 30px;
       }
       .wf-setting-slider {
         -webkit-appearance: none;
-        width: 80px;
+        width: 120px;
         height: 4px;
         border-radius: 2px;
         background: var(--wf-toggle-bg);
@@ -91,6 +95,14 @@
           cursor: pointer;
           box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
         }
+      }
+    }
+
+    &.wf-user-info {
+      .wf-setting-output {
+        text-align: right;
+        padding: 4px 8px;
+        width: 150px;
       }
     }
   }

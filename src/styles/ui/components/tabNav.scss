@@ -85,13 +85,9 @@
 
     .wf-tab-pane {
       padding: 14px;
-      display: none;
+      display: flex;
       flex-direction: column;
       gap: 10px;
-
-      &.active {
-        display: flex;
-      }
 
       .wf-label {
         font-size: 10px;

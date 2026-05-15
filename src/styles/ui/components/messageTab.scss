@@ -63,67 +63,64 @@
     }
   }
 
-  /* mode toggle row */
-  .wf-mode-row {
+  .wf-msg-row {
     align-items: center;
     display: flex;
     gap: 8px;
-    padding: 6px 3px;
+    /* mode toggle row */
+    &.wf-mode-row {
+      padding: 6px 3px;
 
-    .wf-mode-label {
-      font-size: 12px;
-      color: var(--wf-text-sub);
-      flex: 1;
-      display: flex;
-      gap: 8px;
+      .wf-mode-label {
+        font-size: 12px;
+        color: var(--wf-text-sub);
+        flex: 1;
+        display: flex;
+        gap: 8px;
+      }
     }
-  }
+    /* file input row */
+    &.wf-file-row {
+      .wf-file-btn,
+      .wf-file-badge {
+        padding: 10px;
+        border-radius: 10px;
+        font-size: 12px;
+      }
 
-  /* file input row */
-  .wf-file-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+      .wf-file-btn {
+        flex: 1;
+        padding: 8px 10px;
+        background: var(--wf-input-bg);
+        border: 1px dashed var(--wf-border);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-family: "DM Sans";
+        color: var(--wf-text-sub);
+        transition:
+          border-color 0.15s,
+          background 0.15s;
 
-    .wf-file-btn,
-    .wf-file-badge {
-      padding: 10px;
-      border-radius: 10px;
-      font-size: 12px;
-    }
+        &:hover {
+          border-color: var(--wf-green);
+          color: var(--wf-green);
+          background: rgba(0, 154, 75, 0.04);
+        }
 
-    .wf-file-btn {
-      flex: 1;
-      padding: 8px 10px;
-      background: var(--wf-input-bg);
-      border: 1px dashed var(--wf-border);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-family: "DM Sans";
-      color: var(--wf-text-sub);
-      transition:
-        border-color 0.15s,
-        background 0.15s;
+        svg {
+          width: 15px;
+          height: 15px;
+          flex-shrink: 0;
+        }
+      }
 
-      &:hover {
-        border-color: var(--wf-green);
+      .wf-file-badge {
+        background: rgba(0, 154, 75, 0.12);
         color: var(--wf-green);
-        background: rgba(0, 154, 75, 0.04);
+        font-weight: 600;
       }
-
-      svg {
-        width: 15px;
-        height: 15px;
-        flex-shrink: 0;
-      }
-    }
-
-    .wf-file-badge {
-      background: rgba(0, 154, 75, 0.12);
-      color: var(--wf-green);
-      font-weight: 600;
     }
   }
 

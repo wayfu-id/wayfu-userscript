@@ -9,11 +9,11 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap");
-
 @source "../scripts/ui/**/*.{tsx,jsx,ts,js}";
 @source "../scripts/ui/**/*.stories.{tsx,ts}"; // ← add stories files
 @source "../../.storybook/**/*.{ts,tsx}"; // ← add storybook config
+
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap");
 
 @mixin social-button($name, $color) {
   a.icon-#{$name} {
@@ -24,11 +24,4 @@
       }
     }
   }
-}
-
-.wa-bg {
-  position: fixed;
-  inset: 0;
-  background: var(--wf-bg);
-  display: flex;
 }

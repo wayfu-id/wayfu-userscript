@@ -8,6 +8,8 @@
 
   --wf-logo-bg: none;
   --wf-logo-shadow: none;
+  --wf-btn-bg: #f0f4f8;
+  --wf-btn-color: #6b7280;
 
   --wf-bg: #f6f8fa;
   --wf-surface: #ffffff;
@@ -37,4 +39,6 @@
 
   --wf-logo-bg: linear-gradient(135deg, var(--wf-green), var(--wf-blue1));
   --wf-logo-shadow: 0 2px 8px rgba(0, 154, 75, 0.3);
+  --wf-btn-bg: rgba(0, 154, 75, 0.12);
+  --wf-btn-color: #009a4b;
 }
