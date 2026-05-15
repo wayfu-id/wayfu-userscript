@@ -85,22 +85,26 @@ function clean(done) {
     return cleanDir(dest);
 }
 
+/**
+ *
+ * @returns
+ * @deprecated
+ */
 function compilePug() {
-    const pkg = readJSON("package.json"),
-        rgx = /^(?:(?:[A-Za-z\w]+)\s?[A-Za-z\w]+)/g,
-        name = Object.assign({ suffix: "-view", extname: ".html" }, base);
-
-    return src("./src/views/index.pug")
-        .pipe(
-            pug({
-                data: {
-                    author: rgx.exec(pkg.author)[0],
-                    version: pkg.viewVersion,
-                },
-            }),
-        )
-        .pipe(rename(name))
-        .pipe(_dest(`./assets`));
+    // const pkg = readJSON("package.json"),
+    //     rgx = /^(?:(?:[A-Za-z\w]+)\s?[A-Za-z\w]+)/g,
+    //     name = Object.assign({ suffix: "-view", extname: ".html" }, base);
+    // return src("./src/views/index.pug")
+    //     .pipe(
+    //         pug({
+    //             data: {
+    //                 author: rgx.exec(pkg.author)[0],
+    //                 version: pkg.viewVersion,
+    //             },
+    //         }),
+    //     )
+    //     .pipe(rename(name))
+    //     .pipe(_dest(`./assets`));
 }
 
 function compileScss() {
@@ -155,7 +159,7 @@ function addStyleHeader(done) {
         .pipe(_dest(`./assets`));
 }
 
-task("createView", parallel(compilePug, convertImage, moveJson));
+task("createView", parallel(convertImage, moveJson));
 task("bundleStyle", series(compileScss, addStyleHeader));
 task("bundleScript", series(webpackBundled, inserHeader));
 
