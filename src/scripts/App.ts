@@ -16,9 +16,20 @@ declare global {
         DOM?: DOM;
         XLSX: typeof XLSX;
         Waydown: typeof Waydown;
-        React: typeof React;
-        ReactDOM: typeof ReactDOM;
     }
+}
+interface App extends EventBus {
+    WAPI: WAPI;
+    // React: typeof React;
+    // ReactDOM: typeof ReactDOM;
+    DOM: typeof DOM;
+    XLSX: typeof XLSX;
+    Waydown: typeof Waydown;
+    Client: Client;
+    Queue: Queue;
+    Message: Message;
+    Settings: Settings;
+    Worker: Worker;
 }
 
 class App extends EventBus implements App {
@@ -32,8 +43,6 @@ class App extends EventBus implements App {
         this.DOM = DOM;
         this.XLSX = XLSX;
         this.Waydown = Waydown;
-        // this.React = target.require("React");
-        // this.ReactDOM = target.require("ReactDOM");
 
         console.log(this);
         this.Client = Client.getClient(this);
@@ -61,15 +70,7 @@ class App extends EventBus implements App {
 
     static init(target?: typeof unsafeWindow) {
         target = target ?? unsafeWindow;
-        let { React, ReactDOM } = target;
-        if (!!target.require && (!React || !ReactDOM)) {
-            React = target.require("React");
-            ReactDOM = target.require("ReactDOM");
-            // console.log(React, ReactDOM);
-            // window["React"] = React;
-            // window["ReactDOM"] = ReactDOM;
-            // console.log(window);
-        }
+
         let loopTimer = setTimeout(() => {
             DOM.has("div.two").then(() => {
                 clearTimeout(loopTimer);

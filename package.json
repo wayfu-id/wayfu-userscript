@@ -110,6 +110,7 @@
         "@storybook/addon-a11y": "^10.3.6",
         "@storybook/addon-docs": "^10.3.6",
         "@storybook/addon-onboarding": "^10.3.6",
+        "@storybook/addon-postcss": "^2.0.0",
         "@storybook/addon-webpack5-compiler-swc": "^4.0.3",
         "@storybook/react-webpack5": "^10.3.6",
         "@tailwindcss/postcss": "^4.3.0",

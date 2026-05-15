@@ -1,8 +1,8 @@
 // // .storybook/preview.ts
 import "../src/scripts/ui/context/__mocks__/setup";
-import type { Preview } from "@storybook/react-webpack5";
 import "../src/styles/style.scss"; // your Tailwind + SCSS
 
+import type { Preview } from "@storybook/react-webpack5";
 const preview: Preview = {
     parameters: {
         backgrounds: {
@@ -15,8 +15,14 @@ const preview: Preview = {
     },
     decorators: [
         (Story) => (
-            <div id="wayfu-root">
-                <Story />
+            // Replicates WhatsApp Web's root layout:
+            // div#app > div.two (flex row, full viewport, positioned)
+            <div id="app" className="absolute top-[0] left-[0] overflow-hidden m-0 p-0 w-screen h-screen">
+                {/* Simulates div.two — the main chat area sibling */}
+                <div className="two flex h-full flex-col"></div>
+                <div id="wayfu-root">
+                    <Story />
+                </div>
             </div>
         ),
     ],
