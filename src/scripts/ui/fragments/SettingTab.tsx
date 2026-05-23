@@ -2,14 +2,21 @@ import App from "../../App";
 import { Icons, InputRange, InputSelect } from "../components/Index";
 import { Settings } from "../context/Constans";
 import type { Setting, AnySetting } from "../context/Constans";
-import React from "react";
+import React, { useState } from "react";
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 const BetaBadge = () => <span className="wf-beta-badge">Beta</span>;
 
 function RangeInput({ setting }: { setting: Setting<"range"> }) {
-    let { id, label, items, value } = setting;
-    let { min, max, step, defaultValue } = items;
+    let { id, label, items, value, onChange } = setting;
+    let { min, max, step } = items;
+
+    const [rangeValue, setrangeValue] = useState(value);
+    let handleOnChange: React.ChangeEventHandler<HTMLInputElement, HTMLInputElement> = (e) => {
+        let { id, value } = e.target;
+        if (onChange && typeof onChange == "function") onChange({ [id]: value });
+        setrangeValue(e.target.value);
+    };
     // setting.items is guaranteed RangeType here — no cast needed
     return (
         <InputRange
@@ -17,19 +24,28 @@ function RangeInput({ setting }: { setting: Setting<"range"> }) {
             min={min}
             max={max}
             step={step}
-            defaultValue={value ?? defaultValue}
+            value={rangeValue}
             title={label}
+            onChange={handleOnChange}
         />
     );
 }
 
 function SelectInput({ setting }: { setting: Setting<"select"> }) {
-    let { id, label, items, value } = setting;
+    let { id, label, items, value, onChange } = setting;
+
+    const [selected, setSelected] = useState(value);
     items = items.map((i) => {
-        i.selected = i.key == value;
+        i.selected = i.key == selected;
         return i;
     });
-    return <InputSelect id={id} items={items} title={label} />;
+
+    let handleOnChange: React.ChangeEventHandler<HTMLSelectElement, HTMLSelectElement> = (e) => {
+        let { id, value } = e.target;
+        if (onChange && typeof onChange == "function") onChange({ [id]: value });
+        setSelected(e.target.value);
+    };
+    return <InputSelect id={id} items={items} title={label} onChange={handleOnChange} />;
 }
 
 // ── Single row component using the type guard ─────────────────────────────────
@@ -66,6 +82,10 @@ function SettingGroup({ label, items }: { label: string; items: AnySetting[] }) 
 export default function SettingTab({ app }: { app?: App }) {
     const appSettings = app ? app.Settings : undefined;
 
+    let handleChanges = (value: { [k: string]: any }) => {
+        app?.trigger("setting:sets", value);
+    };
+
     return (
         <>
             <div className="wf-setting-group wf-user-info">
@@ -81,7 +101,8 @@ export default function SettingTab({ app }: { app?: App }) {
             {Object.entries(Settings).map(([groupLabel, items]) => {
                 items = items.map((i) => {
                     if (appSettings && appSettings.defaultProp.hasOwnProperty(i.id)) {
-                        i.value = appSettings[`${i.id}`];
+                        i.value = appSettings[i.id];
+                        i.onChange = handleChanges;
                     }
                     return i;
                 });

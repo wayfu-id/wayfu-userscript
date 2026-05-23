@@ -8,13 +8,44 @@
   // - Scrollbar styling
   // - CSS custom property animations
 
-  .wf-fab {
+  .wf-fab-wrap {
     position: absolute;
     bottom: 80px;
     right: 20px;
     width: 48px;
     height: 48px;
+    z-index: 100;
+  }
+
+  .wf-fab-ring {
+    position: absolute;
+    inset: -6px;
+    width: calc(100% + 12px);
+    height: calc(100% + 12px);
+    transform: rotate(-90deg);
+    pointer-events: none;
+
+    .wf-fab-ring-track {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.12);
+      stroke-width: 3;
+    }
+
+    .wf-fab-ring-prog {
+      fill: none;
+      stroke-width: 3;
+      stroke-linecap: round;
+      transition:
+        stroke-dashoffset 0.4s ease,
+        stroke 0.3s ease;
+    }
+  }
+
+  .wf-fab {
+    position: absolute;
+    inset: 0;
     border-radius: 50%;
+    color: var(--wf-svg-fill);
     background: linear-gradient(
       135deg,
       var(--wf-green) 0%,
@@ -29,7 +60,6 @@
     transition:
       transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
       box-shadow 0.2s;
-    z-index: 100;
 
     svg {
       width: 22px;
@@ -37,10 +67,78 @@
     }
 
     &:hover {
-      transform: scale(1.1);
+      transform: scale(1.08);
+    }
+    &:active {
+      transform: scale(0.96);
     }
     &.open {
-      transform: rotate(45deg) scale(1.05);
+      transform: rotate(45deg);
+      &:hover {
+        transform: rotate(45deg) scale(1.08);
+      }
+    }
+  }
+
+  .wf-fab-tooltip {
+    position: absolute;
+    bottom: calc(100% + 14px);
+    right: 0;
+    background: var(--wf-surface);
+    border: 0.5px solid var(--wf-border);
+    border-radius: 12px;
+    padding: 10px 14px;
+    min-width: 164px;
+    white-space: nowrap;
+    pointer-events: none;
+    animation: wf-fade-up 0.15s ease forwards;
+
+    .wf-fab-tt-label {
+      font-size: 10px;
+      color: var(--wf-text-muted);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 4px;
+    }
+
+    .wf-fab-tt-phone {
+      font-size: 12px;
+      color: var(--wf-green);
+      margin-bottom: 2px;
+    }
+
+    .wf-fab-tt-count {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--wf-text);
+      margin-bottom: 8px;
+
+      span {
+        font-size: 12px;
+        font-weight: 400;
+        color: var(--wf-text-muted);
+      }
+    }
+
+    .wf-fab-tt-bar {
+      height: 3px;
+      background: var(--wf-toggle-bg);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .wf-fab-tt-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+
+    .wf-fab-tt-done {
+      font-size: 11px;
+      color: var(--wf-blue1);
+      margin-top: 8px;
+      text-align: center;
     }
   }
 }

@@ -4,21 +4,27 @@ import { Icons, Button, ToggleSwitch } from "../components/Index";
 import React, { useState } from "react";
 
 interface MessageTabProps {
-    text: string;
     app?: App;
 }
 
-export default function MessageTab({ text, app }: MessageTabProps) {
+export default function MessageTab({ app }: MessageTabProps) {
+    let text = app ? app.Message.inputMessage : "";
+
     const [previewMode, setPreviewMode] = useState(false);
+    const [hasFile, setHasFile] = useState(false);
     const [msgText, setMsgText] = useState(text);
-    const [hasFile, setHasFile] = useState(text);
+
+    let handleMessageChange = (text: string) => {
+        app?.trigger("message:update", { text });
+        setMsgText(text);
+    };
 
     return (
         <>
             <textarea
                 className="wf-msg-area"
                 value={msgText}
-                onChange={(e) => setMsgText(e.target.value)}
+                onChange={(e) => handleMessageChange(e.target.value)}
                 placeholder="Tulis pesan di sini…"
             />
 
@@ -29,7 +35,7 @@ export default function MessageTab({ text, app }: MessageTabProps) {
                     <Button
                         key={k.label}
                         className={`wf-chip${k.type === "data" ? " data" : ""}`}
-                        onClick={() => setMsgText((t) => `${t} ${k.label}`)}
+                        onClick={() => handleMessageChange(`${msgText} ${k.label}`)}
                         title={`Sisipkan ${k.label}`}>
                         {k.label}
                     </Button>

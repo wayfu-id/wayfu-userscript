@@ -1,18 +1,16 @@
-import ScriptManager from "./ScriptManager";
-import { JSONParse, intoObject } from "../utilities/index";
-import App from "App";
 import MyDate from "./MyDate";
 import MyArray from "./MyArray";
+import BaseModel from "./BaseModel";
 
-type UserData = ObjectConstructor & {
+export type UserData = ObjectConstructor & {
     name: string | number;
     phone: string;
     type: "oriflame" | "umum";
     attempt?: number;
     reg?: string;
-    mon: number;
-    end: MyDate | null;
-    expires: MyDate | null;
+    mon?: number;
+    end?: MyDate | null;
+    expires?: MyDate | null;
 } & { [k: string | number]: any };
 
 type Subscription = {
@@ -20,59 +18,33 @@ type Subscription = {
     isTrial: boolean;
 };
 
-export default class Client extends ScriptManager {
-    private static Instance: Client;
+export default class Client extends BaseModel {
+    private static instance: Client;
+    private _profile?: WAPI.Contact;
 
-    defaultProp: Tampermonkey.Request;
+    key: "wayfu-user";
     UserData?: UserData = undefined;
-    Today: MyDate = new MyDate();
     Subscription: Subscription = {
         isPremium: false,
         isTrial: false,
     };
-    app: App;
 
-    private constructor(app: App) {
+    private constructor() {
         super();
+        this.key = "wayfu-user";
+    }
 
-        this.app = app;
-        this.defaultProp = {
-            method: "POST",
-            url: `${this.app.appInfo.homepage}user/api`,
-        };
-
-        this.gettingData();
+    setProfile(value: WAPI.Contact) {
+        this._profile = value;
     }
 
     get Profile() {
-        const { WAPI } = this.app;
-
-        return WAPI.ME ?? WAPI.Contact.getMeContact().getModel();
+        return this._profile;
     }
 
-    gettingData() {
-        let { Profile } = this;
-        return new Promise((resolve) => {
-            const opt = Object.assign({}, this.defaultProp, {
-                data: JSON.stringify({
-                    phone: Profile.phoneNumber,
-                    version: this.app.version,
-                }),
-                onload: async (res: Tampermonkey.Response<object>) => {
-                    const { status, responseText } = res;
-                    let data = null;
-                    if (status === 200) {
-                        data = await JSONParse<UserData>(responseText);
-                    }
-                    this.setCurrentUser(data);
-                    resolve(status === 200 && data !== null);
-                },
-                onerror: () => this.setCurrentUser(null),
-                ontimeout: () => this.setCurrentUser(null),
-                onabort: () => this.setCurrentUser(null),
-            });
-            this.request(opt);
-        });
+    setSubscription({ isPremium, isTrial }: Subscription) {
+        this.Subscription = { isPremium, isTrial };
+        return this;
     }
 
     subscriptionStatus() {
@@ -82,44 +54,7 @@ export default class Client extends ScriptManager {
 
     setUserData(user: UserData) {
         this.UserData = user;
-
-        const { end, expires, attempt } = user;
-        let { isPremium, isTrial } = this.Subscription;
-
-        // { Settings } = this.app;
-        // Settings.setOption("userType", user.type);
-
-        isPremium = end !== null ? end > this.Today : isPremium;
-        isTrial = expires !== null && !!attempt ? attempt < 5 && expires < this.Today : isTrial;
-
-        this.Subscription = { isPremium, isTrial };
         return this;
-    }
-
-    updateData(data?: UserData) {
-        if (!data) return this;
-        data = intoObject(data);
-
-        let { UserData } = this,
-            newData = Object.assign({}, UserData ?? {}, data),
-            { end, reg, mon } = newData;
-
-        newData.end = reg && mon ? new MyDate(reg).addMonths(mon) : end || null;
-        return this.setUserData(newData);
-    }
-
-    setCurrentUser(data: UserData | null) {
-        const user = data || this.getValue("wayfu-user");
-        if (user && typeof user !== "undefined" && user !== null) {
-            this.reset().updateData(user).save();
-        }
-
-        if (this.subscriptionStatus()) {
-        } else {
-            setTimeout(() => {
-                this.gettingData();
-            }, 2e4);
-        }
     }
 
     save() {
@@ -144,7 +79,7 @@ export default class Client extends ScriptManager {
             }
         }
 
-        this.setValue("wayfu-user", data);
+        return { [this.key]: data };
     }
 
     reset() {
@@ -152,10 +87,10 @@ export default class Client extends ScriptManager {
         return this;
     }
 
-    static getClient(app: App) {
-        if (!Client.Instance) {
-            Client.Instance = new Client(app);
+    static getClient() {
+        if (!Client.instance) {
+            Client.instance = new Client();
         }
-        return Client.Instance;
+        return Client.instance;
     }
 }

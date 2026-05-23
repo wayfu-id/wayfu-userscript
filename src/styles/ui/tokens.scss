@@ -10,6 +10,7 @@
   --wf-logo-shadow: none;
   --wf-btn-bg: #f0f4f8;
   --wf-btn-color: #6b7280;
+  --wf-svg-fill: #6b7280;
 
   --wf-bg: #f6f8fa;
   --wf-surface: #ffffff;
@@ -19,7 +20,7 @@
   --wf-text-sub: #6b7280;
   --wf-text-muted: #9ca3af;
   --wf-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
-  --wf-shadow-fab: 0 4px 20px rgba(0, 154, 75, 0.35);
+  --wf-shadow-fab: 0 4px 16px rgba(0, 154, 75, 0.35);
   --wf-input-bg: #f0f4f8;
   --wf-toggle-bg: #e5e7eb;
 }
@@ -33,9 +34,10 @@
   --wf-text-sub: #94a3b8;
   --wf-text-muted: #64748b;
   --wf-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3);
-  --wf-shadow-fab: 0 4px 20px rgba(0, 154, 75, 0.4);
+  --wf-shadow-fab: 0 4px 16px rgba(0, 154, 75, 0.4);
   --wf-input-bg: #252c3a;
   --wf-toggle-bg: #374151;
+  --wf-svg-fill: #ffffff;
 
   --wf-logo-bg: linear-gradient(135deg, var(--wf-green), var(--wf-blue1));
   --wf-logo-shadow: 0 2px 8px rgba(0, 154, 75, 0.3);

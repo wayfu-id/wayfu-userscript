@@ -1,9 +1,7 @@
 import { intoObject, findValue, parseValue } from "../utilities/index";
-import App from "../App";
 
 export default class BaseModel {
     [k: string | number]: any;
-    defaultProp: { [k: string]: any } = {};
 
     constructor() {}
 

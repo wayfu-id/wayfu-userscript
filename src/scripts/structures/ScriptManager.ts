@@ -7,7 +7,9 @@ import { findValue } from "../utilities/index";
  * @classdesc Contains Greasemonkey or Tampermonkey UserScript API
  */
 export default class ScriptManager extends BaseModel {
-    constructor() {
+    private static instance: ScriptManager;
+
+    private constructor() {
         super();
     }
 
@@ -175,5 +177,12 @@ export default class ScriptManager extends BaseModel {
         } else {
             console.log("XHR not Allowed!");
         }
+    }
+
+    static getManager() {
+        if (!ScriptManager.instance) {
+            ScriptManager.instance = new ScriptManager();
+        }
+        return ScriptManager.instance;
     }
 }

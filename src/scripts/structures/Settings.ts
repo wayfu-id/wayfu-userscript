@@ -1,22 +1,22 @@
-import App from "../App";
 import MyArray from "./MyArray";
-import { intoObject } from "../utilities/index";
-import ScriptManager from "./ScriptManager";
+import BaseModel from "./BaseModel";
 
 /**
  * Settings Interface
  */
 interface Settings {
+    key: "wayfu-options";
     monthIdx: 0 | 1 | 2;
     theme: "dark" | "light";
     debugMode: boolean;
     hasImage: boolean;
+    useImage: boolean;
     imageFile: File | null;
     imageQuality: "Standard" | "HD";
-    activeTab: number;
+    activeTab: string;
     targetBp: number;
     maxQueue: number;
-    dateFormat: string;
+    dateFormat: "auto" | 0 | 1 | 2;
     openPanel: boolean;
     useCaption: string;
     userType: "general" | "oriflame";
@@ -36,20 +36,22 @@ type defaultProp = Settings;
  * @class Settings
  * @classdesc Contains application settings
  */
-class Settings extends ScriptManager {
+class Settings extends BaseModel {
     private static instance: Settings;
+    key: "wayfu-options";
 
     /**
      * Default Properties
      * You can add new property here
      */
-    defaultProp = {
+    readonly #defaultProp = {
         theme: "dark",
         debugMode: false,
         hasImage: false,
+        useImage: false,
         imageFile: null,
         imageQuality: "Standard",
-        activeTab: 0,
+        activeTab: "msg",
         monthIdx: 0,
         targetBp: 100,
         maxQueue: 500,
@@ -65,24 +67,15 @@ class Settings extends ScriptManager {
         exportType: "ask",
         fileType: "csv",
     };
-    app: App;
 
-    private constructor(app: App) {
+    private constructor() {
         super();
-        this.app = app;
-        this._init();
+        this.key = "wayfu-options";
+        return this._setProps(this.#defaultProp);
     }
 
-    /**
-     * Internal init method to set default properties
-     * @returns
-     */
-    _init() {
-        const set = this.getValue("wayfu-options"),
-            opt = Object.assign({}, this.defaultProp, intoObject(set));
-
-        Object.assign(Settings.prototype, this.defaultProp);
-        return this.setOptions(opt).colorList();
+    get defaultProp() {
+        return this.#defaultProp;
     }
 
     /**
@@ -91,7 +84,8 @@ class Settings extends ScriptManager {
      * @returns
      */
     setOptions(options: { [k: string]: any }) {
-        return !options ? this : this._setProps(options);
+        if (!options) return;
+        return this._setProps(options);
     }
 
     /**
@@ -101,22 +95,8 @@ class Settings extends ScriptManager {
      * @returns
      */
     setOption<K extends keyof defaultProp>(key: K, value: any) {
-        return this._setProp(key, value).fillList().save();
-    }
-
-    fillList() {
-        /**
-         * UI Todo List
-         */
-        return this;
-    }
-
-    colorList() {
-        /**
-         * UI Todo
-         * Color List
-         */
-        return this;
+        if (key == "key") return;
+        return this._setProp(key, value);
     }
 
     /**
@@ -127,14 +107,12 @@ class Settings extends ScriptManager {
             "useImage",
             "hasImage",
             "imageFile",
-            "fileType",
             "alert",
             "debugMode",
-            "queueLimit",
-            "bpLimit",
             "defaultProp",
+            "key",
         );
-        let data: { [k: string]: any } = {};
+        let data: Partial<Settings> = {};
 
         for (let prop in this) {
             if (this.defaultProp.hasOwnProperty(prop) && !keys.isOnArray(prop)) {
@@ -142,12 +120,12 @@ class Settings extends ScriptManager {
             }
         }
 
-        this.setValue("wayfu-options", data);
+        return { [this.key]: data };
     }
 
-    static getSettings(app: App) {
+    static getSettings() {
         if (!Settings.instance) {
-            Settings.instance = new Settings(app);
+            Settings.instance = new Settings();
         }
         return Settings.instance;
     }

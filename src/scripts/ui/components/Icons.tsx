@@ -165,6 +165,43 @@ const Icons = {
             <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.523 5.847L0 24l6.302-1.506A11.93 11.93 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm5.994 16.524c-.248.699-1.458 1.373-2.006 1.427-.548.054-1.025.271-3.452-.72-2.916-1.183-4.759-4.17-4.903-4.361-.143-.191-1.171-1.555-1.171-2.963 0-1.407.737-2.099.998-2.386.261-.287.569-.359.759-.359h.546c.175 0 .415-.066.648.496.248.595.843 2.052.916 2.202.073.15.12.327.024.524-.095.197-.143.319-.287.491-.143.173-.301.385-.431.518-.143.143-.292.298-.125.585.167.287.742 1.224 1.594 1.982 1.095.978 2.018 1.28 2.305 1.423.287.143.455.12.622-.072.167-.191.716-.836.907-1.123.191-.287.382-.239.646-.143.263.095 1.672.789 1.959.932.287.143.479.215.548.334.07.12.07.696-.178 1.396z" />
         </svg>
     ),
+    Pause: () => (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+            <rect x="6" y="4" width="4" height="16" rx="1" />
+            <rect x="14" y="4" width="4" height="16" rx="1" />
+        </svg>
+    ),
+    Stop: () => (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+            <rect x="4" y="4" width="16" height="16" rx="2" />
+        </svg>
+    ),
+    Check: () => (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+            <polyline points="20 6 9 17 4 12" />
+        </svg>
+    ),
+    Info: () => (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+    ),
+    Warning: () => (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+            <line x1="12" y1="9" x2="12" y2="13" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+        </svg>
+    ),
+    Chart: () => (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <line x1="18" y1="20" x2="18" y2="10" />
+            <line x1="12" y1="20" x2="12" y2="4" />
+            <line x1="6" y1="20" x2="6" y2="14" />
+        </svg>
+    ),
 };
 
 export default Icons;

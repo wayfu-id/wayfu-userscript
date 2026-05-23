@@ -20,6 +20,7 @@ export interface Setting<T extends SettingType> {
     title?: string;
     beta?: boolean;
     value?: string | number;
+    onChange?: { [k: string]: any };
 }
 
 // ── Type guards ───────────────────────────────────────────────────────────────
@@ -41,14 +42,6 @@ interface Settings {
 }
 
 const Settings: Settings = {
-    // Tampilan: [
-    //     {
-    //         label: "Warna Panel",
-    //         icon: <Icons.Palette />,
-    //         type: "select",
-    //         items: ["Bawaan", "Hijau", "Biru", "Oranye"],
-    //     },
-    // ],
     Pesan: [
         {
             label: "Caption",
@@ -58,11 +51,22 @@ const Settings: Settings = {
             type: "select",
             items: [
                 { key: "caption", label: "Caption" },
-                { key: "pesan", label: "Pesan" },
+                { key: "pesan", label: "Message" },
             ],
         },
         {
-            label: "Jumlah Penerima",
+            label: "Image Quality",
+            id: "imageQuality",
+            icon: <Icons.Image />,
+            beta: true,
+            type: "select",
+            items: [
+                { key: "Standard", label: "Standard" },
+                { key: "HD", label: "HD" },
+            ],
+        },
+        {
+            label: "Recipients",
             id: "maxQueue",
             icon: <Icons.Zap />,
             type: "range",
@@ -76,7 +80,7 @@ const Settings: Settings = {
     ],
     Oriflame: [
         {
-            label: "Target BP",
+            label: "BP Target",
             id: "targetBp",
             icon: <Icons.Zap />,
             type: "range",
@@ -88,12 +92,12 @@ const Settings: Settings = {
             },
         },
         {
-            label: "Format Tanggal",
+            label: "Date Format",
             id: "dateFormat",
             icon: <Icons.Calendar />,
             type: "select",
             items: [
-                { key: "auto", label: "Deteksi Otomatis" },
+                { key: "auto", label: "Automatic" },
                 { key: "0", label: "MM/DD/YYYY" },
                 { key: "1", label: "DD/MM/YYYY" },
                 { key: "2", label: "YYYY/MM/DD" },
@@ -102,7 +106,7 @@ const Settings: Settings = {
     ],
     Output: [
         {
-            label: "Format File",
+            label: "Export Type",
             id: "exportType",
             icon: <Icons.Download />,
             beta: true,
@@ -116,7 +120,13 @@ const Settings: Settings = {
     ],
 };
 
-const tabs = [
+export type TabDetail = {
+    id: string;
+    icon: React.JSX.Element;
+    label: string;
+};
+
+const tabs: TabDetail[] = [
     {
         id: "msg",
         icon: <Icons.Msg />,

@@ -1,13 +1,7 @@
 import React, { useState } from "react";
 interface RangeProps extends React.InputHTMLAttributes<HTMLInputElement> {}
 
-export default function InputRange({ min, max, step, defaultValue, title, id }: RangeProps) {
-    const [rangeValue, setrangeValue] = useState(defaultValue);
-
-    let handleOnChange: React.ChangeEventHandler<HTMLInputElement, HTMLInputElement> = (e) => {
-        setrangeValue(e.target.value);
-    };
-
+export default function InputRange({ min, max, step, value, title, id, onChange }: RangeProps) {
     return (
         <div className="flex items-center gap-6">
             <input
@@ -18,10 +12,10 @@ export default function InputRange({ min, max, step, defaultValue, title, id }: 
                 max={max}
                 step={step}
                 title={title}
-                value={rangeValue}
-                onChange={handleOnChange}
+                value={value}
+                onChange={onChange}
             />
-            <span className="wf-setting-output">{rangeValue}</span>
+            <span className="wf-setting-output">{value}</span>
         </div>
     );
 }

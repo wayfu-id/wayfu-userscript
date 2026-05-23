@@ -1,5 +1,5 @@
 import React from "react";
-interface InputSelectProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface InputSelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
     items: OptionItem[];
 }
 
@@ -9,9 +9,9 @@ export interface OptionItem {
     selected?: boolean;
 }
 
-export default function InputSelect({ id, items, title }: InputSelectProps) {
+export default function InputSelect({ id, items, title, onChange }: InputSelectProps) {
     return (
-        <select id={id} className="wf-setting-select" name={title} title={title}>
+        <select id={id} className="wf-setting-select" name={title} title={title} onChange={onChange}>
             {items.map((e) => (
                 <option value={e.key} selected={e.selected}>
                     {e.label}

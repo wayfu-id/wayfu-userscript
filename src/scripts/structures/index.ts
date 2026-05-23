@@ -2,6 +2,7 @@
 import BaseModel from "./BaseModel";
 import Client from "./Client";
 import EventBus from "./EventBus";
+import FileRecipient from "./FileRecipient";
 import Message from "./Message";
 import MyArray from "./MyArray";
 import MyDate from "./MyDate";
@@ -15,6 +16,7 @@ export {
     EventBus,
     BaseModel,
     Client,
+    FileRecipient,
     Message,
     MyArray,
     MyDate,

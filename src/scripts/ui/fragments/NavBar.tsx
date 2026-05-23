@@ -2,9 +2,11 @@ import { Button } from "../components/Index";
 import { tabs } from "../context/Constans";
 import React from "react";
 
+import type { TabDetail } from "../context/Constans";
+
 interface NavProps {
     tab: string;
-    setTab: React.Dispatch<React.SetStateAction<string>>;
+    setTab: (tab: TabDetail) => void;
 }
 
 export default function NavBar({ tab, setTab }: NavProps) {
@@ -15,7 +17,7 @@ export default function NavBar({ tab, setTab }: NavProps) {
                     <Button
                         key={t.id}
                         className={`wf-tab-btn ${tab == t.id ? "active" : ""}`}
-                        onClick={() => setTab(t.id)}
+                        onClick={() => setTab(t)}
                         type="button">
                         {t.icon} {t.label}
                     </Button>

@@ -1,10 +1,12 @@
 import App from "../App";
-import { isNumeric, dateFormat, setName } from "../utilities/index";
+import { isNumeric, dateFormat, setName, createFilteredObject } from "../utilities/index";
 import BaseModel from "./BaseModel";
+import Settings from "./Settings";
 import MyDate from "./MyDate";
 import MyArray from "./MyArray";
 import { rgx } from "../config";
-// import { Structures } from "@wayfu/simple-wapi";
+
+import type { rowData } from "./FileRecipient";
 
 /**
  * Message Interface
@@ -21,6 +23,13 @@ interface Message {
     date: Date | string;
     sponsorName: string;
     other: Array<any>;
+    settings: {
+        mIdx: number;
+        mIdx_: number;
+        targetBp: number;
+        isFormat: boolean;
+        userType: "general" | "oriflame";
+    };
 }
 
 /**
@@ -31,7 +40,7 @@ interface Message {
 class Message extends BaseModel {
     private static instance: Message;
 
-    defaultProp = {
+    readonly #defaultProp = {
         inputMessage: "",
         inputCaption: "",
         imageFile: undefined,
@@ -44,64 +53,93 @@ class Message extends BaseModel {
         sponsorName: "",
         other: [],
     };
-    app: App;
 
-    private constructor(app: App) {
+    setting: {
+        mIdx: number;
+        mIdx_: number;
+        targetBp: number;
+        isFormat: boolean;
+        userType: "general" | "oriflame";
+    };
+    // app: App;
+
+    private constructor() {
         super();
-        this.app = app;
-        this._init();
+        this.setting = {
+            mIdx: 0,
+            mIdx_: 0,
+            isFormat: false,
+            targetBp: 100,
+            userType: "general",
+        };
+        // this.app = app;
+        return this._setProps(this.#defaultProp);
     }
 
-    /**
-     * Internal init method to set default properties
-     * @returns
-     */
-    _init() {
-        // Object.assign(Message.prototype, this.defaultProp);
-        return this._setProps(this.defaultProp);
+    get defaultProp() {
+        return this.#defaultProp;
+    }
+
+    updateSettings(settings: Settings) {
+        const { monthIdx: mIdx_, targetBp, isFormat, userType } = settings,
+            { monthIdx: mIdx } = settings.defaultProp;
+
+        this._setProp("setting", { isFormat, mIdx, mIdx_, targetBp, userType });
     }
 
     /**
      * Set data from array
-     * @param {Array<any>} data array of data
+     * @param data array of data
      * @returns
      */
-    setData(data: Array<any>) {
+    setData(data: rowData) {
         const validPhone = (val: string) => rgx.phonePattern.test(val);
 
-        [this.idNumber, this.name, this.phone, this.poinValue, this.date, this.sponsorName, ...this.other] =
-            validPhone(data[2]) ? data : ["", ...data];
+        [this.idNumber, this.name, this.phone, this.poinValue, this.date, this.sponsorName, ...this.other] = validPhone(
+            data[2],
+        )
+            ? data
+            : ["", ...data];
 
-        this.other = data.length > 6 ? data.slice(6) : [];
+        // this.other = data.length > 6 ? data.slice(6) : [];
         return this;
     }
 
-    async setAttachment(attachment: File | WA.ProductModel | WAPI.Product) {
+    setAttachment(attachment?: File | WAPI.Product) {
         if (!attachment) return;
+
         if (attachment instanceof File) {
             this.imageFile = attachment;
-            return;
-        }
-        try {
-            const { WAPI } = this.app,
-                {
-                    ModelClass: { Product },
-                } = WAPI;
-            console.log(attachment instanceof Product);
-            let { id } = attachment;
-            if (!WAPI.BusinessUtils.ProductModel.isIdType(id)) {
-                throw new Error("Attachment is not a valid product model.");
-            }
-            const product = await WAPI.findProduct(id);
-            if (!product) {
-                throw new Error("Product not found for the given attachment ID.");
-            }
-            this.product = product;
-            return;
-        } catch (err) {
-            console.log("Error processing product attachment:", err);
+        } else {
+            this.product = attachment;
         }
     }
+
+    // async setAttachment(attachment: File | WA.ProductModel | WAPI.Product) {
+    //     if (!attachment) return;
+    //     if (attachment instanceof File) {
+    //         this.imageFile = attachment;
+    //         return;
+    //     }
+    //     try {
+    //         const { WAPI } = this.app,
+    //             { Product } = WAPI.ModelClass;
+
+    //         console.log(attachment instanceof Product);
+    //         let { id } = attachment;
+    //         if (!WAPI.BusinessUtils.ProductModel.isIdType(id)) {
+    //             throw new Error("Attachment is not a valid product model.");
+    //         }
+    //         const product = await WAPI.findProduct(id);
+    //         if (!product) {
+    //             throw new Error("Product not found for the given attachment ID.");
+    //         }
+    //         this.product = product;
+    //         return;
+    //     } catch (err) {
+    //         console.log("Error processing product attachment:", err);
+    //     }
+    // }
 
     /**
      * Get processed message value
@@ -125,14 +163,12 @@ class Message extends BaseModel {
      * @returns
      */
     substitute(message: string) {
-        const { userType } = this.app.Settings;
+        const { userType } = this.settings;
         if (message !== "" && message !== null && message !== undefined) {
             const col = [this.poinValue, this.date, this.sponsorName, ...this.other],
                 colTreshold = userType === "oriflame" ? 3 : 0;
 
-            message = message
-                .replace(/F_NAMA/g, setName(this.name, true))
-                .replace(/NAMA/g, setName(this.name));
+            message = message.replace(/F_NAMA/g, setName(this.name, true)).replace(/NAMA/g, setName(this.name));
             message = message.replace(/PHONE/g, this.phone);
             message =
                 this.idNumber !== "" && this.idNumber !== undefined
@@ -155,7 +191,7 @@ class Message extends BaseModel {
      * @returns
      */
     setMessage(message: string, column: number, value: string) {
-        const { targetBp, userType } = this.app.Settings;
+        const { targetBp, userType } = this.settings;
         const dataKey = (numb: number) => new RegExp(String.raw`(DATA_${numb})(\s|\D|$)`, "g");
 
         if (userType === "oriflame") {
@@ -189,16 +225,10 @@ class Message extends BaseModel {
      * @returns formatted date string
      */
     lastDay(dateStr: string, isLastDay: boolean = true) {
-        const {
-            defaultProp: { monthIdx: mIdx },
-            monthIdx: mIdx_,
-            isFormat,
-        } = this.app.Settings;
+        const { mIdx, mIdx_, isFormat } = this.settings;
 
         let date: MyDate = new MyDate(
-            !isFormat && mIdx_ !== mIdx
-                ? MyArray.split(dateStr, "/").changeIndex(mIdx_, mIdx).join("/")
-                : dateStr,
+            !isFormat && mIdx_ !== mIdx ? MyArray.split(dateStr, "/").changeIndex(mIdx_, mIdx).join("/") : dateStr,
         );
 
         date = isLastDay ? date.addDays(30) : date;
@@ -210,32 +240,32 @@ class Message extends BaseModel {
      * Send image message
      * @returns
      */
-    async sendImage() {
-        const { Settings, WAPI } = this.app,
-            { useCaption, imageQuality } = Settings,
-            caption = useCaption === "caption" ? this.caption : this.value;
+    // async sendImage() {
+    //     const { Settings, WAPI } = this.app,
+    //         { useCaption, imageQuality } = Settings,
+    //         caption = useCaption === "caption" ? this.caption : this.value;
 
-        if (!this.imageFile) return;
-        const [_, result] = await WAPI.sendAdvMessage(this.phone, "", {
-            media: this.imageFile,
-            quality: imageQuality,
-            caption,
-        });
-        return result;
-    }
+    //     if (!this.imageFile) return;
+    //     const [_, result] = await WAPI.sendAdvMessage(this.phone, "", {
+    //         media: this.imageFile,
+    //         quality: imageQuality,
+    //         caption,
+    //     });
+    //     return result;
+    // }
 
     /**
      * Send text message
      * @returns
      */
-    async sendText() {
-        const { WAPI } = this.app;
-        return await WAPI.inputAndSendTextMsg(this.phone, this.value);
-    }
+    // async sendText() {
+    //     const { WAPI } = this.app;
+    //     return await WAPI.inputAndSendTextMsg(this.phone, this.value);
+    // }
 
-    static getMessage(app: App) {
+    static getMessage() {
         if (!Message.instance) {
-            Message.instance = new Message(app);
+            Message.instance = new Message();
         }
         return Message.instance;
     }

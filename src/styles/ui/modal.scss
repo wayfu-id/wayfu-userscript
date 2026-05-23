@@ -1,0 +1,237 @@
+// src/styles/ui/components/modal.scss
+@use "./tokens.scss";
+
+// ── Modal stack ───────────────────────────────────────────────────────────────
+
+#wf-modal-root {
+  .wf-modal-stack {
+    position: absolute;
+    bottom: 148px;
+    right: 18px;
+    width: 320px;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 10px;
+    z-index: 99;
+    pointer-events: none;
+
+    > * {
+      pointer-events: all;
+    }
+
+    .wf-modal-entry {
+      animation: wf-fade-up 0.18s ease forwards;
+    }
+
+    // shared card base
+    .wf-modal-card {
+      background: var(--wf-surface);
+      border: 0.5px solid var(--wf-border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      position: relative;
+      border-left-width: 3px;
+      border-left-style: solid;
+
+      &--info {
+        border-left-color: var(--wf-blue1);
+      }
+      &--success {
+        border-left-color: var(--wf-green);
+      }
+      &--warning {
+        border-left-color: #f59e0b;
+      }
+      &--danger {
+        border-left-color: #ef4444;
+      }
+    }
+
+    .wf-modal-confirm {
+      background: var(--wf-surface);
+      border: 0.5px solid var(--wf-border);
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .wf-modal-confirm-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(245, 158, 11, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #f59e0b;
+      margin-bottom: 10px;
+    }
+
+    .wf-modal-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--wf-text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2px;
+      border-radius: 4px;
+      transition: color 0.15s;
+
+      &:hover {
+        color: var(--wf-text);
+      }
+    }
+
+    .wf-modal-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      flex-shrink: 0;
+
+      &--info {
+        color: var(--wf-blue1);
+      }
+      &--success {
+        color: var(--wf-green);
+      }
+      &--warning {
+        color: #f59e0b;
+      }
+      &--danger {
+        color: #ef4444;
+      }
+    }
+
+    .wf-modal-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--wf-text);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-right: 20px;
+    }
+
+    .wf-modal-body {
+      font-size: 12px;
+      color: var(--wf-text-sub);
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .wf-modal-actions {
+      display: flex;
+      gap: 6px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .wf-modal-btn {
+      font-size: 12px;
+      font-family: "DM Sans";
+      padding: 5px 12px;
+      border-radius: 8px;
+      border: 0.5px solid var(--wf-border);
+      background: var(--wf-surface2);
+      color: var(--wf-text-sub);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition:
+        background 0.15s,
+        color 0.15s;
+
+      &:hover {
+        background: var(--wf-toggle-bg);
+        color: var(--wf-text);
+      }
+
+      &--primary {
+        background: var(--wf-green);
+        color: #fff;
+        border-color: var(--wf-green);
+        &:hover {
+          opacity: 0.9;
+          color: #fff;
+        }
+      }
+
+      &--danger {
+        background: rgba(239, 68, 68, 0.08);
+        color: #ef4444;
+        border-color: rgba(239, 68, 68, 0.25);
+        &:hover {
+          background: rgba(239, 68, 68, 0.15);
+        }
+      }
+    }
+
+    // Report grid
+    .wf-report-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .wf-report-cell {
+      background: var(--wf-surface2);
+      border-radius: 8px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .wf-report-num {
+      font-size: 20px;
+      font-weight: 500;
+
+      &--success {
+        color: var(--wf-green);
+      }
+      &--warning {
+        color: #f59e0b;
+      }
+      &--danger {
+        color: #ef4444;
+      }
+    }
+
+    .wf-report-label {
+      font-size: 10px;
+      color: var(--wf-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+}
+
+// Shared animation
+@keyframes wf-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wf-modal-entry,
+  .wf-fab-tooltip {
+    animation: none;
+  }
+}

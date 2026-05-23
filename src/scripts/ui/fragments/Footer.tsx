@@ -15,7 +15,7 @@ export default function Footer({ app }: { app?: App }) {
                     <div className="wf-status-dot" />
                     <span className="text-(--green) text-10 font-semibold">6 penerima dimuat</span>
                 </div>
-                {`© ${author} · WA: ${waVersion}`}
+                {`© ${author}`}
             </div>
             <div className="wf-footer-socials">
                 {socials.map((n) => (
