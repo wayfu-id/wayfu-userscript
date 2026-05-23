@@ -2,25 +2,27 @@ import { parseValue } from ".";
 
 /**
  * Create an Object from Filtered Object
- * @param {any} obj inputed object
- * @param {any | Array<any>} filter What value of the filter
- * @param {string} [type="key"] Type filter `"key" | "val"`
+ * @param obj inputed object
+ * @param filter What value of the filter
+ * @param type Type filter `"key" | "val"`
  */
+function createFilteredObject<T extends object, K extends keyof T>(obj: T, filter: K | K[], type?: "key"): Pick<T, K>;
+function createFilteredObject<T extends object>(obj: T, filter: any | any[], type: "value"): Partial<T>;
 function createFilteredObject(obj: any, filter: any | Array<any>, type: string = "key") {
     let useFilter = Array.isArray(filter) ? filter : [filter];
     return Object.fromEntries(
         Object.entries(obj).filter(([k, v]) => {
             let val = type == "key" ? k : v;
             return useFilter.some((e) => val === e);
-        })
+        }),
     );
 }
 
 /**
  * Get value from Object
- * @param {string} key Object key
- * @param {Object} object Object target, default is `this` class
- * @param {number} [depth=2] dept default is `2`
+ * @param key Object key
+ * @param object Object target, default is `this` class
+ * @param depth dept default is `2`
  */
 function findValue(key: string, object: any, depth: number = 2) {
     if (!depth) return null;
@@ -41,8 +43,8 @@ function findValue(key: string, object: any, depth: number = 2) {
 
 /**
  * Parse data into Object. Also parse the value of object items
- * @param {any | Array<any>} data input data
- * @param {boolean} [parse=true] is it parsed value? default `true`
+ * @param data input data
+ * @param parse it parsed value? default `true`
  */
 function intoObject<T extends Object>(data: T | Array<any>, parse: boolean = true): T {
     let obj: { [k: string | number]: any } = {};
@@ -69,7 +71,7 @@ function intoObject<T extends Object>(data: T | Array<any>, parse: boolean = tru
  * Check and detect the string is JSON valid or not.
  * If it's valid, then return it's JSON value.
  * If it isn't valid, then return it as null.
- * @param {string} str JSON string
+ * @param str JSON string
  */
 function JSONParse<T extends Object>(str: string) {
     return new Promise((done) => {
