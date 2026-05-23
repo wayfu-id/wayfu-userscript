@@ -2,7 +2,7 @@
   "compilerOptions": {
     /* Language and Environment */
     "target": "ESNext",
-    "jsx": "preserve",
+    "jsx": "react",
 
     /* Modules */
     "module": "NodeNext",

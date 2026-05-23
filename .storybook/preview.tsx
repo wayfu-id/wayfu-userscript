@@ -1,5 +1,4 @@
 // // .storybook/preview.ts
-import "../src/scripts/ui/context/__mocks__/setup";
 import "../src/styles/style.scss"; // your Tailwind + SCSS
 
 import type { Preview } from "@storybook/react-webpack5";
