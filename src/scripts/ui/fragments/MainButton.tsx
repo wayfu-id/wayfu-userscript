@@ -1,5 +1,7 @@
 import { Icons, Button } from "../components/Index";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
+import { useAppEvents } from "../hooks/AppHooks";
+import { useApp } from "../context/AppContext";
 
 import type { MainButtonProps } from "../Main";
 import type { BlastState } from "../../events";
@@ -12,49 +14,49 @@ const DEFAULT_STATE: BlastState = {
     done: false,
 };
 
-// export default function MainButton({ open, setOpen, app }: MainButtonProps) {
-//     return (
-//         <Button className={`wf-fab${open ? " open" : ""}`} onClick={setOpen} title="WayFu - Easy Follow Up">
-//             {open ? <Icons.Close stroke="#fff" strokeWidth="2.5" size={20} /> : <Icons.Logo theme="dark" />}
-//         </Button>
-//     );
-// }
-
 const CIRCUMFERENCE = 2 * Math.PI * 30; // r=30
 
-export default function MainButton({ open, setOpen, app }: MainButtonProps) {
+const ButtonIcon = ({ open }: { open: boolean }) => {
+    return <>{open ? <Icons.Close /> : <Icons.Logo theme="dark" />}</>;
+};
+
+export default function MainButton({ open, setOpen }: MainButtonProps) {
+    const app = useApp();
     const [blast, setBlast] = useState<BlastState>(DEFAULT_STATE);
     const [hovered, setHovered] = useState(false);
+    const [btnIcon, setBtnIcon] = useState<React.JSX.Element>(<ButtonIcon open={open} />);
+    const hideTimer = useRef<NodeJS.Timeout | null>(null);
     const tooltipRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        if (!app) return;
-
-        const onProgress = (data: { index: number; total: number; phone: string }) => {
-            setBlast({ running: true, done: false, ...data });
-        };
-
-        const onDone = () => {
-            setBlast((prev) => ({ ...prev, running: false, done: true }));
-        };
-
-        const onReset = () => setBlast(DEFAULT_STATE);
-
-        app.on("blast:progress", onProgress);
-        app.on("blast:done", onDone);
-        app.on("recipient:reset", onReset);
-
-        return () => {
-            app.remove("blast:progress", onProgress);
-            app.remove("blast:done", onDone);
-            app.remove("recipient:reset", onReset);
-        };
-    }, [app]);
-
     const pct = blast.total > 0 ? blast.index / blast.total : 0;
     const offset = CIRCUMFERENCE * (1 - pct);
     const isIdle = !blast.running && !blast.done;
     const ringColor = blast.done ? "#1c8ebd]" : "#009a4b";
+
+    useAppEvents({
+        "blast:progress": (data: { index: number; total: number; phone: string }) => {
+            setBtnIcon(<Icons.Pause />);
+            setBlast({ running: true, done: false, ...data });
+        },
+        "blast:done": (_) => {
+            setBtnIcon(<Icons.Check />);
+            setBlast((prev) => ({ ...prev, running: false, done: true }));
+            setTimeout(() => {
+                setBtnIcon(<ButtonIcon open={open} />);
+            }, 5e3); // keep check icon for a moment before allowing open state change
+        },
+        "recipient:reset": () => {
+            setBlast(DEFAULT_STATE);
+        },
+    });
+
+    const handleMouseEnter = () => {
+        if (hideTimer.current) clearTimeout(hideTimer.current);
+        setHovered(true);
+    };
+
+    const handleMouseLeave = () => {
+        hideTimer.current = setTimeout(() => setHovered(false), 300);
+    };
 
     const handleClick = () => {
         if (blast.running) {
@@ -67,7 +69,8 @@ export default function MainButton({ open, setOpen, app }: MainButtonProps) {
             });
             return;
         }
-        setOpen((v) => !v);
+        setOpen();
+        setBtnIcon(() => ButtonIcon({ open: !open })); // toggle icon immediately on click for better UX, state will sync on next blast event or panel open/close
     };
 
     let fabLabel = open ? "Close Panel" : "Open Panel";
@@ -76,26 +79,27 @@ export default function MainButton({ open, setOpen, app }: MainButtonProps) {
         fabLabel = blast.done ? "Process Complete" : fabLabel;
     }
 
-    let strokeClasses = `[stroke-dasharray:2,5] [stroke-dashoffset:${offset}] stroke-[${ringColor}]`;
     return (
-        <div className="wf-fab-wrap" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+        <div className="wf-fab-wrap" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
             {(blast.running || blast.done) && (
                 <svg className="wf-fab-ring" viewBox="0 0 66 66" aria-hidden="true">
                     <circle className="wf-fab-ring-track" cx="33" cy="33" r="30" />
-                    <circle className={`wf-fab-ring-prog ${strokeClasses}`} cx="33" cy="33" r="30" />
+                    <circle
+                        className={`wf-fab-ring-prog`}
+                        cx="33"
+                        cy="33"
+                        r="30"
+                        style={{
+                            stroke: ringColor, // dynamic color
+                            strokeDasharray: CIRCUMFERENCE, // constant but needed inline
+                            strokeDashoffset: offset, // dynamic — MUST be inline
+                        }}
+                    />
                 </svg>
             )}
 
             <Button className={`wf-fab${open && isIdle ? " open" : ""}`} onClick={handleClick} title={fabLabel}>
-                {blast.running ? (
-                    <Icons.Pause />
-                ) : blast.done ? (
-                    <Icons.Check />
-                ) : open ? (
-                    <Icons.Close />
-                ) : (
-                    <Icons.Logo theme="dark" />
-                )}
+                {btnIcon}
             </Button>
 
             {(blast.running || blast.done) && hovered && (
@@ -106,7 +110,13 @@ export default function MainButton({ open, setOpen, app }: MainButtonProps) {
                         {blast.index} <span>/ {blast.total}</span>
                     </div>
                     <div className="wf-fab-tt-bar">
-                        <div className={`wf-fab-tt-fill width-[${Math.round(pct * 100)}%] bg-[${ringColor}]`} />
+                        <div
+                            className="wf-fab-tt-fill"
+                            style={{
+                                width: `${Math.round(pct * 100)}%`,
+                                background: ringColor,
+                            }}
+                        />
                     </div>
                     {blast.done && <div className="wf-fab-tt-done">Tap to view report</div>}
                 </div>

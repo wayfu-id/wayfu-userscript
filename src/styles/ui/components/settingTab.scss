@@ -8,7 +8,7 @@
     gap: 6px;
 
     .wf-settings-section-label {
-      font-size: 9px;
+      font-size: 10px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1px;
@@ -41,14 +41,19 @@
           color: var(--wf-text-muted);
         }
 
-        .wf-beta-badge {
-          padding: 1px 5px;
+        .wf-beta-badge,
+        .wf-user-badge {
+          padding: 5px;
           border-radius: 4px;
           font-size: 9px;
           font-weight: 700;
           background: rgba(28, 141, 189, 0.15);
           color: var(--wf-blue1);
           text-transform: uppercase;
+
+          &.premium {
+            color: var(--wf-green);
+          }
         }
       }
 
@@ -100,9 +105,9 @@
 
     &.wf-user-info {
       .wf-setting-output {
-        text-align: right;
+        text-align: center;
         padding: 4px 8px;
-        width: 150px;
+        width: auto;
       }
     }
   }

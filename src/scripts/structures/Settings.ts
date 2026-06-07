@@ -5,28 +5,27 @@ import BaseModel from "./BaseModel";
  * Settings Interface
  */
 interface Settings {
-    key: "wayfu-options";
     monthIdx: 0 | 1 | 2;
     theme: "dark" | "light";
     debugMode: boolean;
-    hasImage: boolean;
-    useImage: boolean;
-    imageFile: File | null;
+    hasAttach: boolean;
+    attachFile: File | null;
     imageQuality: "Standard" | "HD";
+    attachType: "file" | "product";
     activeTab: string;
     targetBp: number;
     maxQueue: number;
     dateFormat: "auto" | 0 | 1 | 2;
     openPanel: boolean;
-    useCaption: string;
-    userType: "general" | "oriflame";
+    useCaption: "caption" | "message";
+    userType: "umum" | "oriflame";
     splitter: "," | ";";
     isFormat: boolean;
-    akert: boolean;
+    alert: boolean;
     queueLimit: number;
+    previewMode: boolean;
     bpLimit: number;
-    exportType: "ask" | "csv" | "xlsx";
-    fileType: string;
+    exportType: "csv" | "xlsx";
 }
 
 type defaultProp = Settings;
@@ -37,20 +36,20 @@ type defaultProp = Settings;
  * @classdesc Contains application settings
  */
 class Settings extends BaseModel {
+    readonly #key = "wayfu-options";
     private static instance: Settings;
-    key: "wayfu-options";
 
     /**
      * Default Properties
      * You can add new property here
      */
     readonly #defaultProp = {
-        theme: "dark",
+        theme: document.body.classList.contains("dark") ? "dark" : "light",
         debugMode: false,
-        hasImage: false,
-        useImage: false,
-        imageFile: null,
+        hasAttach: false,
+        attachFile: null,
         imageQuality: "Standard",
+        attachType: "file" as "file" | "product",
         activeTab: "msg",
         monthIdx: 0,
         targetBp: 100,
@@ -58,24 +57,27 @@ class Settings extends BaseModel {
         dateFormat: "auto",
         openPanel: true,
         useCaption: "caption",
-        userType: "general",
+        userType: "umum",
         splitter: ",",
         isFormat: false,
-        akert: true,
+        alert: true,
         queueLimit: 1000,
         bpLimit: 300,
-        exportType: "ask",
-        fileType: "csv",
+        exportType: "csv",
+        previewMode: false,
     };
 
     private constructor() {
         super();
-        this.key = "wayfu-options";
         return this._setProps(this.#defaultProp);
     }
 
     get defaultProp() {
         return this.#defaultProp;
+    }
+
+    get key() {
+        return this.#key;
     }
 
     /**
@@ -95,7 +97,6 @@ class Settings extends BaseModel {
      * @returns
      */
     setOption<K extends keyof defaultProp>(key: K, value: any) {
-        if (key == "key") return;
         return this._setProp(key, value);
     }
 
@@ -104,12 +105,12 @@ class Settings extends BaseModel {
      */
     save() {
         const keys: MyArray<string> = new MyArray<string>(
-            "useImage",
-            "hasImage",
-            "imageFile",
+            "hasAttach",
+            "attachFile",
             "alert",
             "debugMode",
             "defaultProp",
+            "previewMode",
             "key",
         );
         let data: Partial<Settings> = {};
@@ -120,7 +121,7 @@ class Settings extends BaseModel {
             }
         }
 
-        return { [this.key]: data };
+        return { [this.#key]: data };
     }
 
     static getSettings() {

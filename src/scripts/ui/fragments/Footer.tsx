@@ -1,19 +1,33 @@
-import App from "../../App";
+import { useApp } from "../context/AppContext";
 import { socials } from "../context/Constans";
 import { Button } from "../components/Index";
-import React from "react";
+import { useAppEvent } from "../hooks/AppHooks";
+import React, { useState } from "react";
 
-export default function Footer({ app }: { app?: App }) {
+export default function Footer() {
+    const app = useApp();
     const appInfo = app ? app.appInfo : undefined;
     const author = appInfo ? appInfo.author : "Rizal Nurhidayat";
-    const waVersion = app && app.WAPI ? app.WAPI.WA_VERSION : "WA_VERSION";
+    const { Recipient } = app ?? {};
+
+    const [recipientCount, setRecipientCount] = useState(() => Recipient?.data.length ?? 0);
+
+    useAppEvent("recipient:loaded", (recipient) => {
+        setRecipientCount(recipient.data.length);
+    });
+
+    useAppEvent("recipient:reset", () => {
+        setRecipientCount(0);
+    });
+
+    let text = recipientCount > 0 ? `${recipientCount} penerima dimuat` : "Belum ada penerima";
 
     return (
         <div className="wf-panel-footer">
             <div className="wf-footer-info">
                 <div className="flex items-center gap-4">
                     <div className="wf-status-dot" />
-                    <span className="text-(--green) text-10 font-semibold">6 penerima dimuat</span>
+                    <span className="text-(--green) text-10 font-semibold">{text}</span>
                 </div>
                 {`© ${author}`}
             </div>

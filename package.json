@@ -5,7 +5,7 @@
     "homepage": "https://wayfu.id/",
     "bugs": "https://wayfu.id/",
     "description": "WhatsApp Easy Follow Up.",
-    "author": "Rizal Nurhidayat (https://github.com/rzlnhd)",
+    "author": "WayFu (https://wayfu.id/)",
     "license": "CC BY-NC-ND 4.0; https://creativecommons.org/licenses/by-nc-nd/4.0/",
     "main": "src/index.js",
     "types": "src/index.d.ts",
@@ -65,7 +65,9 @@
             "https://unpkg.com/@wayfu/simple-wapi@latest/dist/index.min.js",
             "https://unpkg.com/@wayfu/simple-xlsx@latest/dist/index.min.js",
             "https://unpkg.com/@wayfu/wayfu-dom@latest/dist/wayfu-dom.min.js",
-            "https://unpkg.com/@wayfu/waydown@latest/dist/index.min.js"
+            "https://unpkg.com/@wayfu/waydown@latest/dist/index.min.js",
+            "https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.min.js",
+            "https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js"
         ],
         "resource": [
             {
@@ -148,6 +150,7 @@
         "gulp-webp": "^4.0.0",
         "husky": "^7.0.4",
         "minimist": "^1.2.5",
+        "pdfjs-dist": "^2.16.105",
         "postcss": "^8.5.14",
         "postcss-loader": "^8.2.1",
         "pretty-hrtime": "^1.0.3",

@@ -1,6 +1,7 @@
 import MyArray from "../structures/MyArray";
 import { rgx } from "../config/index";
-import { isNumeric } from "./index";
+import { isNumeric } from "./index"; // src/utilities/PdfPreview.ts
+import * as pdfjsLib from "pdfjs-dist";
 
 /**
  * Calculate and get month indext on some datestring
@@ -110,4 +111,25 @@ const transformRow = (data: MyArray<string | Date>) => {
     return MyArray.create(result);
 };
 
-export { monthIndex, setPhone, getSignDate, rowValue, useComma, transformRow };
+async function getPdfFirstPageUrl(file: File): Promise<string> {
+    const arrayBuffer = await file.arrayBuffer(),
+        typedArray = new Uint8Array(arrayBuffer);
+
+    const pdf = await pdfjsLib.getDocument({ data: typedArray }).promise,
+        page = await pdf.getPage(1);
+
+    const viewport = page.getViewport({ scale: 1.5 }),
+        canvas = document.createElement("canvas"),
+        ctx = canvas.getContext("2d")!;
+
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+
+    await page.render({ canvasContext: ctx, viewport }).promise;
+
+    return new Promise((resolve) => {
+        canvas.toBlob((blob) => resolve(blob ? URL.createObjectURL(blob) : ""), "image/png");
+    });
+}
+
+export { monthIndex, setPhone, getSignDate, getPdfFirstPageUrl, rowValue, useComma, transformRow };

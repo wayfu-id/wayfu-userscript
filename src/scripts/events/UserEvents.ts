@@ -6,10 +6,11 @@ import type { UserData } from "../structures/Client";
 
 export type UserEventMap = {
     "user:load": { payload: UserData | null; return: void };
+    "user:products_loaded": { payload: void; return: void };
     "user:request_data": { payload: void; return: boolean };
+    "user:save": { payload: void; return: void };
     "user:sets": { payload: UserData | null; return: void };
     "user:update": { payload: UserData | any; return: void };
-    "user:save": { payload: void; return: void };
 };
 
 export function registerUserEvents(app: App) {
@@ -17,14 +18,21 @@ export function registerUserEvents(app: App) {
         const { Manager, Client, WAPI } = app,
             Profile = WAPI.ME ?? WAPI.Contact.getMeContact().getModel();
 
-        Client.setProfile(Profile);
-        clientData = Manager.getValue(Client.key) ?? clientData;
-        if (clientData && typeof clientData !== "undefined" && clientData !== null) {
+        if (!Client.Profile) {
+            Client.setProfile(Profile);
+            clientData = Manager.getValue(Client.key);
             app.trigger("user:update", clientData);
-        } else {
-            setTimeout(() => {
+            if (!clientData) {
                 app.trigger("user:request_data");
-            }, 2e4);
+            }
+        } else {
+            if (clientData && typeof clientData !== "undefined" && clientData !== null) {
+                app.trigger("user:update", clientData);
+            } else {
+                setTimeout(() => {
+                    app.trigger("user:request_data");
+                }, 2e4);
+            }
         }
     });
 
@@ -53,7 +61,13 @@ export function registerUserEvents(app: App) {
             isTrial = expires && !!attempt ? attempt < 5 && expires >= today : Subscription.isTrial;
 
         Client.reset().setUserData(user).setSubscription({ isPremium, isTrial });
-        app.trigger("setting:sets", { userType: type });
+
+        const { Profile } = Client,
+            isBusiness = Profile?.isBusiness || false,
+            hasProducts = isBusiness && !!(Profile as WAPI.BusinessContact)?.Products?.length,
+            attachType = isBusiness && hasProducts ? "product" : "file";
+
+        app.trigger("setting:sets", { userType: type, attachType });
         app.trigger("user:save");
     });
 

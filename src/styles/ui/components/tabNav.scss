@@ -1,5 +1,6 @@
 // Tab Nav Area
 @use "./attachmentTab.scss";
+@use "./productPicker.scss";
 @use "./messageTab.scss";
 @use "./settingTab.scss";
 @use "../tokens.scss";
@@ -83,14 +84,73 @@
       border-radius: 2px;
     }
 
+    .wf-tab-content-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .wf-label {
+        margin-bottom: 0 !important;
+      }
+
+      // in messageTab.scss or a shared _toggle.scss
+      .wf-preview-toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 10px;
+        border-radius: 20px;
+        border: 1px solid var(--wf-border);
+        background: var(--wf-surface2);
+        color: var(--wf-text-muted);
+        font-size: 11px;
+        font-family: "DM Sans";
+        cursor: pointer;
+        transition:
+          background 0.15s,
+          color 0.15s,
+          border-color 0.15s;
+        align-self: flex-start; // don't stretch full width
+
+        svg {
+          width: 12px;
+          height: 12px;
+        }
+
+        &.active {
+          background: rgba(0, 154, 75, 0.1);
+          color: var(--wf-green);
+          border-color: rgba(0, 154, 75, 0.3);
+        }
+
+        &:hover:not(.active) {
+          background: var(--wf-toggle-bg);
+          color: var(--wf-text);
+        }
+      }
+
+      .wf-preview-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--wf-border);
+        transition: background 0.15s;
+        margin-left: 2px;
+
+        &.active {
+          background: var(--wf-green);
+        }
+      }
+    }
+
     .wf-tab-pane {
       padding: 14px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
 
       .wf-label {
-        font-size: 10px;
+        font-size: 11px;
         color: var(--wf-text-muted);
         margin-bottom: 5px;
         font-weight: 600;

@@ -1,72 +1,25 @@
-import App from "../App";
-import { Header, Footer, MainButton, NavBar, TabContent } from "./fragments/Index";
+// import App from "../App";
+import { MainButton, MainPanel } from "./fragments/Index";
+import { useApp } from "./context/AppContext";
 import React, { useState, useRef, useEffect } from "react";
-
-import type { AppEventMap } from "../events";
-import type { TabDetail } from "./context/Constans";
-
-type Handler<T> = T extends void ? () => void : (data: T) => void;
 
 export interface MainButtonProps {
     open: boolean;
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    app?: App;
-}
-
-export interface MainPanelProps extends MainButtonProps {
-    theme: "dark" | "light";
-    setTheme: () => void;
-    app?: App;
-    rootRef?: React.RefObject<HTMLDivElement | null>;
+    setOpen: () => void;
 }
 
 export interface AppPanelProps {
-    app?: App;
+    // app?: App;
     style?: "dark" | "light";
 }
 
-function MainPanel({ open, setOpen, theme, setTheme, app }: MainPanelProps) {
-    const appSetting = app ? app.Settings : undefined;
-    const activeTab = appSetting ? appSetting.activeTab : "msg";
-    const [tab, setTab] = useState(activeTab);
-
-    let handleSetTab = (tab: TabDetail) => {
-        setTab(tab.id);
-        app?.trigger("setting:sets", { activeTab: tab.id });
-    };
-
-    return (
-        <div className={`wf-panel${open ? " visible" : " hidden"}`}>
-            {open && (
-                <>
-                    <Header open={open} setOpen={setOpen} theme={theme} setTheme={setTheme} app={app} />
-                    <NavBar tab={tab} setTab={handleSetTab} />
-                    <TabContent tab={tab} app={app} />
-                    <Footer app={app} />
-                </>
-            )}
-        </div>
-    );
-}
-
-export function useAppEvent<K extends keyof AppEventMap>(
-    app: App | undefined,
-    event: K,
-    callback: Handler<AppEventMap[K]["payload"]>,
-) {
-    useEffect(() => {
-        if (!app) return;
-        app.on(event, callback);
-        return () => app.remove(event, callback); // cleanup on unmount
-    }, [app, event]);
-}
-
-export default function Main({ style, app }: AppPanelProps) {
+export default function Main({ style }: AppPanelProps) {
+    const app = useApp();
     const appSetting = app ? app.Settings : undefined;
     const isOpen = appSetting ? appSetting.openPanel : false;
-    const [theme, setTheme] = useState(style ?? "light");
+    const [theme, setTheme] = useState(appSetting?.theme ?? "light");
     const [open, setOpen] = useState(isOpen);
-    const rootRef = useRef<HTMLDivElement>(null);
+    const rootRef = useRef<HTMLElement>(app.Host);
 
     let handleOpenPanel = () => {
         let value = !open;
@@ -86,10 +39,10 @@ export default function Main({ style, app }: AppPanelProps) {
     }, [theme]);
 
     return (
-        <div ref={rootRef} data-theme={theme}>
+        <div id="wayfu-root">
             <div className="wf-main relative">
-                <MainButton open={open} setOpen={handleOpenPanel} app={app} />
-                <MainPanel open={open} setOpen={handleOpenPanel} theme={theme} setTheme={handleChangeTheme} app={app} />
+                <MainButton open={open} setOpen={handleOpenPanel} />
+                <MainPanel open={open} setOpen={handleOpenPanel} theme={theme} setTheme={handleChangeTheme} />
             </div>
         </div>
     );

@@ -4,15 +4,25 @@
 // ── Modal stack ───────────────────────────────────────────────────────────────
 
 #wf-modal-root {
+  .wf-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    z-index: 200; // just below .wf-modal-stack (z-index: 99)
+    animation: wf-fade-in 0.15s ease forwards;
+  }
+
   .wf-modal-stack {
     position: absolute;
-    bottom: 148px;
+    top: 20px;
     right: 18px;
     width: 320px;
     display: flex;
     flex-direction: column-reverse;
     gap: 10px;
-    z-index: 99;
+    z-index: 201;
     pointer-events: none;
 
     > * {
@@ -63,7 +73,11 @@
       align-items: center;
       justify-content: center;
       color: #f59e0b;
-      margin-bottom: 10px;
+
+      svg {
+        width: 18px;
+        height: 18px;
+      }
     }
 
     .wf-modal-close {
@@ -94,6 +108,11 @@
       height: 20px;
       border-radius: 50%;
       flex-shrink: 0;
+
+      svg {
+        width: 15px;
+        height: 15px;
+      }
 
       &--info {
         color: var(--wf-blue1);
@@ -217,6 +236,14 @@
   }
 }
 
+@keyframes wf-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 // Shared animation
 @keyframes wf-fade-up {
   from {

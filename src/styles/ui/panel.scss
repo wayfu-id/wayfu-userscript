@@ -5,12 +5,6 @@
 @use "./components/footer.scss";
 
 #wayfu-root {
-  // Only put styles here that Tailwind can't handle:
-  // - Complex selectors
-  // - WA-specific overrides
-  // - Scrollbar styling
-  // - CSS custom property animations
-
   .wf-main {
     flex: 1;
     // position: relative;
@@ -18,11 +12,11 @@
       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M20 40 L40 20 L60 40 L40 60 Z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     display: flex;
     flex-direction: column;
-    z-index: 200;
+    z-index: 199;
   }
 
   .wf-panel {
-    max-height: 560px;
+    max-height: 600px;
     position: absolute;
     bottom: 140px;
     right: 18px;

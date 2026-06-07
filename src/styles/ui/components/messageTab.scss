@@ -4,8 +4,7 @@
 .wf-tab-pane {
   .wf-msg-area {
     max-width: 100%;
-    min-height: 110px;
-    max-height: 160px;
+    min-height: 200px;
     background: var(--wf-input-bg);
     border: 1px solid var(--wf-border);
     border-radius: 12px;
@@ -19,6 +18,10 @@
       border-color 0.15s,
       box-shadow 0.15s;
     line-height: 1.5;
+
+    &.preview {
+      color: var(--wf-text-muted);
+    }
 
     &::placeholder {
       color: var(--wf-text-muted);

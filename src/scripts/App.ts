@@ -1,10 +1,21 @@
-import { Queue, Settings, Message, Client, Worker, EventBus, ScriptManager, FileRecipient } from "./structures/index";
+import {
+    Queue,
+    Settings,
+    Message,
+    Client,
+    Worker,
+    EventBus,
+    Reports,
+    ScriptManager,
+    FileRecipient,
+} from "./structures/index";
 import WAPI from "@wayfu/simple-wapi";
 import DOM from "@wayfu/wayfu-dom";
 import XLSX from "@wayfu/simple-xlsx";
 import Waydown from "@wayfu/waydown";
-import Main from "./ui/Main";
-import ModalStack from "./ui/fragments/ModalStack";
+import { AppProvider, Main, ModalStack } from "./ui/Index";
+// import Main from "./ui/Main";
+// import ModalStack from "./ui/ModalStack";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import * as Event from "./events/index";
@@ -24,55 +35,49 @@ declare global {
 }
 interface App extends EventBus {
     WAPI: WAPI;
-    DOM: typeof DOM;
     XLSX: typeof XLSX;
     Waydown: typeof Waydown;
     Client: Client;
     Queue: Queue;
     Message: Message;
     Manager: ScriptManager;
-    Recipiemt: FileRecipient | null;
+    Report: Reports;
+    Recipient: FileRecipient | null;
     Settings: Settings;
     Worker: Worker;
 }
 
 class App extends EventBus implements App {
-    private _whatsappRootApp: string;
-    private _rootElementId: string;
-    private _rootModalElementId: string;
+    readonly #_whatsappRootApp = "div#app";
+    readonly #_rootHost = "wayfu-host";
+    readonly #_rootModalElementId = "wf-modal-root";
+    #_uiReady = false;
+    #_themeObserver?: MutationObserver;
+    #_chatObserver?: MutationObserver;
+
+    XLSX = XLSX;
+    Waydown = Waydown;
+
+    Manager = ScriptManager.getManager();
+    Client = Client.getClient();
+    Message = Message.getMessage();
+    Queue = Queue.getOrCreate();
+    Recipient: FileRecipient | null = null;
+    Report = Reports.getOrCreate();
+    Settings = Settings.getSettings();
+    Worker = Worker.getOrCreate();
 
     private constructor(wapi: WAPI) {
         super();
 
         this.WAPI = wapi;
-        this.DOM = DOM;
-        this.XLSX = XLSX;
-        this.Waydown = Waydown;
-
-        this.Manager = ScriptManager.getManager();
-        this.Client = Client.getClient();
-        this.Message = Message.getMessage();
-        this.Settings = Settings.getSettings();
-        this.Queue = Queue.getOrCreate();
-        this.Worker = Worker.getOrCreate();
-        this.Recipiemt = null;
-
-        this._whatsappRootApp = "div#app";
-        this._rootElementId = "wayfu-root";
-        this._rootModalElementId = "wf-modal-root";
-
-        console.log(this);
         return this._init();
     }
 
     private _init() {
-        console.log("init begin");
         this._initListener();
-        console.log("after init listener");
         this._initEvents();
-        console.log("affer fireing initial events");
         this._initUserInterface();
-        console.log("UI should be construct");
         return this;
     }
 
@@ -80,6 +85,7 @@ class App extends EventBus implements App {
         Event.registerCoreEvent(this);
         Event.registerConfigEvent(this);
         Event.registerMessageEvent(this);
+        Event.registerModalEvents(this);
         Event.registerRecipientEvents(this);
         Event.registerUserEvents(this);
     }
@@ -90,27 +96,41 @@ class App extends EventBus implements App {
     }
 
     private _initUserInterface() {
-        const root = this.Root ?? document.createElement("div"),
-            modal = this.ModalRoot ?? document.createElement("div"),
+        const host = this.Host ?? document.createElement("div"),
             style = this._getResource("css"),
             { theme } = this.Settings;
 
         DOM.addStyle(style, { id: "wayfuStyle" });
 
-        if (!root.id) root.id = this._rootElementId;
-        if (!modal.id) modal.id = this._rootModalElementId;
+        if (!host.id) host.id = this.#_rootHost;
 
-        this.WhatsAppRoot?.append(root, modal);
-        ReactDOM.createRoot(root).render(React.createElement(Main, { app: this, style: theme }));
-        ReactDOM.createRoot(modal).render(React.createElement(ModalStack, { app: this }));
-        // const app = React.createElement(Main, { app: this, style: theme });
+        this.WhatsAppRoot?.append(host);
 
-        // console.log(app);
-        // console.log(React, ReactDOM);
+        ReactDOM.createRoot(host).render(
+            React.createElement(
+                AppProvider,
+                { app: this },
+                React.createElement(Main, { style: theme }),
+                React.createElement(ModalStack), // portal renders into #wf-modal-root
+            ),
+        );
+        this.setUiReady(true);
     }
 
     private _getResource(key: string) {
         return this.Manager?.getResource(key);
+    }
+
+    get themeObserver() {
+        return this.#_themeObserver;
+    }
+
+    get chatObserver() {
+        return this.#_chatObserver;
+    }
+
+    get isUiReady() {
+        return this.#_uiReady;
     }
 
     get appInfo() {
@@ -118,15 +138,27 @@ class App extends EventBus implements App {
     }
 
     get WhatsAppRoot() {
-        return document.querySelector(this._whatsappRootApp);
+        return document.querySelector(this.#_whatsappRootApp);
     }
 
-    get Root() {
-        return document.getElementById(this._rootElementId);
+    get Host() {
+        return document.getElementById(this.#_rootHost);
     }
 
     get ModalRoot() {
-        return document.getElementById(this._rootModalElementId);
+        return document.getElementById(this.#_rootModalElementId);
+    }
+
+    setUiReady(value: boolean) {
+        this.#_uiReady = value;
+    }
+
+    setThemeObserver(observer: MutationObserver) {
+        this.#_themeObserver = observer;
+    }
+
+    setChatObserver(observer: MutationObserver) {
+        this.#_chatObserver = observer;
     }
 
     static init(target?: typeof unsafeWindow) {

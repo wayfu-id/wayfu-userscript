@@ -5,20 +5,12 @@ import type { RecipientEventMap } from "./RecipientEvent";
 import type { CoreEventMap } from "./CoreEvent";
 import type { UserEventMap } from "./UserEvents";
 
-export type AppEventMap = {
-    "ui:update": { payload: any; return: void };
-} & CoreEventMap &
+export type AppEventMap = CoreEventMap &
     SettingEventMap &
     MessageEventMap &
     ModalEventMap &
     RecipientEventMap &
     UserEventMap;
-
-export type AppEventReturn = {
-    // "recipient:load": number;
-    // "blast:validate": boolean;
-    // fire-and-forget events don't need entries here
-};
 
 export * from "./ConfigEvent";
 export * from "./CoreEvent";

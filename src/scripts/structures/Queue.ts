@@ -1,5 +1,5 @@
 import MyArray from "./MyArray";
-import type { rowData } from "./FileRecipient";
+import type { fullData } from "./FileRecipient";
 
 /**
  * A simple Queue class with stock and reload feature
@@ -8,8 +8,8 @@ export default class Queue {
     private static instance: Queue;
 
     currentIndex: number;
-    items: rowData;
-    stock: rowData;
+    items: fullData;
+    stock: fullData;
     offset: number;
 
     private constructor() {
@@ -55,7 +55,7 @@ export default class Queue {
      * Set data to current queue, and stock it for later use
      * @param data MyArray<any>
      */
-    setData(data: rowData) {
+    setData(data: fullData) {
         this.items = data;
         this.stock = data;
     }

@@ -1,10 +1,12 @@
 import { Icons, Button } from "../../components/Index";
+import { useWaydown } from "../../hooks/AppHooks";
+import { accentClass, ModalIcon } from "./Index";
 import React from "react";
 
-import type { ModalItem } from "../ModalStack";
+import type { ModalItem } from "../../ModalStack";
 
 export default function ConfirmCard({ modal, onClose }: { modal: ModalItem; onClose: () => void }) {
-    const { title, message } = modal;
+    const { title, message, type } = modal;
 
     const resolve = (v: boolean) => {
         modal.resolve?.(v);
@@ -13,20 +15,18 @@ export default function ConfirmCard({ modal, onClose }: { modal: ModalItem; onCl
 
     return (
         <div className="wf-modal-confirm">
-            <div className="wf-modal-confirm-icon">
-                <Icons.Pause />
+            {/* <div className="wf-modal-confirm-icon"></div> */}
+            <div className="wf-modal-title">
+                <ModalIcon type={type ?? "confirm"} className="wf-modal-confirm-icon" />
+                {title}
             </div>
-            <div className="wf-modal-title">{title}</div>
-            <div className="wf-modal-body">{message}</div>
+            {message && <div className="wf-modal-body" dangerouslySetInnerHTML={{ __html: useWaydown(message) }} />}
             <div className="wf-modal-actions">
                 <Button className="wf-modal-btn" onClick={() => resolve(false)}>
-                    Keep going
-                </Button>
-                <Button className="wf-modal-btn" onClick={() => resolve(false)}>
-                    Resume later
+                    Cancel
                 </Button>
                 <Button className="wf-modal-btn wf-modal-btn--danger" onClick={() => resolve(true)}>
-                    Stop &amp; clear
+                    Confirm
                 </Button>
             </div>
         </div>

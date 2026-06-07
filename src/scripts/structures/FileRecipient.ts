@@ -29,7 +29,7 @@ export default class FileRecipient {
         numb: number;
         ext: ".csv" | ".xlsx";
     };
-    data: rowData;
+    data: fullData;
     dateCollection: MyArray<string>;
     options: CSVOptions;
 
@@ -38,7 +38,7 @@ export default class FileRecipient {
         this.fileName = { fname: [], ftype: "", numb: 1, ext: ".csv" };
 
         this.options = options ?? { monthIdx: 1, splitter: "," };
-        this.data = new MyArray();
+        this.data = new MyArray<rowData>();
         this.dateCollection = new MyArray();
     }
 
@@ -66,7 +66,7 @@ export default class FileRecipient {
             return useComma(d) ? "," : ";";
         })(dataArr);
 
-        const newData: MyArray<rowData> = new MyArray();
+        const newData: fullData = new MyArray();
 
         dataArr.forEach((e) => {
             let row = ((e) => {
@@ -80,7 +80,7 @@ export default class FileRecipient {
             }
         });
 
-        this.data = MyArray.create(newData.filter((e) => !e.isEmpty).map((e) => e.toString()));
+        this.data = MyArray.create(newData.filter((e) => !e.isEmpty));
         return this;
     }
 

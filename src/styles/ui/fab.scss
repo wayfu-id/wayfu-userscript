@@ -90,7 +90,7 @@
     padding: 10px 14px;
     min-width: 164px;
     white-space: nowrap;
-    pointer-events: none;
+    pointer-events: all;
     animation: wf-fade-up 0.15s ease forwards;
 
     .wf-fab-tt-label {

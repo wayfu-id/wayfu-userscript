@@ -1,8 +1,10 @@
+import { useApp } from "../context/AppContext";
 import { Icons, Button } from "../components/Index";
-import type { MainPanelProps } from "../Main";
+import type { MainPanelProps } from "./MainPanel";
 import React from "react";
 
-export default function Header({ open, setOpen, theme, setTheme, app }: MainPanelProps) {
+export default function Header({ open, setOpen, theme, setTheme }: MainPanelProps) {
+    const app = useApp();
     const appInfo = app ? app.appInfo : undefined;
     const name = appInfo ? appInfo.name : "WayFu - Easy Follow Up";
     const version = appInfo ? appInfo.version : "5.0.0";

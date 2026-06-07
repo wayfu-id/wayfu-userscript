@@ -27,12 +27,10 @@ export default class EventBus {
         this.listeners[event]?.forEach((fn) => (fn as any)(data));
     }
 
-    // fire and await — returns array of results
-    async triggerAsync<K extends keyof AppEventMap>(
-        ...args: Payload<K> extends void ? [event: K] : [event: K, data: Payload<K>]
-    ): Promise<Return<K>[]> {
+    async request<K extends keyof AppEventMap>(
+        ...args: AppEventMap[K] extends void ? [event: K] : [event: K, data: Payload<K>]
+    ): Promise<Return<K>> {
         const [event, data] = args;
-        const handlers = this.listeners[event] ?? [];
-        return Promise.all(handlers.map((fn) => (fn as any)(data)));
+        return await (this.listeners[event]?.[0] as any)?.(data);
     }
 }

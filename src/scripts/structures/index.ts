@@ -7,6 +7,7 @@ import Message from "./Message";
 import MyArray from "./MyArray";
 import MyDate from "./MyDate";
 import Queue from "./Queue";
+import Reports from "./Reports";
 import ScriptManager from "./ScriptManager";
 import Settings from "./Settings";
 import Worker from "./Worker";
@@ -21,6 +22,7 @@ export {
     MyArray,
     MyDate,
     Queue,
+    Reports,
     ScriptManager,
     Settings,
     Worker,

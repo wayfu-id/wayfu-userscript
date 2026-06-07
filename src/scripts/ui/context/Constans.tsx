@@ -20,7 +20,7 @@ export interface Setting<T extends SettingType> {
     title?: string;
     beta?: boolean;
     value?: string | number;
-    onChange?: { [k: string]: any };
+    onChange?: (e: { [k: string]: any }) => void;
 }
 
 // ── Type guards ───────────────────────────────────────────────────────────────
@@ -51,7 +51,7 @@ const Settings: Settings = {
             type: "select",
             items: [
                 { key: "caption", label: "Caption" },
-                { key: "pesan", label: "Message" },
+                { key: "message", label: "Message" },
             ],
         },
         {
@@ -112,7 +112,6 @@ const Settings: Settings = {
             beta: true,
             type: "select",
             items: [
-                { key: "ask", label: "Always Ask" },
                 { key: "csv", label: "CSV (.csv)" },
                 { key: "xlsx", label: "Excel (.xlsx)" },
             ],
@@ -130,17 +129,17 @@ const tabs: TabDetail[] = [
     {
         id: "msg",
         icon: <Icons.Msg />,
-        label: "Pesan",
+        label: "Message",
     },
     {
         id: "attach",
         icon: <Icons.Image />,
-        label: "Lampiran",
+        label: "Attachment",
     },
     {
         id: "settings",
         icon: <Icons.Settings />,
-        label: "Opsi",
+        label: "Settings",
     },
 ];
 

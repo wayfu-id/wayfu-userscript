@@ -1,5 +1,4 @@
-import App from "../App";
-import { isNumeric, dateFormat, setName, createFilteredObject } from "../utilities/index";
+import { isNumeric, dateFormat, setName } from "../utilities/index";
 import BaseModel from "./BaseModel";
 import Settings from "./Settings";
 import MyDate from "./MyDate";
@@ -28,7 +27,7 @@ interface Message {
         mIdx_: number;
         targetBp: number;
         isFormat: boolean;
-        userType: "general" | "oriflame";
+        userType: "umum" | "oriflame";
     };
 }
 
@@ -54,23 +53,23 @@ class Message extends BaseModel {
         other: [],
     };
 
-    setting: {
+    settings: {
         mIdx: number;
         mIdx_: number;
         targetBp: number;
         isFormat: boolean;
-        userType: "general" | "oriflame";
+        userType: "umum" | "oriflame";
     };
     // app: App;
 
     private constructor() {
         super();
-        this.setting = {
+        this.settings = {
             mIdx: 0,
             mIdx_: 0,
             isFormat: false,
             targetBp: 100,
-            userType: "general",
+            userType: "umum",
         };
         // this.app = app;
         return this._setProps(this.#defaultProp);
@@ -80,11 +79,37 @@ class Message extends BaseModel {
         return this.#defaultProp;
     }
 
+    /**
+     * Get pricessed caption value
+     * @returns
+     */
+    get caption() {
+        if (!this.inputCaption) return "";
+        if (!this.isDataSet) return this.inputCaption;
+
+        return this.substitute(this.inputCaption);
+    }
+
+    /**
+     * Get processed message value
+     * @returns
+     */
+    get value() {
+        if (!this.inputMessage) return "";
+        if (!this.isDataSet) return this.inputMessage;
+
+        return this.substitute(this.inputMessage);
+    }
+
+    get isDataSet() {
+        return !!this.name && !!this.phone;
+    }
+
     updateSettings(settings: Settings) {
         const { monthIdx: mIdx_, targetBp, isFormat, userType } = settings,
             { monthIdx: mIdx } = settings.defaultProp;
 
-        this._setProp("setting", { isFormat, mIdx, mIdx_, targetBp, userType });
+        this._setProp("settings", { isFormat, mIdx, mIdx_, targetBp, userType });
     }
 
     /**
@@ -93,6 +118,11 @@ class Message extends BaseModel {
      * @returns
      */
     setData(data: rowData) {
+        if (data.length == 0) {
+            this.resetData();
+            return this;
+        }
+
         const validPhone = (val: string) => rgx.phonePattern.test(val);
 
         [this.idNumber, this.name, this.phone, this.poinValue, this.date, this.sponsorName, ...this.other] = validPhone(
@@ -105,56 +135,26 @@ class Message extends BaseModel {
         return this;
     }
 
+    resetData() {
+        const props = ["idNumber", "name", "phone", "poinValue", "date", "sponsorName"];
+        props.forEach((prop) => {
+            this[prop] = undefined;
+        });
+        this.other = [];
+    }
+
     setAttachment(attachment?: File | WAPI.Product) {
-        if (!attachment) return;
+        if (!attachment) {
+            this.imageFile = undefined;
+            this.product = undefined;
+            return;
+        }
 
         if (attachment instanceof File) {
             this.imageFile = attachment;
         } else {
             this.product = attachment;
         }
-    }
-
-    // async setAttachment(attachment: File | WA.ProductModel | WAPI.Product) {
-    //     if (!attachment) return;
-    //     if (attachment instanceof File) {
-    //         this.imageFile = attachment;
-    //         return;
-    //     }
-    //     try {
-    //         const { WAPI } = this.app,
-    //             { Product } = WAPI.ModelClass;
-
-    //         console.log(attachment instanceof Product);
-    //         let { id } = attachment;
-    //         if (!WAPI.BusinessUtils.ProductModel.isIdType(id)) {
-    //             throw new Error("Attachment is not a valid product model.");
-    //         }
-    //         const product = await WAPI.findProduct(id);
-    //         if (!product) {
-    //             throw new Error("Product not found for the given attachment ID.");
-    //         }
-    //         this.product = product;
-    //         return;
-    //     } catch (err) {
-    //         console.log("Error processing product attachment:", err);
-    //     }
-    // }
-
-    /**
-     * Get processed message value
-     * @returns
-     */
-    get value() {
-        return this.inputMessage ? this.substitute(this.inputMessage) : "";
-    }
-
-    /**
-     * Get pricessed caption value
-     * @returns
-     */
-    get caption() {
-        return this.inputCaption ? this.substitute(this.inputCaption) : "";
     }
 
     /**
@@ -175,10 +175,15 @@ class Message extends BaseModel {
                     ? message.replace(userType === "oriflame" ? /NO_KONS/g : /DATA_0/g, this.idNumber)
                     : message;
 
-            col.forEach((val, idx) => {
-                let bypass = idx >= colTreshold;
-                message = val || bypass ? this.setMessage(message, idx, val) : message;
-            });
+            if (col.length > 0) {
+                col.forEach((val, idx) => {
+                    let bypass = idx >= colTreshold;
+                    if (val !== "" && val !== null && val !== undefined) {
+                        message = bypass ? this.setMessage(message, idx, val) : message;
+                    }
+                    // message = val || bypass ? this.setMessage(message, idx, val) : message;
+                });
+            }
         }
         return message;
     }

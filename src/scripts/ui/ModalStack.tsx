@@ -1,9 +1,10 @@
-import App from "../../App";
-import { AlertCard, ConfirmCard, ReportCard } from "./modal/index";
+// import App from "../App";
+import { AlertCard, ConfirmCard, ReportCard } from "./fragments/modal/Index";
+import { useApp } from "./context/AppContext";
 import React, { useState, useEffect, useCallback } from "react";
-import ReactDOM from "react-dom";
+// import ReactDOM from "react-dom";
 
-import type { ReportData } from "./modal/ReportCard";
+import type { ReportData } from "./fragments/modal/ReportCard";
 
 export type ModalType = "alert" | "confirm" | "report" | "error";
 
@@ -18,7 +19,8 @@ export interface ModalItem {
 
 let _idCounter = 0;
 
-export default function ModalStack({ app }: { app?: App }) {
+export default function ModalStack() {
+    const app = useApp();
     const [modals, setModals] = useState<ModalItem[]>([]);
 
     const push = useCallback((item: Omit<ModalItem, "id">) => {
@@ -61,23 +63,40 @@ export default function ModalStack({ app }: { app?: App }) {
         };
     }, [app, push]);
 
-    const portal = app?.ModalRoot ?? document.getElementById("wf-modal-root");
-    if (!portal) return null;
+    useEffect(() => {
+        app?.trigger("ui:ready");
+    }, []);
 
-    return ReactDOM.createPortal(
-        <div className="wf-modal-stack" aria-live="polite">
-            {modals.map((modal) => (
-                <div key={modal.id} className="wf-modal-entry">
-                    {modal.type === "confirm" ? (
-                        <ConfirmCard modal={modal} onClose={() => remove(modal.id)} />
-                    ) : modal.type === "report" ? (
-                        <ReportCard modal={modal} onClose={() => remove(modal.id)} />
-                    ) : (
-                        <AlertCard modal={modal} onClose={() => remove(modal.id)} />
-                    )}
-                </div>
-            ))}
-        </div>,
-        portal,
+    // const portal = app?.ModalRoot ?? document.getElementById("wf-modal-root");
+    // if (!portal) return null;
+
+    return (
+        <div id="wf-modal-root">
+            {modals.length > 0 && (
+                <div
+                    className="wf-modal-backdrop"
+                    aria-hidden="true"
+                    onClick={() => {
+                        const top = modals[modals.length - 1];
+                        if (top.type !== "confirm") {
+                            setModals((prev) => prev.slice(0, -1));
+                        }
+                    }}
+                />
+            )}
+            <div className="wf-modal-stack" aria-live="polite">
+                {modals.map((modal) => (
+                    <div key={modal.id} className="wf-modal-entry">
+                        {modal.type === "confirm" ? (
+                            <ConfirmCard modal={modal} onClose={() => remove(modal.id)} />
+                        ) : modal.type === "report" ? (
+                            <ReportCard modal={modal} onClose={() => remove(modal.id)} />
+                        ) : (
+                            <AlertCard modal={modal} onClose={() => remove(modal.id)} />
+                        )}
+                    </div>
+                ))}
+            </div>
+        </div>
     );
 }

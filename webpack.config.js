@@ -50,19 +50,7 @@ module.exports = {
                   "@wayfu/simple-xlsx": "XLSX",
                   "@wayfu/wayfu-dom": "DOM",
                   "@wayfu/waydown": "Waydown",
-                  // react: "React",
-                  // "react-dom/client": "ReactDOM",
-                  // Change these from string to factory
-                  // react: {
-                  //     commonjs: "react",
-                  //     commonjs2: "react",
-                  //     // This tells webpack: grab it from window.React at runtime
-                  //     root: ["React"],
-                  // },
-                  // "react-dom/client": {
-                  //     // This tells webpack: grab it from window.ReactDOM at runtime
-                  //     root: ["ReactDOM"],
-                  // },
+                  "pdfjs-dist": "pdfjsLib",
               },
               function ({ request }, callback) {
                   const moduleMap = {

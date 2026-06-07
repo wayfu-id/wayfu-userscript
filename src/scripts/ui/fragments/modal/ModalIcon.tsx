@@ -1,11 +1,11 @@
 import { Icons } from "../../components/Index";
-import { accentClass } from ".";
+import { accentClass } from "./Index";
 import React from "react";
 
-import type { ModalType } from "../ModalStack";
+import type { ModalType } from "../../ModalStack";
 
-export default function ModalIcon({ type }: { type: ModalType }) {
-    const className = `wf-modal-icon ${accentClass(type, true)}`;
+export default function ModalIcon({ className, type }: { className?: string; type: ModalType }) {
+    className = className ?? `wf-modal-icon ${accentClass(type, true)}`;
     const IconSpan = ((t) => {
         switch (t) {
             case "error":

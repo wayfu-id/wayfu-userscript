@@ -1,8 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import WayFuUI from "./App";
 import Main from "./Main";
 
-const meta: Meta<typeof WayFuUI> = {
+const meta: Meta<typeof Main> = {
     title: "WayFu/Panel",
     component: Main,
     parameters: {
@@ -14,7 +13,7 @@ const meta: Meta<typeof WayFuUI> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof WayFuUI>;
+type Story = StoryObj<typeof Main>;
 
 // Default state — panel closed
 export const Dark: Story = {

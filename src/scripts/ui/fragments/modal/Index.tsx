@@ -1,8 +1,9 @@
 import AlertCard from "./AlertModal";
 import ConfirmCard from "./ConfirmCard";
 import ModalIcon from "./ModalIcon";
+import ModalMessage from "./ModalMessage";
 import ReportCard from "./ReportCard";
-import type { ModalType } from "../ModalStack";
+import type { ModalType } from "../../ModalStack";
 
 export function accentClass(type: ModalType, icon?: boolean) {
     if (!!icon) icon = false;
@@ -14,4 +15,4 @@ export function accentClass(type: ModalType, icon?: boolean) {
     return `wf-modal-${elementClass}-info`;
 }
 
-export { AlertCard, ConfirmCard, ModalIcon, ReportCard };
+export { AlertCard, ConfirmCard, ModalIcon, ModalMessage, ReportCard };

@@ -19,10 +19,10 @@ type Subscription = {
 };
 
 export default class Client extends BaseModel {
+    readonly #key = "wayfu-user";
     private static instance: Client;
     private _profile?: WAPI.Contact;
 
-    key: "wayfu-user";
     UserData?: UserData = undefined;
     Subscription: Subscription = {
         isPremium: false,
@@ -31,7 +31,10 @@ export default class Client extends BaseModel {
 
     private constructor() {
         super();
-        this.key = "wayfu-user";
+    }
+
+    canUseFeature(): boolean {
+        return this.Subscription.isPremium || this.Subscription.isTrial;
     }
 
     setProfile(value: WAPI.Contact) {
@@ -42,6 +45,10 @@ export default class Client extends BaseModel {
         return this._profile;
     }
 
+    get key() {
+        return this.#key;
+    }
+
     setSubscription({ isPremium, isTrial }: Subscription) {
         this.Subscription = { isPremium, isTrial };
         return this;
@@ -50,6 +57,11 @@ export default class Client extends BaseModel {
     subscriptionStatus() {
         const { isPremium, isTrial } = this.Subscription;
         return isPremium || isTrial;
+    }
+
+    reset() {
+        this.UserData = undefined;
+        return this;
     }
 
     setUserData(user: UserData) {
@@ -79,12 +91,7 @@ export default class Client extends BaseModel {
             }
         }
 
-        return { [this.key]: data };
-    }
-
-    reset() {
-        this.UserData = undefined;
-        return this;
+        return { [this.#key]: data };
     }
 
     static getClient() {

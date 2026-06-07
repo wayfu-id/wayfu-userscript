@@ -1,33 +1,53 @@
-import App from "../../App";
+import { useApp } from "../context/AppContext";
 import { KEYWORDS } from "../context/Constans";
-import { Icons, Button, ToggleSwitch } from "../components/Index";
-import React, { useState } from "react";
+import { MessageArea } from "./Index";
+import { Icons, Button } from "../components/Index";
+import { useAppEvent } from "../hooks/AppHooks";
+import React, { useState, useRef } from "react";
 
-interface MessageTabProps {
-    app?: App;
-}
+type MessageTabProp = {
+    preview: boolean;
+    setPreview: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
-export default function MessageTab({ app }: MessageTabProps) {
-    let text = app ? app.Message.inputMessage : "";
+export default function MessageTab() {
+    const app = useApp();
+    let text = app ? app.Message.inputMessage : "",
+        recipient = app?.Recipient,
+        file = recipient?.file ?? null;
 
-    const [previewMode, setPreviewMode] = useState(false);
-    const [hasFile, setHasFile] = useState(false);
+    const fileRef = useRef<HTMLInputElement>(null);
+
+    const [hasFile, setHasFile] = useState(!!file);
+    const [fileName, setFilename] = useState(() => file?.name ?? "");
+    const [recipientCount, setRecipientCount] = useState(() => recipient?.data.length ?? 0);
     const [msgText, setMsgText] = useState(text);
+
+    const inputAccept =
+        ".csv, .txt, .xlsx, text/csv, text/plain, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+    const handleFilePick = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const picked = e.target.files?.[0];
+        if (!picked) return;
+        setHasFile(true);
+        setFilename(picked.name);
+        app?.trigger("recipient:load", picked);
+    };
+
+    useAppEvent("recipient:loaded", (recipient) => {
+        setRecipientCount(recipient.data.length);
+    });
 
     let handleMessageChange = (text: string) => {
         app?.trigger("message:update", { text });
         setMsgText(text);
     };
 
+    const openPicker = () => fileRef.current?.click();
+
     return (
         <>
-            <textarea
-                className="wf-msg-area"
-                value={msgText}
-                onChange={(e) => handleMessageChange(e.target.value)}
-                placeholder="Tulis pesan di sini…"
-            />
-
+            <MessageArea text={msgText} handleChange={handleMessageChange} />
             {/* Keyword chips */}
             <div className="wf-label">Kata Kunci</div>
             <div className="wf-keyword-row">
@@ -41,22 +61,22 @@ export default function MessageTab({ app }: MessageTabProps) {
                     </Button>
                 ))}
             </div>
-
-            {/* Mode toggle */}
-            <div className="wf-msg-row wf-mode-row">
-                <span className="wf-mode-label">
-                    <Icons.WaIcon /> Mode Preview
-                </span>
-                <ToggleSwitch checked={previewMode} onChange={(e) => setPreviewMode(e.target.checked)} />
-            </div>
-
-            {/* File row */}
             <div className="wf-msg-row wf-file-row">
-                <Button className="wf-file-btn">
+                <input
+                    ref={fileRef}
+                    type="file"
+                    title="Pilih file penerima"
+                    accept={inputAccept}
+                    className="hidden"
+                    onChange={handleFilePick}
+                    // reset value so onChange fires even if same file is picked
+                    onClick={(e) => (e.currentTarget.value = "")}
+                />
+                <Button className="wf-file-btn" onClick={openPicker}>
                     <Icons.File />
-                    {hasFile ? "Test_file.csv" : "Pilih file penerima (.csv / .xlsx)"}
+                    {hasFile ? fileName : "Pilih file penerima (.csv / .xlsx)"}
                 </Button>
-                {hasFile && <span className="wf-file-badge">6</span>}
+                {hasFile && <span className="wf-file-badge">{recipientCount}</span>}
             </div>
         </>
     );

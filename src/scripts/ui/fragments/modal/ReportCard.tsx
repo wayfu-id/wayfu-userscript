@@ -1,8 +1,8 @@
 import { Icons, Button } from "../../components/Index";
-import { ModalIcon, accentClass } from "./index";
+import { ModalIcon, accentClass } from "./Index";
 import React from "react";
 
-import type { ModalItem } from "../ModalStack";
+import type { ModalItem } from "../../ModalStack";
 
 export interface ReportData {
     success: number;

@@ -41,8 +41,8 @@
     }
 
     svg {
-      width: 28px;
-      height: 28px;
+      width: 56px;
+      height: 56px;
       color: var(--wf-text-muted);
     }
 
@@ -60,14 +60,38 @@
   .wf-attach-preview {
     border-radius: 12px;
     overflow: hidden;
+    max-height: 275px;
     background: var(--wf-surface2);
     position: relative;
 
     img {
       width: 100%;
       display: block;
-      max-height: 120px;
       object-fit: cover;
+    }
+
+    .wf-attach-badge {
+      position: absolute;
+      bottom: 6px;
+      right: 6px;
+      background: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .wf-attach-preview-loading {
+      width: 100%;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--wf-surface2);
+      font-size: 12px;
+      color: var(--wf-text-muted);
     }
 
     .wf-attach-preview-del {
@@ -86,6 +110,7 @@
       color: #fff;
     }
   }
+
   .wf-caption-input {
     // width: stretch;
     width: -webkit-fill-available;
@@ -98,6 +123,10 @@
     color: var(--wf-text);
     outline: none;
     transition: border-color 0.15s;
+
+    &.preview {
+      color: var(--wf-text-muted);
+    }
 
     &::placeholder {
       color: var(--wf-text-muted);
