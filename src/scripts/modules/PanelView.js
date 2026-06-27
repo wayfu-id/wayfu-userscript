@@ -19,20 +19,22 @@ import { Debug } from "./Debug";
 function createView(html, style, details) {
     // console.log(window.WAPI);
     const { name, version, icon } = details,
-        after = DOM.getElement("header > header") ? "header > header" : "header";
+        after = DOM.getElement("header > header") ? "header > header" : "header",
+        headElm = DOM.getElement(after);
     // { paneOne } = window.WAPI.WebClasses.Main;
 
     // console.log(after, paneOne);
     DOM.createElement({
         tag: "header",
         id: "wayfuPanel",
-        after: after,
+        after: DOM.getElement("header > header") ? headElm.parentElement : after,
         html: html.replace(/VERSION/, version).replace(/WA_VERSION/, window.WAPI.WA_VERSION),
     });
 
     DOM.addStyle(style, { id: "wayfuStyle" }).setElement("img.appIco", { src: icon });
     if (after !== "header") DOM.setElementStyle(`._aigw header`, { display: "grid" });
-    DOM.getElement("header > header ._ajv7") ? createOldMenuButton(name): createMenuButton(name);
+    DOM.getElement("header > header ._ajv7") ? createOldMenuButton(name) : createMenuButton(name);
+    DOM.getElement("div#side").style.paddingTop = "10px";
     initListener();
 }
 
@@ -67,6 +69,8 @@ function createMenuButton(name) {
         menuDiv = menuButton.parentElement, // span
         menuItem = menuDiv.parentElement, // tab-index
         headMenu = menuItem.parentElement;
+
+    headMenu.style.display = "flex";
     // headMenuContainer = headMenu.parentElement;
 
     /** @type {(name: string) => HTMLElement} */
@@ -135,6 +139,7 @@ function createMenuButton(name) {
 
         return DOM.createElement({
             tag: menuItem.tagName.toLocaleLowerCase(),
+            classid: menuItem.classList.value,
             html: btnWarp.outerHTML,
         });
     };
@@ -142,12 +147,12 @@ function createMenuButton(name) {
     headMenu.insertBefore(createBtnMenu(name), menuItem);
 }
 
-function createOldMenuButton (name) {
+function createOldMenuButton(name) {
     const header = DOM.getElement("header > header") ?? DOM.getElement("header"),
         menuButton = DOM.getElement(`div [role='button']`, header),
         svgEl = DOM.getElement("svg", menuButton),
         spanSvg = svgEl.parentElement, // span
-        menuDiv = menuButton.parentElement, 
+        menuDiv = menuButton.parentElement,
         headMenuContainer = menuDiv.parentElement;
 
     /** @type {(name: string) => HTMLElement} */
@@ -193,6 +198,6 @@ function createOldMenuButton (name) {
     };
 
     headMenuContainer.insertBefore(createBtnMenu(name), menuDiv);
-};
+}
 
 export { createView };

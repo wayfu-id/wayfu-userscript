@@ -12,7 +12,7 @@ body.dark {
         #panel-menus button {
             &:hover,
             &.active {
-                background: $darkbg;
+                background-color: rgba(255, 255, 255, 0.15);
             }
         }
 
@@ -24,6 +24,14 @@ body.dark {
             &::-webkit-slider-thumb,
             &::-moz-range-thumb {
                 background-color: white;
+            }
+        }
+
+        .switch {
+            input[type="checkbox"] {
+                & + .slider {
+                    background-color: rgba(255, 255, 255, 0.15);
+                }
             }
         }
 
@@ -53,15 +61,33 @@ body.dark {
                 }
             }
 
-            a.wfu-export-csv svg{
+            a.wfu-export-csv svg {
                 color: white !important;
             }
         }
     }
-    
+
     div.two {
         svg.wayfu-app-icon {
-            .fill0, .fill1, .fill2 {fill:currentColor}
+            .fill0,
+            .fill1,
+            .fill2 {
+                fill: currentColor;
+            }
+        }
+        [data-testid="menu-bar-wayfu-app"] {
+            [role="button"],
+            [type="button"] {
+                &.active {
+                    background-color: rgba(255, 255, 255, 0.1);
+                }
+            }
+
+            &.active {
+                [role="button"] {
+                    background-color: rgba(255, 255, 255, 0.1);
+                }
+            }
         }
     }
 }

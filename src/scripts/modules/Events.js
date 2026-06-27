@@ -205,19 +205,13 @@ class AppEvents {
                 maxSize = (isPDF(uint8array) ? 100 : 4) * Math.pow(1024, 2);
 
             if (imgFile && imgFile.size > maxSize) {
-                modal.alert(
-                    `Ukuran lampiran: ${type}, tidak boleh lebih dari ${maxSize / Math.pow(1024, 2)}MB`,
-                );
+                modal.alert(`Ukuran lampiran: ${type}, tidak boleh lebih dari ${maxSize / Math.pow(1024, 2)}MB`);
                 imgFile = null;
                 elm.files = [];
             }
 
             type = imgFile ? (isPDF(uint8array) ? "PDF" : "Image") : "";
-            imgSrc = imgFile
-                ? isPDF(uint8array)
-                    ? await getPDFPageThumb(imgFile)
-                    : URL.createObjectURL(imgFile)
-                : "";
+            imgSrc = imgFile ? (isPDF(uint8array) ? await getPDFPageThumb(imgFile) : URL.createObjectURL(imgFile)) : "";
         } else {
             elm.files = [];
             DOM.setElement(`#${btn}`, { value: "" });
@@ -426,9 +420,11 @@ class AppEvents {
         });
 
         let btn = createDonwloadBtn(name);
-        const downloadMenu = DOM.getElement("button[data-icon='download-alt']", outerMenu.parentElement);
+        let container = outerMenu.parentElement;
+        const downloadMenu = DOM.getElement("button[data-icon='download-alt']", container);
         if (!downloadMenu) {
-            outerMenu.parentElement.insertBefore(btn, outerMenu);
+            container.insertBefore(btn, outerMenu);
+            container.style.display = "flex";
         } else if (downloadMenu && e.target === downloadMenu) {
             if (await user.check()) {
                 return await exportDataToFile(contacts, name);
