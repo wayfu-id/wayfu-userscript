@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.7.6](https://github.com/wayfu-id/wayfu-userscript/compare/v4.7.5...v4.7.6) (2026-06-27)
+
+
+### Bug Fixes
+
+* **UI:** broken UI due to WhatsApp update ([70b0b1c](https://github.com/wayfu-id/wayfu-userscript/commit/70b0b1c7040e3bd7dff1be3cbc39454b99abf5e3))
+
 ### [4.7.5](https://github.com/wayfu-id/wayfu-userscript/compare/v4.7.4...v4.7.5) (2026-05-05)
 
 
