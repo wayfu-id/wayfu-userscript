@@ -39,8 +39,11 @@ class Messages extends BaseModel {
     setData(data) {
         const validPhone = (val) => rgx.phonePattern.test(val);
 
-        [this.idNumber, this.name, this.phone, this.poinValue, this.date, this.sponsorName, ...this.other] =
-            validPhone(data[2]) ? data : ["", ...data];
+        [this.idNumber, this.name, this.phone, this.poinValue, this.date, this.sponsorName, ...this.other] = validPhone(
+            data[2],
+        )
+            ? data
+            : ["", ...data];
         return this;
     }
 
@@ -98,9 +101,7 @@ class Messages extends BaseModel {
                         .replace(/L_DAY/g, this.lastDay(value))
                         .replace(/S_DAY/g, this.lastDay(value, false));
                 } else if (i === 2 && !(isNumber || isDate)) {
-                    message = message
-                        .replace(/F_INVS/g, setName(value, true))
-                        .replace(/INVS/g, setName(value));
+                    message = message.replace(/F_INVS/g, setName(value, true)).replace(/INVS/g, setName(value));
                 }
             }
             return column > 2 ? message.replace(dataKey(column - 2), `${value || ""}$2`) : message;
@@ -118,9 +119,7 @@ class Messages extends BaseModel {
             const col = [this.poinValue, this.date, this.sponsorName, ...this.other],
                 colTreshold = options.userType === "oriflame" ? 3 : 0;
 
-            message = message
-                .replace(/F_NAMA/g, setName(this.name, true))
-                .replace(/NAMA/g, setName(this.name));
+            message = message.replace(/F_NAMA/g, setName(this.name, true)).replace(/NAMA/g, setName(this.name));
             message = message.replace(/PHONE/g, this.phone);
             message =
                 this.idNumber !== ""
@@ -147,7 +146,7 @@ class Messages extends BaseModel {
         let date = new MyDate(
             !options.isFormat && mIdx !== mIdx_
                 ? MyArray.split(dateStr, "/").changeIndex(mIdx_, mIdx).join("/")
-                : dateStr
+                : dateStr,
         );
 
         date = isLastDay ? date.addDays(30) : date;
@@ -171,13 +170,19 @@ class Messages extends BaseModel {
         this.msgAttc.forceHD = options.imageQuality == "hd";
         this.msgAttc.quality = options.imageQuality == "hd" ? "HD" : "Standard";
 
-        let result = null; 
+        let result = null;
         try {
-            result = await window.WAPI.sendAdvMessage(this.phone, this.subtitute(caption), { ...this.msgAttc });
-        } catch (e){
+            result = await window.WAPI.sendAdvMessage(this.phone, this.subtitute(caption), {
+                ...this.msgAttc,
+                delay: 500,
+            });
+        } catch (e) {
             console.error(e);
+        } finally {
+            return result;
         }
-        return result;
+        // console.log(result);
+        // return result;
     }
 
     /**
@@ -185,13 +190,15 @@ class Messages extends BaseModel {
      * @returns
      */
     async sendText() {
-        let result = null; 
+        let result = null;
         try {
-            result = await window.WAPI.inputAndSendTextMsg(this.phone, this.value);
+            result = await window.WAPI.sendAdvMessage(this.phone, this.value, { delay: 500 });
         } catch (e) {
             console.error(e);
+        } finally {
+            return result;
         }
-        return result;
+        // return result;
     }
 }
 

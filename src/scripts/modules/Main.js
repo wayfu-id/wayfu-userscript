@@ -40,8 +40,7 @@ async function checkStatus() {
  * @param {CSVFile} csvFile
  */
 function loadRecipient(csvFile) {
-    let mIdx =
-        options.dateFormat !== "auto" ? options.dateFormat : csvFile.options.monthIndex || options.monthIndex;
+    let mIdx = options.dateFormat !== "auto" ? options.dateFormat : csvFile.options.monthIndex || options.monthIndex;
 
     let isFormat = mIdx == 2;
     options.setOptions(Object.assign({}, csvFile.options, { monthIndex: mIdx, isFormat: isFormat }));
@@ -105,25 +104,26 @@ async function startProcess() {
             no = (queue.currentIndex += 1),
             data = queue.run(),
             messej = message.setData(data),
-            stat = "";
+            sendText = c === "caption" || !(i && h) || t === "PDF",
+            returnStep = false,
+            stat = "SUCCESS";
 
         // message.setData(data);
         updateUI(no, messej.phone);
 
-        await wait(5e2);
-        stat = await (async (c) =>
-            (c === "caption" || !(i && h) || t === "PDF"
-                ? (await messej.sendText()) != null
-                : await window.WAPI.openChat(messej.phone)) !== null
-                ? "SUCCESS"
-                : "ERROR")(c);
+        while (stat === "SUCCESS" && !returnStep) {
+            await wait(5e2);
+            returnStep = (sendText ? await messej.sendText() : await window.WAPI.openChat(messej.phone)) !== null;
+            stat = returnStep ? "SUCCESS" : "ERROR";
 
-        await wait(1e2);
-        if (stat === "SUCCESS") {
-            stat = i && h ? ((await messej.sendImg()) ? "SUCCESS" : "FAILED") : stat;
+            await wait(4e2);
+            returnStep = i && h ? (await messej.sendImg()) !== null : returnStep;
+            stat = returnStep ? "SUCCESS" : "ERROR";
+
+            await wait(1e2);
+            returnStep = true;
         }
 
-        await wait(4e2);
         switch (stat) {
             case "SUCCESS":
                 report.success(data);
@@ -352,10 +352,7 @@ function innerModal(id) {
 
         const checksEl = ((id) => {
             const outer = container("row right");
-            const check = DOM.createCheckElement(
-                { id: `set_${id}`, classid: "_input checks" },
-                { change: saveType },
-            );
+            const check = DOM.createCheckElement({ id: `set_${id}`, classid: "_input checks" }, { change: saveType });
             const label = DOM.createLabelElement({
                 id: `set_${id}`,
                 classid: "_label",
