@@ -1,6 +1,7 @@
 {
     "name": "wayfu-userscript",
     "version": "4.7.7",
+    "private": true,
     "viewVersion": "1.8.0",
     "homepage": "https://wayfu.id/",
     "bugs": "https://wayfu.id/",
